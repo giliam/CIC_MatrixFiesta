@@ -146,3 +146,4 @@ INTERNAL_IPS = [
     # ...
 ]
 
+LOGIN_URL = '/matrix/connexion/'

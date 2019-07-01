@@ -1,4 +1,23 @@
 {% extends "index.html" %}
+
+{% load matrix_extras %}
+
 {% block content %}
-{{ecue.acquis}}
+{{ecue}}
+
+<ul>
+    
+{% for c_acquis in acquis %}
+<li>
+    {{c_acquis.nom}} (sur l'échelle <em>{{c_acquis.valeurs.nom}}</em>)
+    {% if c_acquis.id in evaluations_acquis.keys %}
+    Évalué ({{ evaluations_acquis|get_item:c_acquis.id }})
+    {% else %}
+    <a href="{% url "ues.evaluer_acquis" c_acquis.slug %}">Non évalué...</a>
+    {% endif %}
+</li>
+{% empty %}
+<li>Pas d'acquis d'apprentissage à évaluer !</li>
+{% endfor %}
+</ul>
 {% endblock %}

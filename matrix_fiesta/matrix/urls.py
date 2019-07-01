@@ -7,6 +7,7 @@ urlpatterns = [
     path('ues/liste/', views.liste_ues, name="ues.liste"),
 
     re_path(r'ues/matrix/(?P<slug>[-\w]+)', views.matrix_ecue, name="ues.matrix_ecue"),
+    re_path(r'acquis/evaluer/(?P<slug>[-\w]+)', views.evaluer_acquis, name="ues.evaluer_acquis"),
 
     path('connexion/', 
             views.connexion, 

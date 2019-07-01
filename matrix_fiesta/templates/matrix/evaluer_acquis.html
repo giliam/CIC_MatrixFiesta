@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+
+{% load matrix_extras %}
+
+{% block content %}
+
+{{acquis}}
+
+<form method="post" action="{% url "ues.evaluer_acquis" acquis.slug %}">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit"/>
+</form>
+
+{% endblock %}

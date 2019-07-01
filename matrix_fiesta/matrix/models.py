@@ -66,10 +66,46 @@ class ECUE(models.Model):
     class Meta:
         ordering = ['ue', 'nom']
 
+
+class EchelleValeurs(models.Model):
+    nom = models.CharField(max_length=150)
+    description = models.TextField(blank=True, default="")
+    type_echelle = models.CharField(max_length=100, choices=[
+            ("1", "Entiers"), 
+            ("2", "Valeurs")
+    ])
+
+    def __str__(self):
+        return "%s (%s)" % (self.nom, self.type_echelle)
+
+
+class Valeur(models.Model):
+    valeur = models.CharField(max_length=10)
+    echelle = models.ForeignKey(EchelleValeurs, on_delete=models.CASCADE)
+    ordre = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return "%s" % (self.valeur)
+
+    class Meta:
+        ordering = ["echelle", "ordre"]
+
+
 class AcquisApprentissage(models.Model):
     nom = models.CharField(max_length=150)
     ecue = models.ForeignKey(ECUE, on_delete=models.SET_NULL, related_name="acquis", null=True)
-    valeurs = models.IntegerField()
+    valeurs = models.ForeignKey(EchelleValeurs, on_delete=models.SET_NULL, related_name="+", null=True)
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
-        return "%s" % (self.nom.upper())
+        return "%s : %s" % (self.ecue, self.nom)
+
+    class Meta:
+        ordering = ["ecue", "nom"]        
+
+
+class EvaluationEleve(models.Model):
+    acquis = models.ForeignKey(AcquisApprentissage, on_delete=models.CASCADE)
+    eleve = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    valeur = models.ForeignKey(Valeur, on_delete=models.SET_NULL, null=True)
+    evaluation_enseignant = models.BooleanField(default=False)
