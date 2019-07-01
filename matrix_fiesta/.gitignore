@@ -1,0 +1,15 @@
+local
+*.pyc
+
+settings_local.py
+parameters.py
+
+db.sqlite3
+database.db
+secret_key*
+
+__pycache__/*
+
+*.mo
+assets/ckeditor/
+.well-known/
