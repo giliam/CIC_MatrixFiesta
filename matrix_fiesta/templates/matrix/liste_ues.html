@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+{% block content %}
+{% for ue in ues %}
+    <h2>{{ue}}</h2>
+
+    <ul>
+    {% for ecue in ue.ecues.all %}
+        <li><a href="{% url "ues.matrix_ecue" ecue.slug %}">{{ecue}}</a></li>
+    {% endfor %}
+    </ul>
+{% endfor %}
+{% endblock %}
