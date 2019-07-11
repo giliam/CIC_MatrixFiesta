@@ -20,8 +20,8 @@ def liste_ues(request):
 def matrix_ecue(request, slug):
     ecue = models.ECUE.objects.get(slug=slug)
     utilisateur = models.Utilisateur.objects.get(user=request.user)
-    acquis = models.AcquisApprentissage.objects.filter(ecue=ecue)
-    evaluations = models.EvaluationEleve.objects.filter(eleve=utilisateur, evaluation_enseignant=False).prefetch_related('acquis')
+    acquis = models.AcquisApprentissage.objects.filter(ecue=ecue).prefetch_related('valeurs')
+    evaluations = models.EvaluationEleve.objects.filter(eleve=utilisateur, evaluation_enseignant=False).prefetch_related('acquis', 'valeur')
 
     evaluations_acquis = {}
 
