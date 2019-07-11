@@ -3,7 +3,7 @@ from django.urls import path, re_path
 from matrix import views
 
 urlpatterns = [
-    path('', views.homepage, name="homepage"),
+    path('', views.homepage, name="matrix.homepage"),
     path('ues/liste/', views.liste_ues, name="ues.liste"),
 
     re_path(r'ues/matrix/(?P<slug>[-\w]+)', views.matrix_ecue, name="ues.matrix_ecue"),
