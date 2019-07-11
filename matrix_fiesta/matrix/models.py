@@ -1,9 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-# Create your models here.
 
-class Utilisateur(models.Model):
+class DatedModel(models.Model):
+    added_date = models.DateTimeField(auto_now_add=True, blank=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Utilisateur(DatedModel):
     prenom = models.CharField(max_length=150)
     nom = models.CharField(max_length=150)
 
@@ -13,7 +20,7 @@ class Utilisateur(models.Model):
         return "%s %s" % (self.prenom, self.nom.upper())
 
 
-class Annee(models.Model):
+class Annee(DatedModel):
     nom = models.CharField(max_length=150)
     ordre = models.PositiveIntegerField(default=0)
 
@@ -24,7 +31,7 @@ class Annee(models.Model):
         ordering = ['ordre']
 
 
-class Semestre(models.Model):
+class Semestre(DatedModel):
     nom = models.CharField(max_length=150)
     ordre = models.PositiveIntegerField(default=0)
     annee = models.ForeignKey(
@@ -40,7 +47,7 @@ class Semestre(models.Model):
         ordering = ['ordre']
 
 
-class UE(models.Model):
+class UE(DatedModel):
     nom = models.CharField(max_length=150)
     semestre = models.ForeignKey(Semestre, on_delete=models.SET_NULL, related_name="ues", null=True)
 
@@ -51,7 +58,7 @@ class UE(models.Model):
         ordering = ['semestre']
 
 
-class ECUE(models.Model):
+class ECUE(DatedModel):
     nom = models.CharField(max_length=150)
     ue = models.ForeignKey(UE, on_delete=models.SET_NULL, related_name="ecues", null=True)
     slug = models.SlugField(unique=True)
@@ -67,7 +74,7 @@ class ECUE(models.Model):
         ordering = ['ue', 'nom']
 
 
-class EchelleValeurs(models.Model):
+class EchelleValeurs(DatedModel):
     nom = models.CharField(max_length=150)
     description = models.TextField(blank=True, default="")
     type_echelle = models.CharField(max_length=100, choices=[
@@ -79,7 +86,7 @@ class EchelleValeurs(models.Model):
         return "%s (%s)" % (self.nom, self.type_echelle)
 
 
-class Valeur(models.Model):
+class Valeur(DatedModel):
     valeur = models.CharField(max_length=10)
     echelle = models.ForeignKey(EchelleValeurs, on_delete=models.CASCADE)
     ordre = models.PositiveIntegerField(default=0)
@@ -91,7 +98,7 @@ class Valeur(models.Model):
         ordering = ["echelle", "ordre"]
 
 
-class AcquisApprentissage(models.Model):
+class AcquisApprentissage(DatedModel):
     nom = models.CharField(max_length=150)
     ecue = models.ForeignKey(ECUE, on_delete=models.SET_NULL, related_name="acquis", null=True)
     valeurs = models.ForeignKey(EchelleValeurs, on_delete=models.SET_NULL, related_name="+", null=True)
@@ -100,11 +107,15 @@ class AcquisApprentissage(models.Model):
     def __str__(self):
         return "%s : %s" % (self.ecue, self.nom)
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.nom)
+        super(AcquisApprentissage, self).save(*args, **kwargs)
+    
     class Meta:
         ordering = ["ecue", "nom"]        
 
 
-class EvaluationEleve(models.Model):
+class EvaluationEleve(DatedModel):
     acquis = models.ForeignKey(AcquisApprentissage, on_delete=models.CASCADE)
     eleve = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     valeur = models.ForeignKey(Valeur, on_delete=models.SET_NULL, null=True)
