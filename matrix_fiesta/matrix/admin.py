@@ -7,7 +7,6 @@ class SlugNomAdmin(admin.ModelAdmin):
 
 
 
-admin.site.register(models.EchelleValeurs)
 admin.site.register(models.EvaluationEleve)
 admin.site.register(models.Valeur)
 admin.site.register(models.Utilisateur)

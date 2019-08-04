@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 
 class DatedModel(models.Model):
-    added_date = models.DateTimeField(auto_now_add=True, blank=True)
-    updated_date = models.DateTimeField(auto_now=True)
+    added_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_date = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -74,34 +74,20 @@ class ECUE(DatedModel):
         ordering = ['ue', 'nom']
 
 
-class EchelleValeurs(DatedModel):
-    nom = models.CharField(max_length=150)
-    description = models.TextField(blank=True, default="")
-    type_echelle = models.CharField(max_length=100, choices=[
-            ("1", "Entiers"), 
-            ("2", "Valeurs")
-    ])
-
-    def __str__(self):
-        return "%s (%s)" % (self.nom, self.type_echelle)
-
-
 class Valeur(DatedModel):
     valeur = models.CharField(max_length=10)
-    echelle = models.ForeignKey(EchelleValeurs, on_delete=models.CASCADE)
     ordre = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return "%s" % (self.valeur)
 
     class Meta:
-        ordering = ["echelle", "ordre"]
+        ordering = ["ordre"]
 
 
 class AcquisApprentissage(DatedModel):
     nom = models.CharField(max_length=150)
     ecue = models.ForeignKey(ECUE, on_delete=models.SET_NULL, related_name="acquis", null=True)
-    valeurs = models.ForeignKey(EchelleValeurs, on_delete=models.SET_NULL, related_name="+", null=True)
     slug = models.SlugField(unique=True)
 
     def __str__(self):
@@ -112,7 +98,7 @@ class AcquisApprentissage(DatedModel):
         super(AcquisApprentissage, self).save(*args, **kwargs)
     
     class Meta:
-        ordering = ["ecue", "nom"]        
+        ordering = ["ecue", "nom"]
 
 
 class EvaluationEleve(DatedModel):
@@ -120,3 +106,6 @@ class EvaluationEleve(DatedModel):
     eleve = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     valeur = models.ForeignKey(Valeur, on_delete=models.SET_NULL, null=True)
     evaluation_enseignant = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["-added_date"]

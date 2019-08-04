@@ -20,13 +20,26 @@ def liste_ues(request):
 def matrix_ecue(request, slug):
     ecue = models.ECUE.objects.get(slug=slug)
     utilisateur = models.Utilisateur.objects.get(user=request.user)
-    acquis = models.AcquisApprentissage.objects.filter(ecue=ecue).prefetch_related('valeurs')
-    evaluations = models.EvaluationEleve.objects.filter(eleve=utilisateur, evaluation_enseignant=False).prefetch_related('acquis', 'valeur')
+    acquis = models.AcquisApprentissage.objects.filter(ecue=ecue)
+    evaluations = models.EvaluationEleve.objects.filter(
+        eleve=utilisateur, 
+        evaluation_enseignant=False
+    ).prefetch_related('acquis', 'valeur')
 
     evaluations_acquis = {}
 
     for evaluation in evaluations.all():
-        evaluations_acquis[evaluation.acquis.id] = evaluation.valeur
+        if evaluation.acquis.id in evaluations_acquis.keys():
+            evaluations_acquis[evaluation.acquis.id]["history"].append({
+                "value": evaluation.valeur, "date": evaluation.added_date
+            })
+            continue
+        evaluations_acquis[evaluation.acquis.id] = {
+            "last": {
+                "value": evaluation.valeur, "date": evaluation.added_date
+            },
+            "history": []
+        }
 
     return render(request, "matrix/matrix_ecue.html", {
         "ecue":ecue, "acquis":acquis, "evaluations":evaluations, "evaluations_acquis":evaluations_acquis
@@ -65,8 +78,10 @@ def evaluer_acquis(request, slug):
     eleve = models.Utilisateur.objects.get(user=request.user)
     try:
         evaluation_existante = models.EvaluationEleve.objects.get(acquis=acquis, eleve=eleve, evaluation_enseignant=False)
-        return redirect('ues.matrix_ecue', acquis.ecue.slug)
+        # return redirect('ues.matrix_ecue', acquis.ecue.slug)
     except models.EvaluationEleve.DoesNotExist:
+        pass
+    except models.EvaluationEleve.MultipleObjectsReturned:
         pass
 
     if request.method == "POST":
