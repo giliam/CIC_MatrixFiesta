@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.debug import sensitive_post_parameters
@@ -6,10 +6,22 @@ from django.views.decorators.debug import sensitive_post_parameters
 from matrix import forms
 from matrix import models
 
-def homepage(request):
-    return render(request, "homepage.html")
+"""
+Authorizations functions
+"""
+def enseignant_check(user):
+    print(user)
+    return user.groups.filter(name="Enseignants").exists()
 
-def get_evaluations_acquis(evaluations):
+
+def eleve_check(user):
+    print(user)
+    return user.groups.filter(name="Élèves").exists()
+
+"""
+Useful functions
+"""
+def _get_evaluations_acquis(evaluations):
     evaluations_acquis = {}
     evaluations_acquis_valeurs_existantes = {}
 
@@ -34,13 +46,19 @@ def get_evaluations_acquis(evaluations):
     return evaluations_acquis, evaluations_acquis_valeurs_existantes
 
 
+def homepage(request):
+    return render(request, "homepage.html")
+
+
 @login_required
+@user_passes_test(eleve_check)
 def liste_ues(request):
     ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre')
     return render(request, "matrix/liste_ues.html", {"ues":ues})
 
 
 @login_required
+@user_passes_test(eleve_check)
 def matrix_ues(request):
     utilisateur = models.Utilisateur.objects.get(user=request.user)
 
@@ -52,7 +70,7 @@ def matrix_ues(request):
         evaluation_enseignant=False
     ).prefetch_related('acquis', 'valeur')
 
-    evaluations_acquis, evaluations_acquis_valeurs_existantes = get_evaluations_acquis(evaluations)
+    evaluations_acquis, evaluations_acquis_valeurs_existantes = _get_evaluations_acquis(evaluations)
 
     return render(request, "matrix/matrix_ues.html", {
         "ues":ues, "valeurs":valeurs,
@@ -60,6 +78,7 @@ def matrix_ues(request):
 
 
 @login_required
+@user_passes_test(eleve_check)
 def matrix_ecue(request, slug):
     ecue = models.ECUE.objects.get(slug=slug)
     utilisateur = models.Utilisateur.objects.get(user=request.user)
@@ -69,7 +88,7 @@ def matrix_ecue(request, slug):
         evaluation_enseignant=False
     ).prefetch_related('acquis', 'valeur')
 
-    evaluations_acquis, _ = get_evaluations_acquis(evaluations)
+    evaluations_acquis, _ = _get_evaluations_acquis(evaluations)
 
     return render(request, "matrix/matrix_ecue.html", {
         "ecue":ecue, "acquis":acquis, "evaluations":evaluations, "evaluations_acquis":evaluations_acquis
@@ -102,6 +121,7 @@ def deconnexion(request):
 
 
 @login_required
+@user_passes_test(eleve_check)
 def evaluer_acquis(request, slug):
     acquis = models.AcquisApprentissage.objects.get(slug=slug)
 
