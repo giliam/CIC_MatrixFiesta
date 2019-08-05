@@ -9,11 +9,54 @@ from matrix import models
 def homepage(request):
     return render(request, "homepage.html")
 
+def get_evaluations_acquis(evaluations):
+    evaluations_acquis = {}
+    evaluations_acquis_valeurs_existantes = {}
+
+    for evaluation in evaluations.all():
+
+        if evaluation.acquis.id in evaluations_acquis.keys():
+            evaluations_acquis_valeurs_existantes[evaluation.acquis.id].append(evaluation.valeur)
+
+            evaluations_acquis[evaluation.acquis.id]["history"].append({
+                "value": evaluation.valeur, "date": evaluation.added_date
+            })
+            continue
+        evaluations_acquis[evaluation.acquis.id] = {
+            "last": {
+                "value": evaluation.valeur, "date": evaluation.added_date
+            },
+            "history": []
+        }
+
+        evaluations_acquis_valeurs_existantes[evaluation.acquis.id] = [evaluation.valeur]
+
+    return evaluations_acquis, evaluations_acquis_valeurs_existantes
+
 
 @login_required
 def liste_ues(request):
     ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre')
     return render(request, "matrix/liste_ues.html", {"ues":ues})
+
+
+@login_required
+def matrix_ues(request):
+    utilisateur = models.Utilisateur.objects.get(user=request.user)
+
+    ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre').prefetch_related("ecues__acquis")
+    valeurs = models.Valeur.objects.all()
+
+    evaluations = models.EvaluationEleve.objects.filter(
+        eleve=utilisateur, 
+        evaluation_enseignant=False
+    ).prefetch_related('acquis', 'valeur')
+
+    evaluations_acquis, evaluations_acquis_valeurs_existantes = get_evaluations_acquis(evaluations)
+
+    return render(request, "matrix/matrix_ues.html", {
+        "ues":ues, "valeurs":valeurs,
+        "evaluations_acquis": evaluations_acquis, "evaluations_acquis_valeurs_existantes": evaluations_acquis_valeurs_existantes})
 
 
 @login_required
@@ -26,20 +69,7 @@ def matrix_ecue(request, slug):
         evaluation_enseignant=False
     ).prefetch_related('acquis', 'valeur')
 
-    evaluations_acquis = {}
-
-    for evaluation in evaluations.all():
-        if evaluation.acquis.id in evaluations_acquis.keys():
-            evaluations_acquis[evaluation.acquis.id]["history"].append({
-                "value": evaluation.valeur, "date": evaluation.added_date
-            })
-            continue
-        evaluations_acquis[evaluation.acquis.id] = {
-            "last": {
-                "value": evaluation.valeur, "date": evaluation.added_date
-            },
-            "history": []
-        }
+    evaluations_acquis, _ = get_evaluations_acquis(evaluations)
 
     return render(request, "matrix/matrix_ecue.html", {
         "ecue":ecue, "acquis":acquis, "evaluations":evaluations, "evaluations_acquis":evaluations_acquis

@@ -107,5 +107,8 @@ class EvaluationEleve(DatedModel):
     valeur = models.ForeignKey(Valeur, on_delete=models.SET_NULL, null=True)
     evaluation_enseignant = models.BooleanField(default=False)
 
+    def __str__(self):
+        return "%s, %s : %s" % (self.acquis, self.eleve, self.valeur)
+
     class Meta:
         ordering = ["-added_date"]
