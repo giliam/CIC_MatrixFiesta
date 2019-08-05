@@ -112,3 +112,12 @@ class EvaluationEleve(DatedModel):
 
     class Meta:
         ordering = ["-added_date"]
+
+
+class PetiteClasse(DatedModel):
+    enseignant = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, related_name="petites_classes_enseignant", null=True)
+    ecue = models.ForeignKey(ECUE, on_delete=models.CASCADE, related_name="petites_classes")
+    eleves = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, related_name="petites_classes_eleve", null=True)
+
+    def __str__(self):
+        return "PC de %s par %s (%d élèves)" % (self.ecue, self.enseignant, len(self.eleves))
