@@ -1,11 +1,16 @@
 from django import forms
-from matrix.models import EvaluationEleve
+from matrix.models import StudentEvaluation
 
 class ConnexionForm(forms.Form):
     username = forms.CharField(label="Nom d'utilisateur (email)", max_length=30)
     password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
 
-class EvaluationEleveForm(forms.ModelForm):
+class StudentEvaluationForm(forms.ModelForm):
     class Meta:
-        model = EvaluationEleve
-        fields = ('valeur',)
+        model = StudentEvaluation
+        fields = ('evaluation_value',)
+
+class TeacherEvaluationForm(forms.ModelForm):
+    class Meta:
+        model = StudentEvaluation
+        fields = ('evaluation_value','student',)

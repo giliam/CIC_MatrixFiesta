@@ -10,39 +10,39 @@ from common import auths
 """
 Authorizations functions
 """
-def enseignant_check(user):
+def teacher_check(user):
     return auths.check_is_teacher(user)
 
 
-def eleve_check(user):
+def student_check(user):
     return auths.check_is_student(user)
 
 """
 Useful functions
 """
-def _get_evaluations_acquis(evaluations):
-    evaluations_acquis = {}
-    evaluations_acquis_valeurs_existantes = {}
+def _get_achievement_evaluations(evaluations):
+    achievements_evaluations = {}
+    existing_values_achievements_evaluations = {}
 
     for evaluation in evaluations.all():
 
-        if evaluation.acquis.id in evaluations_acquis.keys():
-            evaluations_acquis_valeurs_existantes[evaluation.acquis.id].append(evaluation.valeur)
+        if evaluation.achievement.id in achievements_evaluations.keys():
+            existing_values_achievements_evaluations[evaluation.achievement.id].append(evaluation.evaluation_value)
 
-            evaluations_acquis[evaluation.acquis.id]["history"].append({
-                "value": evaluation.valeur, "date": evaluation.added_date
+            achievements_evaluations[evaluation.achievement.id]["history"].append({
+                "value": evaluation.evaluation_value, "date": evaluation.added_date
             })
             continue
-        evaluations_acquis[evaluation.acquis.id] = {
+        achievements_evaluations[evaluation.achievement.id] = {
             "last": {
-                "value": evaluation.valeur, "date": evaluation.added_date
+                "value": evaluation.evaluation_value, "date": evaluation.added_date
             },
             "history": []
         }
 
-        evaluations_acquis_valeurs_existantes[evaluation.acquis.id] = [evaluation.valeur]
+        existing_values_achievements_evaluations[evaluation.achievement.id] = [evaluation.evaluation_value]
 
-    return evaluations_acquis, evaluations_acquis_valeurs_existantes
+    return achievements_evaluations, existing_values_achievements_evaluations
 
 
 def homepage(request):
@@ -50,61 +50,61 @@ def homepage(request):
 
 
 @login_required
-@user_passes_test(eleve_check)
-def liste_ues(request):
+@user_passes_test(student_check)
+def ues_list(request):
     ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre')
-    return render(request, "matrix/eleves/liste_ues.html", {"ues":ues})
+    return render(request, "matrix/students/ues_list.html", {"ues":ues})
 
 
 @login_required
-@user_passes_test(eleve_check)
+@user_passes_test(student_check)
 def matrix_ues(request):
-    utilisateur = models.Utilisateur.objects.get(user=request.user)
+    profile_user = models.ProfileUser.objects.get(user=request.user)
 
-    ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre').prefetch_related("ecues__acquis")
-    valeurs = models.Valeur.objects.all()
+    ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre').prefetch_related("ecues__achievements")
+    values = models.EvaluationValue.objects.all()
 
-    evaluations = models.EvaluationEleve.objects.filter(
-        eleve=utilisateur, 
-        evaluation_enseignant=False
-    ).prefetch_related('acquis', 'valeur')
+    evaluations = models.StudentEvaluation.objects.filter(
+        student=profile_user, 
+        teacher_evaluation=False
+    ).prefetch_related('achievement', 'evaluation_value')
 
-    evaluations_acquis, evaluations_acquis_valeurs_existantes = _get_evaluations_acquis(evaluations)
+    achievements_evaluations, existing_values_achievements_evaluations = _get_achievement_evaluations(evaluations)
 
-    return render(request, "matrix/eleves/matrix_ues.html", {
-        "ues":ues, "valeurs":valeurs,
-        "evaluations_acquis": evaluations_acquis, "evaluations_acquis_valeurs_existantes": evaluations_acquis_valeurs_existantes})
+    return render(request, "matrix/students/matrix_ues.html", {
+        "ues":ues, "values":values,
+        "achievements_evaluations": achievements_evaluations, "existing_values_achievements_evaluations": existing_values_achievements_evaluations})
 
 
 @login_required
-@user_passes_test(eleve_check)
+@user_passes_test(student_check)
 def matrix_ecue(request, slug):
     ecue = models.ECUE.objects.get(slug=slug)
-    utilisateur = models.Utilisateur.objects.get(user=request.user)
-    acquis = models.AcquisApprentissage.objects.filter(ecue=ecue)
-    evaluations = models.EvaluationEleve.objects.filter(
-        eleve=utilisateur, 
-        evaluation_enseignant=False
-    ).prefetch_related('acquis', 'valeur')
+    profile_user = models.ProfileUser.objects.get(user=request.user)
+    achievements = models.LearningAchievement.objects.filter(ecue=ecue)
+    evaluations = models.StudentEvaluation.objects.filter(
+        student=profile_user, 
+        teacher_evaluation=False
+    ).prefetch_related('achievement', 'evaluation_value')
 
-    evaluations_acquis, _ = _get_evaluations_acquis(evaluations)
+    achievements_evaluations, _ = _get_achievement_evaluations(evaluations)
 
-    return render(request, "matrix/eleves/matrix_ecue.html", {
-        "ecue":ecue, "acquis":acquis, "evaluations":evaluations, "evaluations_acquis":evaluations_acquis
+    return render(request, "matrix/students/matrix_ecue.html", {
+        "ecue":ecue, "achievements":achievements, "evaluations":evaluations, "achievements_evaluations":achievements_evaluations
     })
 
 
 @sensitive_post_parameters('password')
-def connexion(request):
+def log_in(request):
     error = False
     if request.method == "POST":
         form = forms.ConnexionForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data["username"] # Nous récupérons le nom d'utilisateur
+            username = form.cleaned_data["username"] # Nous récupérons le nom d'profile_user
             password = form.cleaned_data["password"] # … et le mot de passe
             user = authenticate(username=username, password=password) #Nous vérifions si les données sont correctes
             if user: # Si l'objet renvoyé n'est pas None
-                login(request, user) # nous connectons l'utilisateur
+                login(request, user) # nous connectons l'profile_user
                 return redirect("homepage")
             else: #sinon une erreur sera affichée
                 error = True
@@ -114,48 +114,76 @@ def connexion(request):
 
 
 @login_required
-def deconnexion(request):
+def log_out(request):
     logout(request)
-    return redirect(reverse(connexion))
+    return redirect(reverse(log_in))
 
 
 @login_required
-@user_passes_test(eleve_check)
-def evaluer_acquis(request, slug):
-    acquis = models.AcquisApprentissage.objects.get(slug=slug)
+@user_passes_test(student_check)
+def evaluate_achievement(request, slug):
+    achievement = models.LearningAchievement.objects.get(slug=slug)
 
-    eleve = models.Utilisateur.objects.get(user=request.user)
+    student = models.ProfileUser.objects.get(user=request.user)
     try:
-        evaluation_existante = models.EvaluationEleve.objects.get(acquis=acquis, eleve=eleve, evaluation_enseignant=False)
-        # return redirect('ues.matrix_ecue', acquis.ecue.slug)
-    except models.EvaluationEleve.DoesNotExist:
+        evaluation_existante = models.StudentEvaluation.objects.get(achievement=achievement, student=student, teacher_evaluation=False)
+        # return redirect('ues.matrix_ecue', achievement.ecue.slug)
+    except models.StudentEvaluation.DoesNotExist:
         pass
-    except models.EvaluationEleve.MultipleObjectsReturned:
+    except models.StudentEvaluation.MultipleObjectsReturned:
         pass
 
     if request.method == "POST":
-        form = forms.EvaluationEleveForm(request.POST)
+        form = forms.StudentEvaluationForm(request.POST)
         if form.is_valid():
-            evaluation_eleve = form.save(commit=False)
-            evaluation_eleve.acquis = acquis
-            evaluation_eleve.eleve = eleve
-            evaluation_eleve.evaluation_enseignant = False
-            evaluation_eleve.save()
-            return redirect('ues.matrix_ecue', acquis.ecue.slug)
+            evaluation_student = form.save(commit=False)
+            evaluation_student.achievement = achievement
+            evaluation_student.student = student
+            evaluation_student.teacher_evaluation = False
+            evaluation_student.save()
+            return redirect('ues.matrix_ecue', achievement.ecue.slug)
     else:
-        form = forms.EvaluationEleveForm()
-    return render(request, "matrix/eleves/evaluer_acquis.html", {"form":form, "acquis": acquis})
+        form = forms.StudentEvaluationForm()
+    return render(request, "matrix/students/evaluate_achievement.html", {"form":form, "achievement": achievement})
 
 
 @login_required
-@user_passes_test(enseignant_check)
+@user_passes_test(teacher_check)
 def homepage_teachers(request):
-    enseignant = models.Utilisateur.objects.get(user=request.user)
+    teacher = models.ProfileUser.objects.get(user=request.user)
 
-    classes = models.PetiteClasse.objects.filter(
-        enseignant=enseignant
-    ).prefetch_related('ecue').prefetch_related('eleves')
+    classes = models.SmallClass.objects.filter(
+        teacher=teacher
+    ).prefetch_related('ecue').prefetch_related('students')
 
-    return render(request, "matrix/enseignants/homepage.html", {
+    return render(request, "matrix/teachers/homepage.html", {
         "classes": classes            
     })
+
+
+@login_required
+@user_passes_test(student_check)
+def evaluate_achievement_student(request, slug, student):
+    achievement = models.LearningAchievement.objects.get(slug=slug)
+
+    student = models.ProfileUser.objects.get(user=request.user)
+    try:
+        evaluation_existante = models.StudentEvaluation.objects.get(achievement=achievement, student=student, teacher_evaluation=False)
+        # return redirect('ues.matrix_ecue', achievement.ecue.slug)
+    except models.StudentEvaluation.DoesNotExist:
+        pass
+    except models.StudentEvaluation.MultipleObjectsReturned:
+        pass
+
+    if request.method == "POST":
+        form = forms.StudentEvaluationForm(request.POST)
+        if form.is_valid():
+            evaluation_student = form.save(commit=False)
+            evaluation_student.achievement = achievement
+            evaluation_student.student = student
+            evaluation_student.teacher_evaluation = False
+            evaluation_student.save()
+            return redirect('ues.matrix_ecue', achievement.ecue.slug)
+    else:
+        form = forms.StudentEvaluationForm()
+    return render(request, "matrix/teachers/evaluate_achievement.html", {"form":form, "achievement": achievement})

@@ -4,9 +4,9 @@
 
 {% block content %}
 
-{{acquis}}
+{{achievement}}
 
-<form method="post" action="{% url "ues.evaluer_acquis" acquis.slug %}">
+<form method="post" action="{% url "ues.evaluate_achievement" achievement.slug %}">
 {% csrf_token %}
 {{ form.as_p }}
 <input type="submit"/>

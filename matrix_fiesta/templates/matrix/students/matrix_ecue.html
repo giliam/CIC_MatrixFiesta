@@ -7,21 +7,21 @@
 
 <ul>
     
-{% for c_acquis in acquis %}
+{% for c_achievement in achievements %}
 <li>
-    <strong>{{c_acquis.nom}}</strong>
+    <strong>{{c_achievement.name}}</strong>
     <br />
-    {% if c_acquis.id in evaluations_acquis.keys %}
-        {% with current_eval=evaluations_acquis|get_item:c_acquis.id %}
+    {% if c_achievement.id in achievements_evaluations.keys %}
+        {% with current_eval=achievements_evaluations|get_item:c_achievement.id %}
             Évalué : <em>{{ current_eval|get_item:"last"|get_item:"value" }} - {{current_eval|get_item:"last"|get_item:"date" }}</em>
             <br />
             {% for prec_eval in current_eval|get_item:"history" %}
                 <span style="font-size: 0.8em;">{{ prec_eval.value }} - {{ prec_eval.date }} ;</span>
             {% endfor %}
         {% endwith %}
-        <a href="{% url "ues.evaluer_acquis" c_acquis.slug %}">Nouvelle évaluation ?</a>
+        <a href="{% url "ues.evaluate_achievement" c_achievement.slug %}">Nouvelle évaluation ?</a>
     {% else %}
-    <a href="{% url "ues.evaluer_acquis" c_acquis.slug %}">Non évalué...</a>
+    <a href="{% url "ues.evaluate_achievement" c_achievement.slug %}">Non évalué...</a>
     {% endif %}
 </li>
 {% empty %}

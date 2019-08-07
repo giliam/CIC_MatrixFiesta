@@ -7,122 +7,136 @@ class DatedModel(models.Model):
     updated_date = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     class Meta:
+        verbose_name = "DatedModel"
         abstract = True
 
 
-class Utilisateur(DatedModel):
-    prenom = models.CharField(max_length=150)
-    nom = models.CharField(max_length=150)
+class ProfileUser(DatedModel):
+    firstname = models.CharField(max_length=150)
+    lastname = models.CharField(max_length=150)
 
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return "%s %s" % (self.prenom, self.nom.upper())
-
-
-class Annee(DatedModel):
-    nom = models.CharField(max_length=150)
-    ordre = models.PositiveIntegerField(default=0)
-
-    def __str__(self):
-        return "%s" % (self.nom.upper())
+        return "%s %s" % (self.firstname, self.lastname.upper())
 
     class Meta:
-        ordering = ['ordre']
+        verbose_name = "Utilisateur"
+
+class SchoolYear(DatedModel):
+    name = models.CharField(max_length=150)
+    order = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return "%s" % (self.name.upper())
+
+    class Meta:
+        verbose_name = "Annee"
+        ordering = ['order']
 
 
 class Semestre(DatedModel):
-    nom = models.CharField(max_length=150)
-    ordre = models.PositiveIntegerField(default=0)
-    annee = models.ForeignKey(
-        Annee, 
+    name = models.CharField(max_length=150)
+    order = models.PositiveIntegerField(default=0)
+    schoolyear = models.ForeignKey(
+        SchoolYear, 
         on_delete=models.SET_NULL, null=True,
         related_name="semestres"
     )
 
     def __str__(self):
-        return "%s" % (self.nom.upper())
+        return "%s" % (self.name.upper())
 
     class Meta:
-        ordering = ['ordre']
+        verbose_name = "Semestre"
+        ordering = ['order']
 
 
 class UE(DatedModel):
-    nom = models.CharField(max_length=150)
+    name = models.CharField(max_length=150)
     semestre = models.ForeignKey(Semestre, on_delete=models.SET_NULL, related_name="ues", null=True)
 
     def __str__(self):
-        return "%s (%s)" % (self.nom.upper(), self.semestre)
+        return "%s (%s)" % (self.name.upper(), self.semestre)
 
     class Meta:
+        verbose_name = "UE"
         ordering = ['semestre']
 
 
 class ECUE(DatedModel):
-    nom = models.CharField(max_length=150)
+    name = models.CharField(max_length=150)
     ue = models.ForeignKey(UE, on_delete=models.SET_NULL, related_name="ecues", null=True)
     slug = models.SlugField(unique=True)
 
     def __str__(self):
-        return "%s - %s" % (self.nom.upper(), self.ue)
+        return "%s - %s" % (self.name.upper(), self.ue)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.nom)
+        self.slug = slugify(self.name)
         super(ECUE, self).save(*args, **kwargs)
 
     class Meta:
-        ordering = ['ue', 'nom']
+        verbose_name = "ECUE"
+        ordering = ['ue', 'name']
 
 
-class Valeur(DatedModel):
-    valeur = models.CharField(max_length=10)
-    ordre = models.PositiveIntegerField(default=0)
+class EvaluationValue(DatedModel):
+    value = models.CharField(max_length=10)
+    order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return "%s" % (self.valeur)
+        return "%s" % (self.value)
 
     class Meta:
-        ordering = ["ordre"]
+        verbose_name = "Valeur"
+        ordering = ["order"]
 
 
-class AcquisApprentissage(DatedModel):
-    nom = models.CharField(max_length=150)
-    ecue = models.ForeignKey(ECUE, on_delete=models.SET_NULL, related_name="acquis", null=True)
+class LearningAchievement(DatedModel):
+    name = models.CharField(max_length=150)
+    ecue = models.ForeignKey(ECUE, on_delete=models.SET_NULL, related_name="achievements", null=True)
     slug = models.SlugField(unique=True)
 
     def __str__(self):
-        return "%s : %s" % (self.ecue, self.nom)
+        return "%s : %s" % (self.ecue, self.name)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.nom)
-        super(AcquisApprentissage, self).save(*args, **kwargs)
+        self.slug = slugify(self.name)
+        super(LearningAchievement, self).save(*args, **kwargs)
     
     class Meta:
-        ordering = ["ecue", "nom"]
+        verbose_name = "AcquisApprentissage"
+        ordering = ["ecue", "name"]
 
 
-class EvaluationEleve(DatedModel):
-    acquis = models.ForeignKey(AcquisApprentissage, on_delete=models.CASCADE)
-    eleve = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
-    valeur = models.ForeignKey(Valeur, on_delete=models.SET_NULL, null=True)
-    evaluation_enseignant = models.BooleanField(default=False)
+class StudentEvaluation(DatedModel):
+    achievement = models.ForeignKey(LearningAchievement, on_delete=models.CASCADE)
+    student = models.ForeignKey(ProfileUser, on_delete=models.CASCADE)
+    evaluation_value = models.ForeignKey(EvaluationValue, on_delete=models.SET_NULL, null=True)
+    teacher_evaluation = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s, %s : %s" % (self.acquis, self.eleve, self.valeur)
+        return "%s, %s : %s" % (self.achievement, self.student, self.evaluation_value)
 
     class Meta:
+        verbose_name = "EvaluationEleve"
         ordering = ["-added_date"]
 
 
-class PetiteClasse(DatedModel):
-    enseignant = models.ForeignKey(
-        Utilisateur, on_delete=models.SET_NULL, 
-        related_name="petites_classes_enseignant", null=True,
+class SmallClass(DatedModel):
+    teacher = models.ForeignKey(
+        ProfileUser, on_delete=models.SET_NULL, 
+        related_name="small_classes_teacher", null=True,
         limit_choices_to={'user__groups__name': 'Enseignants'}
     )
-    ecue = models.ForeignKey(ECUE, on_delete=models.CASCADE, related_name="petites_classes")
-    eleves = models.ManyToManyField(Utilisateur, related_name="petites_classes_eleve",
+    ecue = models.ForeignKey(ECUE, on_delete=models.CASCADE, related_name="small_classes")
+    students = models.ManyToManyField(ProfileUser, related_name="small_classes_student",
         limit_choices_to={'user__groups__name': 'Élèves'})
 
     def __str__(self):
-        return "PC de %s par %s (%d élèves)" % (self.ecue, self.enseignant, self.eleves.count())
+        return "PC de %s par %s (%d élèves)" % (self.ecue, self.teacher, self.students.count())
+
+    class Meta:
+        verbose_name = "PetiteClasse"
+        ordering = ["ecue"]
