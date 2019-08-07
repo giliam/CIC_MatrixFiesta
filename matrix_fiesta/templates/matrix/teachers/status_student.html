@@ -1,0 +1,47 @@
+{% extends "index.html" %}
+
+{% load common_extras %}
+
+{% block content %}
+<h1>{{small_class}}</h1>
+<h2>ECUE : {{small_class.ecue}}</h2>
+
+<table class="ui blue table">
+    <thead>
+        <tr>
+            <th>Achievement</th>
+            <th>-</th>
+            {% for value in values %}
+                <th>{{value}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+    {% for achievement in small_class.ecue.achievements.all %}
+        <tr>
+            <td>{{achievement.name}}</td>
+            <td><a href="{% url "ues.evaluate_achievement_student" small_class.id student.id achievement.slug %}">Evaluate</a></td>
+            {% for value in values %}
+                {% if value in existing_achiev_eval|get_item:achievement.id %}
+                    <td>
+                    {% with current_eval=achievements_evaluations|get_item:achievement.id %}
+                        {% if value == current_eval|get_item:"last"|get_item:"value" %}
+                            <strong>{{current_eval|get_item:"last"|get_item:"date" }}</strong>
+                        {% endif %}
+                        {% for prec_eval in current_eval|get_item:"history" %}
+                            {% if value == prec_eval.value %}
+                                <em>{{ prec_eval.date }}</em>
+                            {% endif %}
+                        {% endfor %}
+                        <br />
+                    {% endwith %}
+                    </td>
+                {% else %}
+                <td></td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

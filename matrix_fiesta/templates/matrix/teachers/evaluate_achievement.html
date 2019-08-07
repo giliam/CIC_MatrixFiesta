@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+
+{% load common_extras %}
+
+{% block content %}
+
+{{achievement}} for {{student}}
+
+<form method="post" action="{% url "ues.evaluate_achievement_student" small_class.id student.id achievement.slug %}">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit"/>
+</form>
+
+{% endblock %}

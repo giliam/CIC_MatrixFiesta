@@ -23,7 +23,7 @@
             <tr>
                 <td>{{achievement.name}}</td>
                 {% for value in values %}
-                    {% if value in existing_values_achievements_evaluations|get_item:achievement.id %}
+                    {% if value in existing_achiev_eval|get_item:achievement.id %}
                         <td>
                         {% with current_eval=achievements_evaluations|get_item:achievement.id %}
                             {% if value == current_eval|get_item:"last"|get_item:"value" %}

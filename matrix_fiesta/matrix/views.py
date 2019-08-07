@@ -22,12 +22,12 @@ Useful functions
 """
 def _get_achievement_evaluations(evaluations):
     achievements_evaluations = {}
-    existing_values_achievements_evaluations = {}
+    existing_achiev_eval = {}
 
     for evaluation in evaluations.all():
 
         if evaluation.achievement.id in achievements_evaluations.keys():
-            existing_values_achievements_evaluations[evaluation.achievement.id].append(evaluation.evaluation_value)
+            existing_achiev_eval[evaluation.achievement.id].append(evaluation.evaluation_value)
 
             achievements_evaluations[evaluation.achievement.id]["history"].append({
                 "value": evaluation.evaluation_value, "date": evaluation.added_date
@@ -40,58 +40,23 @@ def _get_achievement_evaluations(evaluations):
             "history": []
         }
 
-        existing_values_achievements_evaluations[evaluation.achievement.id] = [evaluation.evaluation_value]
+        existing_achiev_eval[evaluation.achievement.id] = [evaluation.evaluation_value]
 
-    return achievements_evaluations, existing_values_achievements_evaluations
+    return achievements_evaluations, existing_achiev_eval
 
+
+
+##
+# HOMEPAGE
+##
 
 def homepage(request):
     return render(request, "homepage.html")
 
 
-@login_required
-@user_passes_test(student_check)
-def ues_list(request):
-    ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre')
-    return render(request, "matrix/students/ues_list.html", {"ues":ues})
-
-
-@login_required
-@user_passes_test(student_check)
-def matrix_ues(request):
-    profile_user = models.ProfileUser.objects.get(user=request.user)
-
-    ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre').prefetch_related("ecues__achievements")
-    values = models.EvaluationValue.objects.all()
-
-    evaluations = models.StudentEvaluation.objects.filter(
-        student=profile_user, 
-        teacher_evaluation=False
-    ).prefetch_related('achievement', 'evaluation_value')
-
-    achievements_evaluations, existing_values_achievements_evaluations = _get_achievement_evaluations(evaluations)
-
-    return render(request, "matrix/students/matrix_ues.html", {
-        "ues":ues, "values":values,
-        "achievements_evaluations": achievements_evaluations, "existing_values_achievements_evaluations": existing_values_achievements_evaluations})
-
-
-@login_required
-@user_passes_test(student_check)
-def matrix_ecue(request, slug):
-    ecue = models.ECUE.objects.get(slug=slug)
-    profile_user = models.ProfileUser.objects.get(user=request.user)
-    achievements = models.LearningAchievement.objects.filter(ecue=ecue)
-    evaluations = models.StudentEvaluation.objects.filter(
-        student=profile_user, 
-        teacher_evaluation=False
-    ).prefetch_related('achievement', 'evaluation_value')
-
-    achievements_evaluations, _ = _get_achievement_evaluations(evaluations)
-
-    return render(request, "matrix/students/matrix_ecue.html", {
-        "ecue":ecue, "achievements":achievements, "evaluations":evaluations, "achievements_evaluations":achievements_evaluations
-    })
+##
+# USER PAGES
+##
 
 
 @sensitive_post_parameters('password')
@@ -117,6 +82,56 @@ def log_in(request):
 def log_out(request):
     logout(request)
     return redirect(reverse(log_in))
+
+
+##
+# STUDENT PAGES
+##
+
+
+@login_required
+@user_passes_test(student_check)
+def ues_list(request):
+    ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre')
+    return render(request, "matrix/students/ues_list.html", {"ues":ues})
+
+
+@login_required
+@user_passes_test(student_check)
+def matrix_ues(request):
+    profile_user = models.ProfileUser.objects.get(user=request.user)
+
+    ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre').prefetch_related("ecues__achievements")
+    values = models.EvaluationValue.objects.all()
+
+    evaluations = models.StudentEvaluation.objects.filter(
+        student=profile_user, 
+        teacher_evaluation=False
+    ).prefetch_related('achievement', 'evaluation_value')
+
+    achievements_evaluations, existing_achiev_eval = _get_achievement_evaluations(evaluations)
+
+    return render(request, "matrix/students/matrix_ues.html", {
+        "ues":ues, "values":values,
+        "achievements_evaluations": achievements_evaluations, "existing_achiev_eval": existing_achiev_eval})
+
+
+@login_required
+@user_passes_test(student_check)
+def matrix_ecue(request, slug):
+    ecue = models.ECUE.objects.get(slug=slug)
+    profile_user = models.ProfileUser.objects.get(user=request.user)
+    achievements = models.LearningAchievement.objects.filter(ecue=ecue)
+    evaluations = models.StudentEvaluation.objects.filter(
+        student=profile_user, 
+        teacher_evaluation=False
+    ).prefetch_related('achievement', 'evaluation_value')
+
+    achievements_evaluations, _ = _get_achievement_evaluations(evaluations)
+
+    return render(request, "matrix/students/matrix_ecue.html", {
+        "ecue":ecue, "achievements":achievements, "evaluations":evaluations, "achievements_evaluations":achievements_evaluations
+    })
 
 
 @login_required
@@ -147,6 +162,11 @@ def evaluate_achievement(request, slug):
     return render(request, "matrix/students/evaluate_achievement.html", {"form":form, "achievement": achievement})
 
 
+##
+# TEACHER PAGES
+##
+
+
 @login_required
 @user_passes_test(teacher_check)
 def homepage_teachers(request):
@@ -162,13 +182,35 @@ def homepage_teachers(request):
 
 
 @login_required
-@user_passes_test(student_check)
-def evaluate_achievement_student(request, slug, student):
+@user_passes_test(teacher_check)
+def status_student(request, small_class_id, student_id):
+    student = models.ProfileUser.objects.get(id=student_id)
+    small_class = models.SmallClass.objects.filter(id=small_class_id).prefetch_related("ecue", "ecue__achievements").get(id=small_class_id)
+    values = models.EvaluationValue.objects.all()
+    evaluations = models.StudentEvaluation.objects.filter(
+         student=student, 
+         teacher_evaluation=True,
+         achievement__ecue=small_class.ecue
+    ).prefetch_related('achievement', 'evaluation_value')
+
+    achievements_evaluations, existing_achiev_eval = _get_achievement_evaluations(evaluations)
+
+    return render(request, "matrix/teachers/status_student.html", {
+        "small_class":small_class, "values": values, "student": student,
+        "achievements_evaluations": achievements_evaluations, "existing_achiev_eval": existing_achiev_eval
+    })
+
+
+@login_required
+@user_passes_test(teacher_check)
+def evaluate_achievement_student(request, small_class_id, student_id, slug):
     achievement = models.LearningAchievement.objects.get(slug=slug)
 
-    student = models.ProfileUser.objects.get(user=request.user)
+    student = models.ProfileUser.objects.get(id=student_id)
+    
+    small_class = models.SmallClass.objects.get(id=small_class_id, teacher__user=request.user, students__id__contains=student.id)
     try:
-        evaluation_existante = models.StudentEvaluation.objects.get(achievement=achievement, student=student, teacher_evaluation=False)
+        evaluation_existante = models.StudentEvaluation.objects.get(achievement=achievement, student=student, teacher_evaluation=True)
         # return redirect('ues.matrix_ecue', achievement.ecue.slug)
     except models.StudentEvaluation.DoesNotExist:
         pass
@@ -181,9 +223,12 @@ def evaluate_achievement_student(request, slug, student):
             evaluation_student = form.save(commit=False)
             evaluation_student.achievement = achievement
             evaluation_student.student = student
-            evaluation_student.teacher_evaluation = False
+            evaluation_student.teacher_evaluation = True
             evaluation_student.save()
-            return redirect('ues.matrix_ecue', achievement.ecue.slug)
+            return redirect('ues.status_student', small_class_id, student.id)
     else:
         form = forms.StudentEvaluationForm()
-    return render(request, "matrix/teachers/evaluate_achievement.html", {"form":form, "achievement": achievement})
+    return render(request, "matrix/teachers/evaluate_achievement.html", {
+        "form": form, "student": student, "achievement": achievement, "small_class": small_class,
+    })
+

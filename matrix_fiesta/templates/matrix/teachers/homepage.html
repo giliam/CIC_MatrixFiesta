@@ -5,7 +5,10 @@
         <h2>{{ small_classe.ecue }}</h2>
         <ul>
             {% for student in small_classe.students.all %}
-                <li>{{ student }}</li>
+                <li>
+                    {{ student }} - 
+                    <a href="{% url "ues.status_student" small_classe.id student.id %}">Status</a>
+                </li>
             {% empty %}
                 <li>No student enrolled yet.</li>
             {% endfor %}
