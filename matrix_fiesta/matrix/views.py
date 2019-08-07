@@ -5,18 +5,17 @@ from django.views.decorators.debug import sensitive_post_parameters
 
 from matrix import forms
 from matrix import models
+from common import auths
 
 """
 Authorizations functions
 """
 def enseignant_check(user):
-    print(user)
-    return user.groups.filter(name="Enseignants").exists()
+    return auths.check_is_teacher(user)
 
 
 def eleve_check(user):
-    print(user)
-    return user.groups.filter(name="Élèves").exists()
+    return auths.check_is_student(user)
 
 """
 Useful functions
@@ -54,7 +53,7 @@ def homepage(request):
 @user_passes_test(eleve_check)
 def liste_ues(request):
     ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre')
-    return render(request, "matrix/liste_ues.html", {"ues":ues})
+    return render(request, "matrix/eleves/liste_ues.html", {"ues":ues})
 
 
 @login_required
@@ -72,7 +71,7 @@ def matrix_ues(request):
 
     evaluations_acquis, evaluations_acquis_valeurs_existantes = _get_evaluations_acquis(evaluations)
 
-    return render(request, "matrix/matrix_ues.html", {
+    return render(request, "matrix/eleves/matrix_ues.html", {
         "ues":ues, "valeurs":valeurs,
         "evaluations_acquis": evaluations_acquis, "evaluations_acquis_valeurs_existantes": evaluations_acquis_valeurs_existantes})
 
@@ -90,7 +89,7 @@ def matrix_ecue(request, slug):
 
     evaluations_acquis, _ = _get_evaluations_acquis(evaluations)
 
-    return render(request, "matrix/matrix_ecue.html", {
+    return render(request, "matrix/eleves/matrix_ecue.html", {
         "ecue":ecue, "acquis":acquis, "evaluations":evaluations, "evaluations_acquis":evaluations_acquis
     })
 
@@ -145,4 +144,18 @@ def evaluer_acquis(request, slug):
             return redirect('ues.matrix_ecue', acquis.ecue.slug)
     else:
         form = forms.EvaluationEleveForm()
-    return render(request, "matrix/evaluer_acquis.html", {"form":form, "acquis": acquis})
+    return render(request, "matrix/eleves/evaluer_acquis.html", {"form":form, "acquis": acquis})
+
+
+@login_required
+@user_passes_test(enseignant_check)
+def homepage_teachers(request):
+    enseignant = models.Utilisateur.objects.get(user=request.user)
+
+    classes = models.PetiteClasse.objects.filter(
+        enseignant=enseignant
+    ).prefetch_related('ecue').prefetch_related('eleves')
+
+    return render(request, "matrix/enseignants/homepage.html", {
+        "classes": classes            
+    })

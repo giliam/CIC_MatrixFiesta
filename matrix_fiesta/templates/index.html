@@ -1,4 +1,6 @@
 {% load static %}
+{% load common_extras %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,9 +22,16 @@
           <a class="item {{ nav_homepage_active }}" href="{% url "homepage" %}">
             Accueil
           </a>
-          <a class="item {{ nav_ues_active }}" href="{% url "ues.liste" %}">
+          {% if request.user|is_student %} 
+          <a class="item {{ nav_matrix_active }}" href="{% url "ues.matrix" %}">
             UEs
           </a>
+          {% endif %}
+          {% if request.user|is_teacher %} 
+          <a class="item {{ nav_homepage_teachers_active }}" href="{% url "ues.homepage_teachers" %}">
+            Notation
+          </a>
+          {% endif %}
           <div class="right menu">
 <!--             <div class="item">
               <div class="ui icon input">
@@ -52,7 +61,7 @@
         <div class="ui grid">
           <div class="twelve wide column">
             {% block content %}
-            Default content...
+            Nothing to see here!
             {% endblock %}
           </div>
         </div>

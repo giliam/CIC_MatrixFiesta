@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% block content %}
+    {% for small_classe in classes %}
+        <h2>{{ small_classe.ecue }}</h2>
+        <ul>
+            {% for student in small_classe.eleves.all %}
+                <li>{{ student }}</li>
+            {% empty %}
+                <li>No student enrolled yet.</li>
+            {% endfor %}
+        </ul>
+    {% empty %}
+        <p>No class assigned yet.</p>
+    {% endfor %}
+{% endblock %}
