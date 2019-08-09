@@ -83,6 +83,7 @@ class ECUE(DatedModel):
 
 class EvaluationValue(DatedModel):
     value = models.CharField(max_length=10)
+    integer_value = models.IntegerField(default=0)
     order = models.PositiveIntegerField(default=0)
 
     def __str__(self):

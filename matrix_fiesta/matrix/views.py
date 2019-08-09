@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import Avg
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.debug import sensitive_post_parameters
 
@@ -175,6 +176,18 @@ def homepage_teachers(request):
     classes = models.SmallClass.objects.filter(
         teacher=teacher
     ).prefetch_related('ecue').prefetch_related('students')
+
+    evaluations = models.StudentEvaluation.objects.filter(achievement__ecue__small_classes__in=classes, teacher_evaluation=True)
+
+    for small_class in classes.all():
+        print("##########")
+        print(small_class)
+        for student in small_class.students.all():
+            print("----------")
+            print(student)
+            evaluations_this_sc_student = evaluations.filter(student=student, achievement__ecue__small_classes=small_class
+                ).aggregate(Avg("evaluation_value"))
+            print(evaluations_this_sc_student)
 
     return render(request, "matrix/teachers/homepage.html", {
         "classes": classes            

@@ -3,8 +3,9 @@
 {% load common_extras %}
 
 {% block content %}
-<h1>{{small_class}}</h1>
-<h2>ECUE : {{small_class.ecue}}</h2>
+<h1>{{student}}</h1>
+<h2>{{small_class}}</h2>
+<h3>ECUE : {{small_class.ecue}}</h3>
 
 <form method="post" action="">
     {% csrf_token %}

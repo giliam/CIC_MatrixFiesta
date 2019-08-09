@@ -14,6 +14,7 @@ class StudentEvaluationAllForm(forms.Form):
         self.achievements_fields = []
         self.values = models.EvaluationValue.objects.all()
         self.choices = [(value.id, value.value) for value in self.values]
+        self.worst_value = self.choices[0]
 
     def add_achievement_evaluation(self, achievement, default_value=None):      
         # Adds the field to the list of existing achievements related fields
@@ -25,6 +26,8 @@ class StudentEvaluationAllForm(forms.Form):
         )
         if not default_value is None:
             self.initial["achievement_"+str(achievement.id)] = (default_value.id, default_value.value)
+        else:
+            self.initial["achievement_"+str(achievement.id)] = self.worst_value
 
     def get_cleaned_data(self, achievement):
         if "achievement_"+str(achievement.id) in self.cleaned_data.keys():
