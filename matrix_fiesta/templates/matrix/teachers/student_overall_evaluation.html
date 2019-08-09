@@ -5,12 +5,15 @@
 {% block content %}
 <h1>{{small_class}}</h1>
 <h2>ECUE : {{small_class.ecue}}</h2>
-<p><a href="{% url "ues.evaluate_student_all" small_class.id student.id %}">Overall evaluation</a></p>
 
+<form method="post" action="">
+    {% csrf_token %}
+    
 <table class="ui blue table">
     <thead>
         <tr>
             <th>Achievement</th>
+            <th>-</th>
             {% for value in values %}
                 <th>{{value}}</th>
             {% endfor %}
@@ -20,6 +23,7 @@
     {% for achievement in small_class.ecue.achievements.all %}
         <tr>
             <td>{{achievement.name}}</td>
+            <td><a href="{% url "ues.evaluate_achievement_student" small_class.id student.id achievement.slug %}">Evaluate</a></td>
             {% for value in values %}
                 {% if value in existing_achiev_eval|get_item:achievement.id %}
                     <td>
@@ -43,4 +47,7 @@
     {% endfor %}
     </tbody>
 </table>
+{{ form.as_p }}
+<input type="submit"/>
+</form>
 {% endblock %}

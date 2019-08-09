@@ -7,7 +7,8 @@
             {% for student in small_classe.students.all %}
                 <li>
                     {{ student }} - 
-                    <a href="{% url "ues.status_student" small_classe.id student.id %}">Status</a>
+                    <a href="{% url "ues.status_student" small_classe.id student.id %}">Status</a> - 
+                    <a href="{% url "ues.evaluate_student_all" small_classe.id student.id %}">Overall evaluation</a>
                 </li>
             {% empty %}
                 <li>No student enrolled yet.</li>
