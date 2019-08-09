@@ -104,6 +104,9 @@ class LearningAchievement(DatedModel):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(LearningAchievement, self).save(*args, **kwargs)
+
+    def get_field_name(self):
+        return "achievement_" + str(self.id)
     
     class Meta:
         verbose_name = "AcquisApprentissage"

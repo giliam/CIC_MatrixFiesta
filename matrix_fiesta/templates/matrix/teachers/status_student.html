@@ -11,6 +11,7 @@
     <thead>
         <tr>
             <th>Achievement</th>
+            <th>Evaluation</th>
             {% for value in values %}
                 <th>{{value}}</th>
             {% endfor %}
@@ -20,6 +21,7 @@
     {% for achievement in small_class.ecue.achievements.all %}
         <tr>
             <td>{{achievement.name}}</td>
+            <td><a href="{% url "ues.evaluate_achievement_student" small_class.id student.id achievement.slug %}">Evaluate</a></td>
             {% for value in values %}
                 {% if value in existing_achiev_eval|get_item:achievement.id %}
                     <td>

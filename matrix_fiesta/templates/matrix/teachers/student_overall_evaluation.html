@@ -8,12 +8,11 @@
 
 <form method="post" action="">
     {% csrf_token %}
-    
+
 <table class="ui blue table">
     <thead>
         <tr>
             <th>Achievement</th>
-            <th>-</th>
             {% for value in values %}
                 <th>{{value}}</th>
             {% endfor %}
@@ -22,32 +21,18 @@
     <tbody>
     {% for achievement in small_class.ecue.achievements.all %}
         <tr>
-            <td>{{achievement.name}}</td>
-            <td><a href="{% url "ues.evaluate_achievement_student" small_class.id student.id achievement.slug %}">Evaluate</a></td>
-            {% for value in values %}
-                {% if value in existing_achiev_eval|get_item:achievement.id %}
-                    <td>
-                    {% with current_eval=achievements_evaluations|get_item:achievement.id %}
-                        {% if value == current_eval|get_item:"last"|get_item:"value" %}
-                            <strong>{{current_eval|get_item:"last"|get_item:"date" }}</strong>
-                        {% endif %}
-                        {% for prec_eval in current_eval|get_item:"history" %}
-                            {% if value == prec_eval.value %}
-                                <em>{{ prec_eval.date }}</em>
-                            {% endif %}
-                        {% endfor %}
-                        <br />
-                    {% endwith %}
-                    </td>
-                {% else %}
-                <td></td>
-                {% endif %}
-            {% endfor %}
+            {% with form_field=form.fields|get_item:achievement.get_field_name %}
+            {% with form_initial=form.initial|get_item:achievement.get_field_name %}
+                <td>{{achievement.name}}</td>
+                {% for value, text in form_field.choices %}
+                    <td><input type="radio" name="{{achievement.get_field_name}}" value="{{ value }}"{% if form_initial|get_item:0 == value %} checked{% endif %} /></td>
+                {% endfor %}
+            {% endwith %}
+            {% endwith %}
         </tr>
     {% endfor %}
     </tbody>
 </table>
-{{ form.as_p }}
 <input type="submit"/>
 </form>
 {% endblock %}
