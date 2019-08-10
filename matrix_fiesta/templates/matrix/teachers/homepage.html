@@ -1,29 +1,38 @@
 {% extends "index.html" %}
 
+{% load common_extras %}
+
 {% block content %}
-    {% for small_classe in classes %}
-        <h2>{{ small_classe.ecue }}</h2>
+    {% for small_class in classes %}
+        <h2>{{ small_class.ecue }}</h2>
         <table class="ui blue table sortable celled">
             <thead>
                 <tr>
                     <th>Student name</th>
                     <th>Evaluate</th>
                     <th>Average</th>
-                    <th>...</th>
+                    <th>Nb of evaluations</th>
                 </tr>
             </thead>
             <tbody>
-            {% for student in small_classe.students.all %}
-            <tr>
-                <td><a href="{% url "ues.status_student" small_classe.id student.id %}">{{ student }}</a></td>
-                <td><a href="{% url "ues.evaluate_student_all" small_classe.id student.id %}">Overall evaluation</a></td>
-                <td></td>
-                <td></td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="4">No student enrolled yet.</td></tr>
-            {% endfor %}
+                {% for student in small_class.students.all %}
+                <tr>
+                    <td><a href="{% url "ues.status_student" small_class.id student.id %}">{{ student }}</a></td>
+                    <td><a href="{% url "ues.evaluate_student_all" small_class.id student.id %}">Overall evaluation</a></td>
+                    <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:0 }}</td>
+                    <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:1 }} / {{nb_achievements|get_item:small_class.id}}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">No student enrolled yet.</td></tr>
+                {% endfor %}
             </tbody>
+            <tfoot>
+                <tr class="active">
+                    <td colspan="2"><em>Average of the class</em></td>
+                    <td>{{ averages|get_item:small_class.id|get_item:"average"}}</td>
+                    <td>{{ small_class.students.all|length }} student(s)</td>
+                </tr>
+            </tfoot>
         </table>
     {% empty %}
         <p>No class assigned yet.</p>

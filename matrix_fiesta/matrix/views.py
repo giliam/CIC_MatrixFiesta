@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate, login, logout
-from django.db.models import Avg
+from django.db.models import Sum, Avg, Value, Count
+from django.db.models.functions import Coalesce
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.debug import sensitive_post_parameters
 
@@ -152,10 +153,14 @@ def evaluate_achievement(request, slug):
     if request.method == "POST":
         form = forms.StudentEvaluationForm(request.POST)
         if form.is_valid():
+            models.StudentEvaluation.objects.filter(
+                achievement=achievement, student=student, teacher_evaluation=False
+            ).update(last_evaluation=False)
             evaluation_student = form.save(commit=False)
             evaluation_student.achievement = achievement
             evaluation_student.student = student
             evaluation_student.teacher_evaluation = False
+            evaluation_student.last_evaluation = True
             evaluation_student.save()
             return redirect('ues.matrix_ecue', achievement.ecue.slug)
     else:
@@ -175,22 +180,38 @@ def homepage_teachers(request):
 
     classes = models.SmallClass.objects.filter(
         teacher=teacher
-    ).prefetch_related('ecue').prefetch_related('students')
+    ).prefetch_related('ecue', 'ecue__achievements').prefetch_related('students')
 
-    evaluations = models.StudentEvaluation.objects.filter(achievement__ecue__small_classes__in=classes, teacher_evaluation=True)
+    # Gets all evaluations for the classes of the teacher.
+    evaluations = models.StudentEvaluation.objects.filter(
+        achievement__ecue__small_classes__in=classes, teacher_evaluation=True, last_evaluation=True
+    )
+
+    averages = {}
+    nb_achievements = {}
 
     for small_class in classes.all():
-        print("##########")
-        print(small_class)
-        for student in small_class.students.all():
-            print("----------")
-            print(student)
-            evaluations_this_sc_student = evaluations.filter(student=student, achievement__ecue__small_classes=small_class
-                ).aggregate(Avg("evaluation_value"))
-            print(evaluations_this_sc_student)
+        averages[small_class.id] = {}
+        nb_achievements[small_class.id] = len(small_class.ecue.achievements.all())
+
+        if nb_achievements[small_class.id] == 0:
+            for student in small_class.students.all():
+                averages[small_class.id][student.id] = (0.0, 0)
+        else:
+            for student in small_class.students.all():
+                evaluations_this_sc_student = evaluations.filter(student=student, achievement__ecue__small_classes=small_class
+                    ).aggregate(sum_values=Coalesce(Sum("evaluation_value__integer_value"), Value(0.0)), nb_evals=Count('achievement'))
+                averages[small_class.id][student.id] = (
+                    float(evaluations_this_sc_student['sum_values'])/nb_achievements[small_class.id],
+                    int(evaluations_this_sc_student['nb_evals'])
+                )
+
+        if len(small_class.students.all()) > 0:
+            averages[small_class.id]["average"] = sum(map(lambda x: x[0], averages[small_class.id].values()))/len(small_class.students.all())
+
 
     return render(request, "matrix/teachers/homepage.html", {
-        "classes": classes            
+        "classes": classes, "averages": averages, "nb_achievements": nb_achievements
     })
 
 
@@ -233,10 +254,14 @@ def evaluate_achievement_student(request, small_class_id, student_id, slug):
     if request.method == "POST":
         form = forms.StudentEvaluationForm(request.POST)
         if form.is_valid():
+            models.StudentEvaluation.objects.filter(
+                achievement=achievement, student=student, teacher_evaluation=True
+            ).update(last_evaluation=False)
             evaluation_student = form.save(commit=False)
             evaluation_student.achievement = achievement
             evaluation_student.student = student
             evaluation_student.teacher_evaluation = True
+            evaluation_student.last_evaluation = True
             evaluation_student.save()
             return redirect('ues.status_student', small_class_id, student.id)
     else:
@@ -287,17 +312,25 @@ def evaluate_student_all(request, small_class_id, student_id):
                 new_value = form.get_cleaned_data(achievement)
                 # Either updates an existing achievement
                 if achievement.id in achievements_evaluations.keys():
-                    evaluation = evaluations.get(achievement=achievement)
+                    models.StudentEvaluation.objects.filter(
+                        achievement=achievement, student=student, teacher_evaluation=True
+                    ).update(last_evaluation=False)
+                    evaluation = evaluations.get(achievement=achievement, student=student)
                     evaluation.evaluation_value = new_value
                     evaluation.teacher_evaluation = True
+                    evaluation.last_evaluation = True
                     evaluation.save()
                 # Or creates a new one
                 else:
+                    models.StudentEvaluation.objects.filter(
+                        achievement=achievement, student=student, teacher_evaluation=True
+                    ).update(last_evaluation=False)
                     evaluation = models.StudentEvaluation()
                     evaluation.achievement = achievement
                     evaluation.student = student
                     evaluation.evaluation_value = new_value
                     evaluation.teacher_evaluation = True
+                    evaluation.last_evaluation = True
                     evaluation.save()
             # Then redirects to the status
             return redirect('ues.status_student', small_class_id, student.id)

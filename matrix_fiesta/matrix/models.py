@@ -119,6 +119,7 @@ class StudentEvaluation(DatedModel):
     student = models.ForeignKey(ProfileUser, on_delete=models.CASCADE)
     evaluation_value = models.ForeignKey(EvaluationValue, on_delete=models.SET_NULL, null=True)
     teacher_evaluation = models.BooleanField(default=False)
+    last_evaluation = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s, %s : %s" % (self.achievement, self.student, self.evaluation_value)
