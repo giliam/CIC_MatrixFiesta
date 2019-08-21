@@ -6,15 +6,15 @@
 
 {% block content %}
 
-<p class="ui purple button"><a style="color:white" href="{% url "ues.self_evaluate_all" %}">{% trans "Self evaluation" %}</a></p>
+<p><a style="color:white" href="{% url "ues.self_evaluate_all" %}" class="ui purple button">{% trans "Self evaluation" %}</a></p>
 
-<table class="ui blue table">
+<table class="ui blue table celled">
 {% for ue in ues %}
     <thead>
         <tr>
             <th>{{ue}}</th>
             {% for value in values %}
-                <th>{{value}}</th>
+                <th class="center aligned">{{value}}</th>
             {% endfor %}
         </tr>
     </thead>
@@ -32,10 +32,12 @@
                     <td>{{achievement.name}}</td>
                     {% for value in values %}
                         {% if value in existing_achiev_eval|get_item:achievement.id %}
-                            <td>
                             {% with current_eval=achievements_evaluations|get_item:achievement.id %}
                                 {% if value == current_eval|get_item:"last"|get_item:"value" %}
+                                <td class="center aligned positive">
                                     <strong>{{current_eval|get_item:"last"|get_item:"date" }}</strong>
+                                {% else %}
+                                <td class="center aligned">
                                 {% endif %}
                                 {% for prec_eval in current_eval|get_item:"history" %}
                                     {% if value == prec_eval.value %}
@@ -43,8 +45,8 @@
                                     {% endif %}
                                 {% endfor %}
                                 <br />
+                                </td>
                             {% endwith %}
-                            </td>
                         {% else %}
                         <td></td>
                         {% endif %}
@@ -52,23 +54,23 @@
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="{{values|length|add:1}}"><em>{% trans "No achievement here yet." %}</em></td>
+                    <td class="center aligned disabled" colspan="{{values|length|add:1}}"><em>{% trans "No achievement here yet." %}</em></td>
                 </tr>
                 {% endfor %}
             {% empty %}
             <tr>
-                <td colspan="{{values|length|add:1}}"><em>{% trans "No course here yet." %}</em></td>
+                <td class="center aligned disabled" colspan="{{values|length|add:1}}"><em>{% trans "No course here yet." %}</em></td>
             </tr>
             {% endfor %}
         {% empty %}
         <tr>
-            <td colspan="{{values|length|add:1}}"><em>{% trans "No ECUE here yet." %}</em></td>
+            <td class="center aligned disabled" colspan="{{values|length|add:1}}"><em>{% trans "No ECUE here yet." %}</em></td>
         </tr>
         {% endfor %}
     </tbody>
     {% empty %}
     <tr>
-        <td colspan="{{values|length|add:1}}"><em>{% trans "No UE here yet." %}</em></td>
+        <td class="center aligned disabled" colspan="{{values|length|add:1}}"><em>{% trans "No UE here yet." %}</em></td>
     </tr>
     {% endfor %}
 </table>
