@@ -103,7 +103,7 @@ def ues_list(request):
 def matrix_ues(request):
     profile_user = models.ProfileUser.objects.get(user=request.user)
 
-    ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre').prefetch_related("ecues__achievements")
+    ues = models.UE.objects.all().prefetch_related('ecues').prefetch_related('semestre').prefetch_related("ecues__courses").prefetch_related("ecues__courses__achievements")
     values = models.EvaluationValue.objects.all()
 
     evaluations = models.StudentEvaluation.objects.filter(
@@ -120,10 +120,10 @@ def matrix_ues(request):
 
 @login_required
 @user_passes_test(student_check)
-def matrix_ecue(request, slug):
-    ecue = models.ECUE.objects.get(slug=slug)
+def matrix_course(request, slug):
+    course = models.Course.objects.get(slug=slug)
     profile_user = models.ProfileUser.objects.get(user=request.user)
-    achievements = models.LearningAchievement.objects.filter(ecue=ecue)
+    achievements = models.LearningAchievement.objects.filter(course=course)
     evaluations = models.StudentEvaluation.objects.filter(
         student=profile_user, 
         teacher_evaluation=False
@@ -131,8 +131,8 @@ def matrix_ecue(request, slug):
 
     achievements_evaluations, _ = _get_achievement_evaluations(evaluations)
 
-    return render(request, "matrix/students/matrix_ecue.html", {
-        "ecue":ecue, "achievements":achievements, "evaluations":evaluations, "achievements_evaluations":achievements_evaluations
+    return render(request, "matrix/students/matrix_course.html", {
+        "course":course, "achievements":achievements, "evaluations":evaluations, "achievements_evaluations":achievements_evaluations
     })
 
 
@@ -144,7 +144,7 @@ def evaluate_achievement(request, slug):
     student = models.ProfileUser.objects.get(user=request.user)
     try:
         evaluation_existante = models.StudentEvaluation.objects.get(achievement=achievement, student=student, teacher_evaluation=False)
-        # return redirect('ues.matrix_ecue', achievement.ecue.slug)
+        # return redirect('ues.matrix_course', achievement.course.slug)
     except models.StudentEvaluation.DoesNotExist:
         pass
     except models.StudentEvaluation.MultipleObjectsReturned:
@@ -162,7 +162,7 @@ def evaluate_achievement(request, slug):
             evaluation_student.teacher_evaluation = False
             evaluation_student.last_evaluation = True
             evaluation_student.save()
-            return redirect('ues.matrix_ecue', achievement.ecue.slug)
+            return redirect('ues.matrix_course', achievement.course.slug)
     else:
         form = forms.StudentEvaluationForm()
     return render(request, "matrix/students/evaluate_achievement.html", {"form":form, "achievement": achievement})
@@ -180,11 +180,11 @@ def homepage_teachers(request):
 
     classes = models.SmallClass.objects.filter(
         teacher=teacher
-    ).prefetch_related('ecue', 'ecue__achievements').prefetch_related('students')
+    ).prefetch_related('course', 'course__achievements').prefetch_related('students')
 
     # Gets all evaluations for the classes of the teacher.
     evaluations = models.StudentEvaluation.objects.filter(
-        achievement__ecue__small_classes__in=classes, teacher_evaluation=True, last_evaluation=True
+        achievement__course__small_classes__in=classes, teacher_evaluation=True, last_evaluation=True
     )
 
     averages = {}
@@ -192,14 +192,14 @@ def homepage_teachers(request):
 
     for small_class in classes.all():
         averages[small_class.id] = {}
-        nb_achievements[small_class.id] = len(small_class.ecue.achievements.all())
+        nb_achievements[small_class.id] = len(small_class.course.achievements.all())
 
         if nb_achievements[small_class.id] == 0:
             for student in small_class.students.all():
                 averages[small_class.id][student.id] = (0.0, 0)
         else:
             for student in small_class.students.all():
-                evaluations_this_sc_student = evaluations.filter(student=student, achievement__ecue__small_classes=small_class
+                evaluations_this_sc_student = evaluations.filter(student=student, achievement__course__small_classes=small_class
                     ).aggregate(sum_values=Coalesce(Sum("evaluation_value__integer_value"), Value(0.0)), nb_evals=Count('achievement'))
                 averages[small_class.id][student.id] = (
                     float(evaluations_this_sc_student['sum_values'])/nb_achievements[small_class.id],
@@ -219,13 +219,18 @@ def homepage_teachers(request):
 @user_passes_test(teacher_check)
 def status_student(request, small_class_id, student_id):
     student = models.ProfileUser.objects.get(id=student_id)
-    small_class = models.SmallClass.objects.filter(id=small_class_id).prefetch_related("ecue", "ecue__achievements").get(id=small_class_id)
+    small_class = models.SmallClass.objects.filter(id=small_class_id).prefetch_related(
+        "course", "course__achievements"
+    ).get(id=small_class_id)
+
     values = models.EvaluationValue.objects.all()
     evaluations = models.StudentEvaluation.objects.filter(
          student=student, 
          teacher_evaluation=True,
-         achievement__ecue=small_class.ecue
+         achievement__course=small_class.course
     ).prefetch_related('achievement', 'evaluation_value')
+
+    print(small_class.course.achievements)
 
     achievements_evaluations, existing_achiev_eval = _get_achievement_evaluations(evaluations)
 
@@ -245,7 +250,7 @@ def evaluate_achievement_student(request, small_class_id, student_id, slug):
     small_class = models.SmallClass.objects.get(id=small_class_id, teacher__user=request.user, students__id__contains=student.id)
     try:
         evaluation_existante = models.StudentEvaluation.objects.get(achievement=achievement, student=student, teacher_evaluation=True)
-        # return redirect('ues.matrix_ecue', achievement.ecue.slug)
+        # return redirect('ues.matrix_course', achievement.course.slug)
     except models.StudentEvaluation.DoesNotExist:
         pass
     except models.StudentEvaluation.MultipleObjectsReturned:
@@ -280,14 +285,14 @@ def evaluate_student_all(request, small_class_id, student_id):
     # Checks we are in a small class existing and taught by the user
     small_class = models.SmallClass.objects.filter(
         id=small_class_id
-    ).prefetch_related("ecue", "ecue__achievements").get(teacher=teacher, id=small_class_id)
+    ).prefetch_related("course", "course__achievements").get(teacher=teacher, id=small_class_id)
 
     values = models.EvaluationValue.objects.all()
     # Gets all evaluations on this small class
     evaluations = models.StudentEvaluation.objects.filter(
          student=student, 
          teacher_evaluation=True,
-         achievement__ecue=small_class.ecue
+         achievement__course=small_class.course
     ).prefetch_related('achievement', 'evaluation_value')
 
     # Creates the array of existing evaluations
@@ -299,7 +304,7 @@ def evaluate_student_all(request, small_class_id, student_id):
         form = forms.StudentEvaluationAllForm()
 
     # Adds a field for all achievements
-    for achievement in small_class.ecue.achievements.all():
+    for achievement in small_class.course.achievements.all():
         if achievement.id in achievements_evaluations.keys():
             form.add_achievement_evaluation(achievement, achievements_evaluations[achievement.id]["last"]["value"])
         else:
@@ -308,7 +313,7 @@ def evaluate_student_all(request, small_class_id, student_id):
     # Saves eventually the quries
     if request.method == "POST":
         if form.is_valid():
-            for achievement in small_class.ecue.achievements.all():
+            for achievement in small_class.course.achievements.all():
                 new_value = form.get_cleaned_data(achievement)
                 # Either updates an existing achievement
                 if achievement.id in achievements_evaluations.keys():

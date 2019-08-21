@@ -4,8 +4,8 @@
     <h2>{{ue}}</h2>
 
     <ul>
-    {% for ecue in ue.ecues.all %}
-        <li><a href="{% url "ues.matrix_ecue" ecue.slug %}">{{ecue}}</a></li>
+    {% for course in ue.courses.all %}
+        <li><a href="{% url "ues.matrix_course" course.slug %}">{{course}}</a></li>
     {% endfor %}
     </ul>
 {% endfor %}

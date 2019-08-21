@@ -5,7 +5,7 @@
 {% block content %}
 <h1>{{student}}</h1>
 <h2>{{small_class}}</h2>
-<h3>ECUE : {{small_class.ecue}}</h3>
+<h3>Course : {{small_class.course}}</h3>
 
 <form method="post" action="">
     {% csrf_token %}
@@ -20,7 +20,7 @@
         </tr>
     </thead>
     <tbody>
-    {% for achievement in small_class.ecue.achievements.all %}
+    {% for achievement in small_class.course.achievements.all %}
         <tr>
             {% with form_field=form.fields|get_item:achievement.get_field_name %}
             {% with form_initial=form.initial|get_item:achievement.get_field_name %}

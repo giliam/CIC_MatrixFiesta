@@ -1,0 +1,40 @@
+{% extends "index.html" %}
+
+{% load common_extras %}
+
+{% block content %}
+<h2>{{course}}</h2>
+
+<table class="ui blue table">
+    <thead>
+        <tr>
+            <th>Achievement</th>
+            <th>Current evaluation</th>
+            <th>Older evaluation(s)</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>    
+    {% for c_achievement in achievements %}
+    <tr>
+        <td><strong>{{c_achievement.name}}</strong></td>
+            {% if c_achievement.id in achievements_evaluations.keys %}
+            {% with current_eval=achievements_evaluations|get_item:c_achievement.id %}
+                <td>Évalué : <em>{{ current_eval|get_item:"last"|get_item:"value" }} - {{current_eval|get_item:"last"|get_item:"date" }}</em></td>
+                <td>{% for prec_eval in current_eval|get_item:"history" %}
+                    <span style="font-size: 0.8em;">{{ prec_eval.value }} - {{ prec_eval.date }} ;</span>
+                {% endfor %}</td>
+            {% endwith %}
+            <td><a href="{% url "ues.evaluate_achievement" c_achievement.slug %}">Nouvelle évaluation ?</a></td>
+        {% else %}
+        <td colspan="3"><a href="{% url "ues.evaluate_achievement" c_achievement.slug %}">Non évalué...</a></td>
+        {% endif %}
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">Pas d'acquis d'apprentissage à évaluer !</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

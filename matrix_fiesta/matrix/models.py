@@ -61,24 +61,36 @@ class UE(DatedModel):
 
     class Meta:
         verbose_name = "UE"
-        ordering = ['semestre']
+        ordering = ['semestre', 'name']
 
 
 class ECUE(DatedModel):
     name = models.CharField(max_length=150)
     ue = models.ForeignKey(UE, on_delete=models.SET_NULL, related_name="ecues", null=True)
-    slug = models.SlugField(unique=True)
 
     def __str__(self):
-        return "%s - %s" % (self.name.upper(), self.ue)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(ECUE, self).save(*args, **kwargs)
+        return "ECUE %s - %s" % (self.name, self.ue)
 
     class Meta:
         verbose_name = "ECUE"
         ordering = ['ue', 'name']
+
+
+class Course(DatedModel):
+    name = models.CharField(max_length=150)
+    ecue = models.ForeignKey(ECUE, on_delete=models.SET_NULL, related_name="courses", null=True)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return "%s - %s" % (self.name, self.ecue)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Course, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Course"
+        ordering = ['ecue', 'name']
 
 
 class EvaluationValue(DatedModel):
@@ -96,11 +108,11 @@ class EvaluationValue(DatedModel):
 
 class LearningAchievement(DatedModel):
     name = models.CharField(max_length=150)
-    ecue = models.ForeignKey(ECUE, on_delete=models.SET_NULL, related_name="achievements", null=True)
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, related_name="achievements", null=True)
     slug = models.SlugField(unique=True)
 
     def __str__(self):
-        return "%s : %s" % (self.ecue, self.name)
+        return "%s : %s" % (self.course, self.name)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -111,7 +123,7 @@ class LearningAchievement(DatedModel):
     
     class Meta:
         verbose_name = "AcquisApprentissage"
-        ordering = ["ecue", "name"]
+        ordering = ["course", "name"]
 
 
 class StudentEvaluation(DatedModel):
@@ -135,13 +147,13 @@ class SmallClass(DatedModel):
         related_name="small_classes_teacher", null=True,
         limit_choices_to={'user__groups__name': 'Enseignants'}
     )
-    ecue = models.ForeignKey(ECUE, on_delete=models.CASCADE, related_name="small_classes")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="small_classes")
     students = models.ManyToManyField(ProfileUser, related_name="small_classes_student",
         limit_choices_to={'user__groups__name': 'Élèves'})
 
     def __str__(self):
-        return "PC de %s par %s (%d élèves)" % (self.ecue, self.teacher, self.students.count())
+        return "PC de %s par %s (%d élèves)" % (self.course, self.teacher, self.students.count())
 
     class Meta:
         verbose_name = "PetiteClasse"
-        ordering = ["ecue"]
+        ordering = ["course"]
