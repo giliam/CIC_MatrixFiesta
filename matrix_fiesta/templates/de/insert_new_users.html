@@ -1,8 +1,11 @@
 {% extends "index.html" %}
-{% block content %}
-<h1>Insert new users</h1>
 
-<p>To insert new users, you need to upload a <strong>csv file</strong> (delimited by <em>;</em>) with the following columns:
+{% block title %}Insert new students{% endblock %}
+
+{% block content %}
+<h1>Insert new students</h1>
+
+<p>To insert new students, you need to upload a <strong>csv file</strong> (delimited by <em>;</em>) with the following columns:
 </p>
 <ul>
     {% for column, info in columns.items %}

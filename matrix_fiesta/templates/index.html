@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8" />
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <title>Test</title>
+    <title>CIC - {% block title %}Welcome{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static "css/semantic.min.css" %}">
     <script
       src="{% static "js/jquery-3.1.1.min.js" %}"
@@ -33,7 +33,7 @@
           </a>
           {% endif %}
           {% if request.user|is_de %} 
-          <a class="item {{ nav_homepage_de_active }}" href="{% url "de.homepage" %}">
+          <a class="item {{ nav_homepage_de_active }}" href="{% url "de.homepage_de" %}">
             DE
           </a>
           {% endif %}
