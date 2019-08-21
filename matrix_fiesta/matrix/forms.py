@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import Group
+from django.contrib.auth import models as auth_models
 from django.utils.translation import gettext as _
 
 from matrix import models
@@ -49,7 +49,13 @@ class TeacherEvaluationForm(forms.ModelForm):
         fields = ('evaluation_value','student',)
 
 
+def get_groups():
+    try: 
+        return [(g.id, g) for g in auth_models.Group.objects.all() if g.name != GroupsNames.DIRECTOR_LEVEL.value]
+    except:
+        return []
+
 class UploadNewStudentsForm(forms.Form):
     has_header = forms.BooleanField(label=_("File has a header ?"), required=False)
     file = forms.FileField(label=_('Select a file'))
-    group = forms.MultipleChoiceField(choices=[(g.id, g) for g in Group.objects.all() if g.name != GroupsNames.DIRECTOR_LEVEL.value])
+    group = forms.MultipleChoiceField(choices=get_groups)

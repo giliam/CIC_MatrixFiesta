@@ -9,7 +9,7 @@
 {% if user.is_authenticated %}
 {% blocktrans %}You are successfully logged in, {{user.username}}!{% endblocktrans %}
 {% else %}
-<form method="post" action=".">
+<form method="post" action="." class="ui form">
 {% csrf_token %}
 {{ form.as_p }}
 <input type="submit" value="{% trans "Submit" %}" />
