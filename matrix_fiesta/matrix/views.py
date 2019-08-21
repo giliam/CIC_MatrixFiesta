@@ -168,6 +168,78 @@ def evaluate_achievement(request, slug):
     return render(request, "matrix/students/evaluate_achievement.html", {"form":form, "achievement": achievement})
 
 
+@login_required
+@user_passes_test(student_check)
+def self_evaluate_all(request):
+    student = models.ProfileUser.objects.get(user=request.user)
+    
+    # Checks we are in a small class existing and taught by the user
+    small_classes = models.SmallClass.objects.filter(
+        students__id__contains=student.id
+    ).prefetch_related("course", "course__achievements")
+
+    values = models.EvaluationValue.objects.all()
+    # Gets all evaluations on this small class
+    evaluations = models.StudentEvaluation.objects.filter(
+         student=student, 
+         teacher_evaluation=False,
+    ).prefetch_related('achievement', 'evaluation_value')
+
+    # Creates the array of existing evaluations
+    achievements_evaluations, existing_achiev_eval = _get_achievement_evaluations(evaluations)
+
+    if request.method == "POST":
+        form = forms.StudentEvaluationAllForm(request.POST)
+    else:
+        form = forms.StudentEvaluationAllForm()
+
+    # Adds a field for all achievements
+    for small_class in small_classes.all():
+        for achievement in small_class.course.achievements.all():
+            if achievement.id in achievements_evaluations.keys():
+                form.add_achievement_evaluation(achievement, achievements_evaluations[achievement.id]["last"]["value"])
+            else:
+                form.add_achievement_evaluation(achievement)
+
+    # Saves eventually the quries
+    if request.method == "POST":
+        if form.is_valid():
+            for small_class in small_classes.all():
+                for achievement in small_class.course.achievements.all():
+                    new_value = form.get_cleaned_data(achievement)
+                    # Either updates an existing achievement
+                    if achievement.id in achievements_evaluations.keys():
+                        models.StudentEvaluation.objects.filter(
+                            achievement=achievement, student=student, teacher_evaluation=False
+                        ).update(last_evaluation=False)
+                        evaluation = evaluations.get(achievement=achievement, student=student)
+                        evaluation.evaluation_value = new_value
+                        evaluation.teacher_evaluation = False
+                        evaluation.last_evaluation = True
+                        evaluation.save()
+                    # Or creates a new one
+                    else:
+                        models.StudentEvaluation.objects.filter(
+                            achievement=achievement, student=student, teacher_evaluation=False
+                        ).update(last_evaluation=False)
+                        evaluation = models.StudentEvaluation()
+                        evaluation.achievement = achievement
+                        evaluation.student = student
+                        evaluation.evaluation_value = new_value
+                        evaluation.teacher_evaluation = False
+                        evaluation.last_evaluation = True
+                        evaluation.save()
+            # Then redirects to the status
+            return redirect('ues.matrix')
+
+    return render(request, "matrix/students/overall_self_evaluation.html", {
+        "small_classes":small_classes, "values": values, "student": student,
+        "achievements_evaluations": achievements_evaluations, "existing_achiev_eval": existing_achiev_eval,
+        "form": form
+    })
+
+
+
 ##
 # TEACHER PAGES
 ##

@@ -10,6 +10,7 @@ urlpatterns = [
 
     re_path(r'ues/matrix/(?P<slug>[-\w]+)', views.matrix_course, name="ues.matrix_course"),
     re_path(r'achievement/evaluate/(?P<slug>[-\w]+)', views.evaluate_achievement, name="ues.evaluate_achievement"),
+    re_path(r'achievement/self/evaluate/', views.self_evaluate_all, name="ues.self_evaluate_all"),
     
     re_path(r'achievement/(?P<small_class_id>[0-9]+)/student/(?P<student_id>[0-9]+)/evaluate/(?P<slug>[-\w]+)', 
                             views.evaluate_achievement_student, name="ues.evaluate_achievement_student"),

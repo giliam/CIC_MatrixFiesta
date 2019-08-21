@@ -3,6 +3,9 @@
 {% load common_extras %}
 
 {% block content %}
+
+<p><a href="{% url "ues.self_evaluate_all" %}">Self evaluation</a></p>
+
 <table class="ui blue table">
 {% for ue in ues %}
     <thead>
@@ -16,13 +19,11 @@
     <tbody>
     {% for ecue in ue.ecues.all %}
         <tr style="background-color: #1642AB; color:white;">
-            <td><strong>{{ecue}}</strong></td>
-            <td colspan="{{values|length}}"></td>
+            <td colspan="{{values|length|add:1}}"><strong>ECUE - {{ecue.name}}</strong></td>
         </tr>
         {% for course in ecue.courses.all %}
             <tr style="background-color: #a7d4f699;">
-                <td><a href="{% url "ues.matrix_course" course.slug %}">{{course}}</a></td>
-                <td colspan="{{values|length}}"></td>
+                <td colspan="{{values|length|add:1}}"><a href="{% url "ues.matrix_course" course.slug %}">{{course.name}}</a></td>
             </tr>
             {% for achievement in course.achievements.all %}
                 <tr>
