@@ -1,13 +1,14 @@
 {% extends "index.html" %}
+{% load i18n %}
 
-{% block title %}Student overall evaluation{% endblock %}
+{% block title %}{% trans "Student overall evaluation" %}{% endblock %}
 
 {% load common_extras %}
 
 {% block content %}
 <h1>{{student}}</h1>
 <h2>{{small_class}}</h2>
-<h3>Course : {{small_class.course}}</h3>
+<h3>{% trans "Course:" %} {{small_class.course}}</h3>
 
 <form method="post" action="">
     {% csrf_token %}
@@ -15,7 +16,7 @@
 <table class="ui blue table">
     <thead>
         <tr>
-            <th>Achievement</th>
+            <th>{% trans "Achievement" %}</th>
             {% for value in values %}
                 <th>{{value}}</th>
             {% endfor %}
@@ -36,6 +37,6 @@
     {% endfor %}
     </tbody>
 </table>
-<input type="submit"/>
+<input type="submit" value="{% trans "Submit" %}" />
 </form>
 {% endblock %}

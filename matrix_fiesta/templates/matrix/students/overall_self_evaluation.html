@@ -1,12 +1,12 @@
 {% extends "index.html" %}
-
-{% block title %}Self global evaluation{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Self global evaluation" %}{% endblock %}
 
 {% load common_extras %}
 
 {% block content %}
 
-<p class="ui purple button"><a style="color:white" href="{% url "ues.matrix" %}">Return to main list</a></p>
+<p class="ui purple button"><a style="color:white" href="{% url "ues.matrix" %}">{% trans "Return to main list" %}</a></p>
 
 <form method="post" action="">
     {% csrf_token %}
@@ -23,7 +23,7 @@
         <tbody>
         {% for ecue in ue.ecues.all %}
             <tr style="background-color: #2F56B2; color:white;">
-                <td colspan="{{values|length|add:1}}"><strong>ECUE - {{ecue.name}}</strong></td>
+                <td colspan="{{values|length|add:1}}"><strong>{% trans "ECUE" %} - {{ecue.name}}</strong></td>
             </tr>
             {% for course in ecue.courses.all %}
                 <tr style="background-color: #a7d4f699;">
@@ -42,23 +42,23 @@
                     </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="{{values|length|add:1}}"><em>No achievement here yet.</em></td>
+                    <td colspan="{{values|length|add:1}}"><em>{% trans "No achievement here yet." %}</em></td>
                 </tr>
                 {% endfor %}
             {% empty %}
             <tr>
-                <td colspan="{{values|length|add:1}}"><em>No course here yet.</em></td>
+                <td colspan="{{values|length|add:1}}"><em>{% trans "No course here yet." %}</em></td>
             </tr>
             {% endfor %}
         {% empty %}
         <tr>
-            <td colspan="{{values|length|add:1}}"><em>No ECUE here yet.</em></td>
+            <td colspan="{{values|length|add:1}}"><em>{% trans "No ECUE here yet." %}</em></td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
     {% empty %}
-    <p><em>No UE here yet.</em></p>
+    <p><em>{% trans "No UE here yet." %}</em></p>
     {% endfor %}
 <input type="submit"/>
 </form>

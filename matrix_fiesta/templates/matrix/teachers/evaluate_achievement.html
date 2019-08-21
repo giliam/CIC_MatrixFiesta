@@ -1,17 +1,18 @@
 {% extends "index.html" %}
+{% load i18n %}
 
-{% block title %}Evaluate an achievement{% endblock %}
+{% block title %}{% trans "Evaluate an achievement" %}{% endblock %}
 
 {% load common_extras %}
 
 {% block content %}
 
-{{achievement}} for {{student}}
+{% blocktrans %}{{achievement}} for {{student}}{% endblocktrans %}
 
 <form method="post" action="{% url "ues.evaluate_achievement_student" small_class.id student.id achievement.slug %}">
 {% csrf_token %}
 {{ form.as_p }}
-<input type="submit"/>
+<input type="submit" value="{% trans "Submit" %}" />
 </form>
 
 {% endblock %}

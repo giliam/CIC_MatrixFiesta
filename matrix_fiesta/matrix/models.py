@@ -3,13 +3,16 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.utils.translation import gettext as _
+
+from common.auths import GroupsNames
 
 class DatedModel(models.Model):
     added_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     class Meta:
-        verbose_name = "DatedModel"
+        verbose_name = _("DatedModel")
         abstract = True
 
 
@@ -32,7 +35,7 @@ class ProfileUser(DatedModel):
         return "%s %s" % (self.firstname, self.lastname.upper())
 
     class Meta:
-        verbose_name = "Utilisateur"
+        verbose_name = _("User")
 
 class SchoolYear(DatedModel):
     name = models.CharField(max_length=150)
@@ -42,7 +45,7 @@ class SchoolYear(DatedModel):
         return "%s" % (self.name.upper())
 
     class Meta:
-        verbose_name = "Annee"
+        verbose_name = _("School year")
         ordering = ['order']
 
 
@@ -59,7 +62,7 @@ class Semestre(DatedModel):
         return "%s" % (self.name.upper())
 
     class Meta:
-        verbose_name = "Semestre"
+        verbose_name = _("Semestre")
         ordering = ['order']
 
 
@@ -71,7 +74,7 @@ class UE(DatedModel):
         return "%s (%s)" % (self.name.upper(), self.semestre)
 
     class Meta:
-        verbose_name = "UE"
+        verbose_name = _("UE")
         ordering = ['semestre', 'name']
 
 
@@ -80,10 +83,10 @@ class ECUE(DatedModel):
     ue = models.ForeignKey(UE, on_delete=models.SET_NULL, related_name="ecues", null=True)
 
     def __str__(self):
-        return "ECUE %s - %s" % (self.name, self.ue)
+        return _("ECUE %(name)s - %(ue)s") % {"name": self.name, "ue": self.ue}
 
     class Meta:
-        verbose_name = "ECUE"
+        verbose_name = _("ECUE")
         ordering = ['ue', 'name']
 
 
@@ -93,14 +96,14 @@ class Course(DatedModel):
     slug = models.SlugField(unique=True)
 
     def __str__(self):
-        return "%s - %s" % (self.name, self.ecue)
+        return "%(name)s - %(ecue)s" % {"name": self.name, "ecue": self.ecue}
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Course, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name = "Course"
+        verbose_name = _("Course")
         ordering = ['ecue', 'name']
 
 
@@ -113,7 +116,7 @@ class EvaluationValue(DatedModel):
         return "%s" % (self.value)
 
     class Meta:
-        verbose_name = "Valeur"
+        verbose_name = _("Evaluation value")
         ordering = ["order"]
 
 
@@ -133,7 +136,7 @@ class LearningAchievement(DatedModel):
         return "achievement_" + str(self.id)
     
     class Meta:
-        verbose_name = "AcquisApprentissage"
+        verbose_name = _("Learning achievement")
         ordering = ["course", "name"]
 
 
@@ -145,10 +148,14 @@ class StudentEvaluation(DatedModel):
     last_evaluation = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s, %s : %s (teacher: %s)" % (self.achievement, self.student, self.evaluation_value, self.teacher_evaluation)
+        return _("%(achiev)s, %(student)s : %(eval)s (teacher: %(teacher)s)") % {
+            "achiev": self.achievement, "student": self.student, 
+            "eval": self.evaluation_value, 
+            "teacher": self.teacher_evaluation
+        }
 
     class Meta:
-        verbose_name = "EvaluationEleve"
+        verbose_name = _("Student evaluation")
         ordering = ["-added_date"]
 
 
@@ -156,15 +163,18 @@ class SmallClass(DatedModel):
     teacher = models.ForeignKey(
         ProfileUser, on_delete=models.SET_NULL, 
         related_name="small_classes_teacher", null=True,
-        limit_choices_to={'user__groups__name': 'Enseignants'}
+        limit_choices_to={'user__groups__name': GroupsNames.TEACHERS_LEVEL.value}
     )
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="small_classes")
     students = models.ManyToManyField(ProfileUser, related_name="small_classes_student",
-        limit_choices_to={'user__groups__name': 'Élèves'})
+        limit_choices_to={'user__groups__name': GroupsNames.STUDENTS_LEVEL.value})
 
     def __str__(self):
-        return "PC de %s par %s (%d élèves)" % (self.course, self.teacher, self.students.count())
+        return _("SC of %(course)s by %(teacher)s (%(std_count)d students)") % {
+            "course": self.course, "teacher": self.teacher,
+            "std_count": self.students.count()
+        }
 
     class Meta:
-        verbose_name = "PetiteClasse"
+        verbose_name = _("Small class")
         ordering = ["course"]

@@ -1,11 +1,13 @@
 from django import forms
 from django.contrib.auth.models import Group
+from django.utils.translation import gettext as _
 
 from matrix import models
+from common.auths import GroupsNames
 
 class ConnexionForm(forms.Form):
-    username = forms.CharField(label="Nom d'utilisateur (email)", max_length=30)
-    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
+    username = forms.CharField(label=_("User name"), max_length=30)
+    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
 class StudentEvaluationAllForm(forms.Form):
     # Based on https://www.caktusgroup.com/blog/2018/05/07/creating-dynamic-forms-django/
@@ -48,6 +50,6 @@ class TeacherEvaluationForm(forms.ModelForm):
 
 
 class UploadNewStudentsForm(forms.Form):
-    has_header = forms.BooleanField(label="File has a header ?", required=False)
-    file = forms.FileField(label='Select a file')
-    group = forms.MultipleChoiceField(choices=[(g.id, g) for g in Group.objects.all() if g.name != "DE"])
+    has_header = forms.BooleanField(label=_("File has a header ?"), required=False)
+    file = forms.FileField(label=_('Select a file'))
+    group = forms.MultipleChoiceField(choices=[(g.id, g) for g in Group.objects.all() if g.name != GroupsNames.DIRECTOR_LEVEL.value])

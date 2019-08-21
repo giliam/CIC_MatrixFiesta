@@ -1,6 +1,6 @@
 {% extends "index.html" %}
-
-{% block title %}Course matrix{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Course matrix" %}{% endblock %}
 
 {% load common_extras %}
 
@@ -10,10 +10,10 @@
 <table class="ui blue table">
     <thead>
         <tr>
-            <th>Achievement</th>
-            <th>Current evaluation</th>
-            <th>Older evaluation(s)</th>
-            <th>Action</th>
+            <th>{% trans "Achievement" %}</th>
+            <th>{% trans "Current evaluation" %}</th>
+            <th>{% trans "Older evaluation(s)" %}</th>
+            <th>{% trans "Action" %}</th>
         </tr>
     </thead>
     <tbody>    
@@ -27,14 +27,14 @@
                     <span style="font-size: 0.8em;">{{ prec_eval.value }} - {{ prec_eval.date }} ;</span>
                 {% endfor %}</td>
             {% endwith %}
-            <td><a href="{% url "ues.evaluate_achievement" c_achievement.slug %}">Nouvelle évaluation ?</a></td>
+            <td><a href="{% url "ues.evaluate_achievement" c_achievement.slug %}">{% trans "New evaluation?" %}</a></td>
         {% else %}
-        <td colspan="3"><a href="{% url "ues.evaluate_achievement" c_achievement.slug %}">Non évalué...</a></td>
+        <td colspan="3"><a href="{% url "ues.evaluate_achievement" c_achievement.slug %}">{% trans "Non evaluated" %}</a></td>
         {% endif %}
     </tr>
     {% empty %}
     <tr>
-        <td colspan="4">Pas d'acquis d'apprentissage à évaluer !</td>
+        <td colspan="4">{% trans "No achievement to evaluate." %}</td>
     </tr>
     {% endfor %}
     </tbody>

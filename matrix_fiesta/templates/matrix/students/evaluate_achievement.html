@@ -1,17 +1,17 @@
 {% extends "index.html" %}
-
-{% block title %}Achievement self evaluation{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Achievement self evaluation" %}{% endblock %}
 
 {% load common_extras %}
 
 {% block content %}
 
-{{achievement}}
+<h2>{{achievement}}</h2>
 
-<form method="post" action="{% url "ues.evaluate_achievement" achievement.slug %}">
+<form method="post" action="{% url "ues.evaluate_achievement" achievement.slug %}" class="ui form">
 {% csrf_token %}
 {{ form.as_p }}
-<input type="submit"/>
+<input type="submit" class="ui button"/>
 </form>
 
 {% endblock %}

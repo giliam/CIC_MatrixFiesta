@@ -1,5 +1,7 @@
 {% extends "index.html" %}
-{% block title %}Homepage{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Homepage" %}{% endblock %}
 {% block content %}
-Bienvenue !
+{% trans "Welcome !" %}
 {% endblock %}

@@ -1,12 +1,12 @@
 {% extends "index.html" %}
-
-{% block title %}Matrix{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Matrix" %}{% endblock %}
 
 {% load common_extras %}
 
 {% block content %}
 
-<p class="ui purple button"><a style="color:white" href="{% url "ues.self_evaluate_all" %}">Self evaluation</a></p>
+<p class="ui purple button"><a style="color:white" href="{% url "ues.self_evaluate_all" %}">{% trans "Self evaluation" %}</a></p>
 
 <table class="ui blue table">
 {% for ue in ues %}
@@ -52,23 +52,23 @@
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="{{values|length|add:1}}"><em>No achievement here yet.</em></td>
+                    <td colspan="{{values|length|add:1}}"><em>{% trans "No achievement here yet." %}</em></td>
                 </tr>
                 {% endfor %}
             {% empty %}
             <tr>
-                <td colspan="{{values|length|add:1}}"><em>No course here yet.</em></td>
+                <td colspan="{{values|length|add:1}}"><em>{% trans "No course here yet." %}</em></td>
             </tr>
             {% endfor %}
         {% empty %}
         <tr>
-            <td colspan="{{values|length|add:1}}"><em>No ECUE here yet.</em></td>
+            <td colspan="{{values|length|add:1}}"><em>{% trans "No ECUE here yet." %}</em></td>
         </tr>
         {% endfor %}
     </tbody>
     {% empty %}
     <tr>
-        <td colspan="{{values|length|add:1}}"><em>No UE here yet.</em></td>
+        <td colspan="{{values|length|add:1}}"><em>{% trans "No UE here yet." %}</em></td>
     </tr>
     {% endfor %}
 </table>

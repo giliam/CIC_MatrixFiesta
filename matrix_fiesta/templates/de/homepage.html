@@ -1,9 +1,12 @@
 {% extends "index.html" %}
+{% load i18n %}
 
-{% block title %}DE homepage{% endblock %}
+{% block title %}{% trans "DE homepage" %}{% endblock %}
 
 {% block content %}
-<h1>Administrative tools</h1>
+<h1>{% trans "Administrative tools" %}</h1>
 
-<p><a href="{% url "de.insert_new_users" %}">Insert new users</a></p>
+<p><a href="{% url "de.list_students" %}">{% trans "List students" %}</a></p>
+<p><a href="{% url "de.list_teachers" %}">{% trans "List teachers" %}</a></p>
+<p><a href="{% url "de.insert_new_users" %}">{% trans "Insert new users" %}</a></p>
 {% endblock %}

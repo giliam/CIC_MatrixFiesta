@@ -9,6 +9,7 @@ from django.core.files.storage import default_storage
 from django.db.models import Sum, Avg, Value, Count
 from django.db.models.functions import Coalesce
 from django.shortcuts import render, redirect, reverse
+from django.utils.translation import gettext as _
 from django.views.decorators.debug import sensitive_post_parameters
 
 from matrix import forms
@@ -113,7 +114,9 @@ def ues_list(request):
 def matrix_ues(request):
     profile_user = models.ProfileUser.objects.get(user=request.user)
 
-    ues = models.UE.objects.filter(semestre__schoolyear__order=profile_user.get_schoolyear()).prefetch_related('ecues', 'semestre', "ecues__courses", "ecues__courses__achievements")
+    ues = models.UE.objects.filter(semestre__schoolyear__order=profile_user.get_schoolyear()).prefetch_related(
+        'ecues', 'semestre', "ecues__courses", "ecues__courses__achievements"
+    )
     values = models.EvaluationValue.objects.all()
 
     evaluations = models.StudentEvaluation.objects.filter(
@@ -337,6 +340,68 @@ def homepage_teachers(request):
 
 @login_required
 @user_passes_test(teacher_check)
+def all_students_teachers(request):
+    teacher = models.ProfileUser.objects.get(user=request.user)
+
+    classes = models.SmallClass.objects.all().prefetch_related(
+        'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
+    )
+
+    # Gets all evaluations for the classes of the teacher.
+    evaluations = models.StudentEvaluation.objects.filter(
+        teacher_evaluation=True, last_evaluation=True
+    ).prefetch_related(
+        'evaluation_value', 'achievement__course__small_classes', 'student', 'achievement', 'achievement__course', 'achievement__course__ecue', 'achievement__course__ecue__ue'
+    ).all()
+    
+    evaluations_sorted = {}
+    for evaluation in evaluations:
+        if not evaluation.student.id in evaluations_sorted.keys():
+            evaluations_sorted[evaluation.student.id] = []
+        evaluations_sorted[evaluation.student.id].append(evaluation)
+
+    averages = {}
+    nb_achievements = {}
+
+    for small_class in classes:
+        averages[small_class.id] = {}
+        nb_achievements[small_class.id] = len(small_class.course.achievements.all())
+        
+        students = small_class.students.all()
+
+        if nb_achievements[small_class.id] == 0:
+            for student in students:
+                averages[small_class.id][student.id] = (0.0, 0)
+        else:
+            for student in students:
+                sum_ = 0
+                count_ = 0
+                if student.id in evaluations_sorted.keys():
+                    for evaluation in evaluations_sorted[student.id]:
+                        if small_class in evaluation.achievement.course.small_classes.all():
+                            sum_ += evaluation.evaluation_value.integer_value
+                            count_ += 1
+
+                sum_ /= nb_achievements[small_class.id]
+
+                # evaluations_this_sc_student = evaluations.filter(student=student, achievement__course__small_classes=small_class
+                #     ).aggregate(sum_values=Coalesce(Sum("evaluation_value__integer_value"), Value(0.0)), nb_evals=Count('achievement'))
+                averages[small_class.id][student.id] = (
+                    sum_,
+                    count_
+                )
+
+        if len(students) > 0:
+            averages[small_class.id]["average"] = sum(map(lambda x: x[0], averages[small_class.id].values()))/len(small_class.students.all())
+
+
+    return render(request, "matrix/teachers/list_all_students.html", {
+        "classes": classes, "averages": averages, "nb_achievements": nb_achievements
+    })
+
+
+@login_required
+@user_passes_test(teacher_check)
 def status_student(request, small_class_id, student_id):
     student = models.ProfileUser.objects.get(id=student_id)
     small_class = models.SmallClass.objects.filter(id=small_class_id).prefetch_related(
@@ -497,9 +562,12 @@ def homepage_de(request):
 
 @login_required
 @user_passes_test(de_check)
-def list_students(request):
-    students = models.ProfileUser.objects.all()
-    return render(request, "de/list_students.html", {"students": students})
+def list_users(request, group_filter=auths.GroupsNames.STUDENTS_LEVEL):
+    if type(group_filter) != auths.GroupsNames:
+        return render(request, "de/homepage.html", {})
+
+    students = models.ProfileUser.objects.filter(user__groups__name__contains=group_filter.value)
+    return render(request, "de/list_users.html", {"students": students})
 
 
 @login_required
@@ -517,11 +585,13 @@ def insert_new_users(request):
         },
         "Entrance year": {
             "index": 3,
-            "help": "sous la forme 20XX"
+            # sous la forme 20XX
+            "help": _("formatted as 20XX")
         },
         "Cesure": {
             "index": 4,
-            "help": "doit être 0 ou 1"
+            # "doit être 0 ou 1"
+            "help": _("must be 0 or 1")
         },
     }
 

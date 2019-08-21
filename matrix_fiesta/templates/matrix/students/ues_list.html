@@ -1,6 +1,6 @@
 {% extends "index.html" %}
-
-{% block title %}UEs list{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "UEs list" %}{% endblock %}
 
 {% block content %}
 {% for ue in ues %}

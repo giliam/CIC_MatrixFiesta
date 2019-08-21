@@ -1,53 +1,34 @@
 {% extends "index.html" %}
 {% load i18n %}
-
-{% block title %}{% trans "Teacher homepage" %}{% endblock %}
-
-{% load common_extras %}
+{% block title %}{% trans "Students list" %}{% endblock %}
 
 {% block content %}
-    {% for small_class in classes %}
-    <div class="ui accordion">
-        <div class="title">
-            <h2><i class="dropdown icon"></i> {{ small_class.course }}</h2>
-        </div>
-        <div class="content active">
-            <div class="transition visible">
-            <table class="ui blue table sortable celled">
-                <thead>
-                    <tr>
-                        <th>{% trans "Student name" %}</th>
-                        <th>{% trans "Evaluate" %}</th>
-                        <th>{% trans "Average" %}</th>
-                        <th>{% trans "Nb of evaluations" %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for student in small_class.students.all %}
-                    <tr>
-                        <td><a href="{% url "ues.status_student" small_class.id student.id %}">{{ student }}</a></td>
-                        <td><a href="{% url "ues.evaluate_student_all" small_class.id student.id %}">{% trans "Overall evaluation" %}</a></td>
-                        <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:0 }}</td>
-                        <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:1 }} / {{nb_achievements|get_item:small_class.id}}</td>
-                    </tr>
-                    {% empty %}
-                    <tr><td colspan="4">{% trans "No student enrolled yet." %}</td></tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot>
-                    <tr class="active">
-                        <td colspan="2"><em>{% trans "Average of the class" %}</em></td>
-                        <td>{{ averages|get_item:small_class.id|get_item:"average"}}</td>
-                        <td>{{ small_class.students.all|length }} {% trans "student(s)" %}</td>
-                    </tr>
-                </tfoot>
-            </table>
-            </div>
-        </div>
-    </div>
-    {% empty %}
-        <p>{% trans "No class assigned yet." %}</p>
-    {% endfor %}
+<h1>{% trans "Students list" %}</h1>
+
+<table class="ui blue table sortable celled">
+<thead>
+    <tr>
+        <th>{% trans "Student firstname" %}</th>
+        <th>{% trans "Student lastname" %}</th>
+        <th>{% trans "Email" %}</th>
+        <th>{% trans "Entrance year" %}</th>
+        <th>{% trans "Cesure?" %}</th>
+        <th>{% trans "Groups" %}</th>
+    </tr>
+</thead>
+<tbody>
+{% for student in students %}
+<tr>
+    <td>{{student.firstname}}</td>
+    <td>{{student.lastname}}</td>
+    <td>{{student.user.mail}}</td>
+    <td>{{student.year_entrance}}</td>
+    <td>{% if student.cesure %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
+    <td>{{student.user.groups.all|join:", "}}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
 
 <script type="text/javascript">
 /*
@@ -184,9 +165,5 @@ Version 0.0.11
 })(window.Zepto || window.jQuery);
 $('table').tablesort()
 
-
-$('.ui.accordion')
-  .accordion()
-;
 </script>
 {% endblock %}

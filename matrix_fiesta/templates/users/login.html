@@ -1,17 +1,18 @@
 {% extends "index.html" %}
+{% load i18n %}
+
 {% block content %}
-<h1>Se connecter</h1>
+<h1>{% trans "Log in" %}</h1>
 {% if error %}
-<p class="text-error"><strong>Utilisateur inexistant ou mauvais de mot de
-passe.</strong></p>
+<p class="text-error"><strong>{% trans "Unknown user or wrong password." %}</strong></p>
 {% endif %}
 {% if user.is_authenticated %}
-Vous êtes connecté, {{ user.username }} !
+{% blocktrans %}You are successfully logged in, {{user.username}}!{% endblocktrans %}
 {% else %}
 <form method="post" action=".">
 {% csrf_token %}
 {{ form.as_p }}
-<input type="submit"/>
+<input type="submit" value="{% trans "Submit" %}" />
 </form>
 {% endif %}
 {% endblock %}

@@ -1,12 +1,13 @@
 {% load static %}
 {% load common_extras %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <title>CIC - {% block title %}Welcome{% endblock %}</title>
+    <title>CIC - {% block title %}{% trans "Welcome" %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static "css/semantic.min.css" %}">
     <script
       src="{% static "js/jquery-3.1.1.min.js" %}"
@@ -20,21 +21,24 @@
         <div class="ui secondary menu">
           <div class="header item">Matrix Fiesta</div>
           <a class="item {{ nav_homepage_active }}" href="{% url "homepage" %}">
-            Homepage
+            {% trans "Homepage" %}
           </a>
           {% if request.user|is_student %} 
           <a class="item {{ nav_matrix_active }}" href="{% url "ues.matrix" %}">
-            Your evaluation
+            {% trans "Your evaluation" %}
           </a>
           {% endif %}
           {% if request.user|is_teacher %} 
           <a class="item {{ nav_homepage_teachers_active }}" href="{% url "ues.homepage_teachers" %}">
-            Evaluate the students
+            {% trans "Evaluate your students" %}
+          </a>
+          <a class="item {{ nav_all_students_teachers_active }}" href="{% url "ues.all_students_teachers" %}">
+            {% trans "Show all students" %}
           </a>
           {% endif %}
           {% if request.user|is_de %} 
           <a class="item {{ nav_homepage_de_active }}" href="{% url "de.homepage_de" %}">
-            DE
+            {% trans "DE" %}
           </a>
           {% endif %}
           <div class="right menu">
@@ -47,16 +51,16 @@
  -->        
             {% if user.is_staff %}
             <a class="ui item {{ nav_admin_active }}" href="/admin">
-              Admin
+              {% trans "Admin" %}
             </a>
             {% endif %}
             {% if user.is_authenticated %}    
             <a class="ui item {{ nav_users_active }}" href="{% url "users.log_out" %}">
-              Déconnexion
+              {% trans "Log out" %}
             </a>
             {% else %}
             <a class="ui item {{ nav_users_active }}" href="{% url "users.log_in" %}">
-              Connexion
+              {% trans "Log in" %}
             </a>
             {% endif %}
           </div>
@@ -66,7 +70,7 @@
         <div class="ui grid">
           <div class="twelve wide column">
             {% block content %}
-            Nothing to see here!
+            {% trans "Nothing to see here!" %}
             {% endblock %}
           </div>
         </div>
