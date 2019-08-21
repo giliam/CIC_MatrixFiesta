@@ -14,6 +14,7 @@ class DatedModel(models.Model):
 class ProfileUser(DatedModel):
     firstname = models.CharField(max_length=150)
     lastname = models.CharField(max_length=150)
+    schoolyear = models.ForeignKey("SchoolYear", on_delete=models.SET_NULL, null=True)
 
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
 
