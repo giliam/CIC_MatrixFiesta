@@ -3,36 +3,61 @@
 {% load common_extras %}
 
 {% block content %}
-<h1>{{student}}</h1>
+
+<p class="ui purple button"><a style="color:white" href="{% url "ues.matrix" %}">Return to main list</a></p>
 
 <form method="post" action="">
     {% csrf_token %}
-{% for small_class in small_classes %}
+    {% for ue in ues %}
     <table class="ui blue table">
         <thead>
             <tr>
-                <th>Achievement</th>
+                <th>{{ue}}</th>
                 {% for value in values %}
                     <th>{{value}}</th>
                 {% endfor %}
             </tr>
         </thead>
         <tbody>
-        {% for achievement in small_class.course.achievements.all %}
-            <tr>
-                {% with form_field=form.fields|get_item:achievement.get_field_name %}
-                {% with form_initial=form.initial|get_item:achievement.get_field_name %}
-                    <td>{{achievement.name}}</td>
-                    {% for value, text in form_field.choices %}
-                        <td><input type="radio" name="{{achievement.get_field_name}}" value="{{ value }}"{% if form_initial|get_item:0 == value %} checked{% endif %} /></td>
-                    {% endfor %}
-                {% endwith %}
-                {% endwith %}
+        {% for ecue in ue.ecues.all %}
+            <tr style="background-color: #2F56B2; color:white;">
+                <td colspan="{{values|length|add:1}}"><strong>ECUE - {{ecue.name}}</strong></td>
             </tr>
+            {% for course in ecue.courses.all %}
+                <tr style="background-color: #a7d4f699;">
+                    <td colspan="{{values|length|add:1}}"><strong>{{course.name}}</strong></td>
+                </tr>
+                {% for achievement in course.achievements.all %}
+                    <tr>
+                        {% with form_field=form.fields|get_item:achievement.get_field_name %}
+                        {% with form_initial=form.initial|get_item:achievement.get_field_name %}
+                            <td>{{achievement.name}}</td>
+                            {% for value, text in form_field.choices %}
+                                <td><input type="radio" name="{{achievement.get_field_name}}" value="{{ value }}"{% if form_initial|get_item:0 == value %} checked{% endif %} /></td>
+                            {% endfor %}
+                        {% endwith %}
+                        {% endwith %}
+                    </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="{{values|length|add:1}}"><em>No achievement here yet.</em></td>
+                </tr>
+                {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="{{values|length|add:1}}"><em>No course here yet.</em></td>
+            </tr>
+            {% endfor %}
+        {% empty %}
+        <tr>
+            <td colspan="{{values|length|add:1}}"><em>No ECUE here yet.</em></td>
+        </tr>
         {% endfor %}
         </tbody>
     </table>
-{% endfor %}
+    {% empty %}
+    <p><em>No UE here yet.</em></p>
+    {% endfor %}
 <input type="submit"/>
 </form>
 {% endblock %}

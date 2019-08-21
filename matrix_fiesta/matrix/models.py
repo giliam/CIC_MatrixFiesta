@@ -134,7 +134,7 @@ class StudentEvaluation(DatedModel):
     last_evaluation = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s, %s : %s" % (self.achievement, self.student, self.evaluation_value)
+        return "%s, %s : %s (teacher: %s)" % (self.achievement, self.student, self.evaluation_value, self.teacher_evaluation)
 
     class Meta:
         verbose_name = "EvaluationEleve"

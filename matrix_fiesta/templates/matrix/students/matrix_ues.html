@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<p><a href="{% url "ues.self_evaluate_all" %}">Self evaluation</a></p>
+<p class="ui purple button"><a style="color:white" href="{% url "ues.self_evaluate_all" %}">Self evaluation</a></p>
 
 <table class="ui blue table">
 {% for ue in ues %}
@@ -18,12 +18,12 @@
     </thead>
     <tbody>
     {% for ecue in ue.ecues.all %}
-        <tr style="background-color: #1642AB; color:white;">
+        <tr style="background-color: #2F56B2; color:white;">
             <td colspan="{{values|length|add:1}}"><strong>ECUE - {{ecue.name}}</strong></td>
         </tr>
         {% for course in ecue.courses.all %}
             <tr style="background-color: #a7d4f699;">
-                <td colspan="{{values|length|add:1}}"><a href="{% url "ues.matrix_course" course.slug %}">{{course.name}}</a></td>
+                <td colspan="{{values|length|add:1}}"><strong><a href="{% url "ues.matrix_course" course.slug %}">{{course.name}}</a></strong></td>
             </tr>
             {% for achievement in course.achievements.all %}
                 <tr>
@@ -48,10 +48,26 @@
                         {% endif %}
                     {% endfor %}
                 </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="{{values|length|add:1}}"><em>No achievement here yet.</em></td>
+                </tr>
+                {% endfor %}
+            {% empty %}
+            <tr>
+                <td colspan="{{values|length|add:1}}"><em>No course here yet.</em></td>
+            </tr>
             {% endfor %}
+        {% empty %}
+        <tr>
+            <td colspan="{{values|length|add:1}}"><em>No ECUE here yet.</em></td>
+        </tr>
         {% endfor %}
-    {% endfor %}
     </tbody>
-{% endfor %}
+    {% empty %}
+    <tr>
+        <td colspan="{{values|length|add:1}}"><em>No UE here yet.</em></td>
+    </tr>
+    {% endfor %}
 </table>
 {% endblock %}
