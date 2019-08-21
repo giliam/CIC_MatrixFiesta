@@ -50,4 +50,4 @@ class TeacherEvaluationForm(forms.ModelForm):
 class UploadNewStudentsForm(forms.Form):
     has_header = forms.BooleanField(label="File has a header ?", required=False)
     file = forms.FileField(label='Select a file')
-    group = forms.MultipleChoiceField(choices=[(g.id, g) for g in Group.objects.all()])
+    group = forms.MultipleChoiceField(choices=[(g.id, g) for g in Group.objects.all() if g.name != "DE"])

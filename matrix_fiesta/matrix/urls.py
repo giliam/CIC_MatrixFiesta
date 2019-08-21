@@ -21,7 +21,7 @@ urlpatterns = [
     re_path(r'teachers/achievements/overall/student/([0-9]+)/([0-9]+)', views.evaluate_student_all, name="ues.evaluate_student_all"),
 
     # DE part
-    path('de/', views.homepage_de, name="de.homepage"),
+    path('de/', views.homepage_de, name="de.homepage_de"),
     path('de/list/students', views.list_students, name="de.list_students"),
     path('de/insert/new/users', views.insert_new_users, name="de.insert_new_users"),
     

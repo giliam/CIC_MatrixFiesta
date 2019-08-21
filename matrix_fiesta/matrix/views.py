@@ -537,8 +537,13 @@ def insert_new_users(request):
 
             header_skipped = False
 
+            # Reads file uploaded
+            # cf. https://stackoverflow.com/a/16243182/8980220
             f = TextIOWrapper(request.FILES['file'].file, encoding="utf-8")
             spamreader = csv.reader(f, delimiter=";")
+
+            if "DE" in form.cleaned_data["group"]:
+                exit()
 
             for student in spamreader:
                 if not header_skipped and form.cleaned_data["has_header"]:
