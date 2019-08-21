@@ -1,6 +1,6 @@
 from django import template
 
-from common.auths import check_is_student, check_is_teacher
+from common import auths
 
 register = template.Library()
 
@@ -15,9 +15,14 @@ def get_item(dictionary, key):
 
 @register.filter()
 def is_student(user):
-    return check_is_student(user)
+    return auths.check_is_student(user)
 
 
 @register.filter
 def is_teacher(user):
-    return check_is_teacher(user)
+    return auths.check_is_teacher(user)
+
+
+@register.filter
+def is_de(user):
+    return auths.check_is_de(user)

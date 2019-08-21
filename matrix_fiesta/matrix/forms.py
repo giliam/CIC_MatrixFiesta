@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import Group
 
 from matrix import models
 
@@ -44,3 +45,9 @@ class TeacherEvaluationForm(forms.ModelForm):
     class Meta:
         model = models.StudentEvaluation
         fields = ('evaluation_value','student',)
+
+
+class UploadNewStudentsForm(forms.Form):
+    has_header = forms.BooleanField(label="File has a header ?", required=False)
+    file = forms.FileField(label='Select a file')
+    group = forms.MultipleChoiceField(choices=[(g.id, g) for g in Group.objects.all()])

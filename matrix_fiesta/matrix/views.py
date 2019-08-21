@@ -1,5 +1,11 @@
+from io import TextIOWrapper
+import csv
+import os
+
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.core.files.storage import default_storage
 from django.db.models import Sum, Avg, Value, Count
 from django.db.models.functions import Coalesce
 from django.shortcuts import render, redirect, reverse
@@ -18,6 +24,10 @@ def teacher_check(user):
 
 def student_check(user):
     return auths.check_is_student(user)
+
+
+def de_check(user):
+    return auths.check_is_de(user)
 
 """
 Useful functions
@@ -472,3 +482,86 @@ def evaluate_student_all(request, small_class_id, student_id):
         "form": form
     })
 
+
+
+##
+# DE PAGES
+##
+
+
+@login_required
+@user_passes_test(de_check)
+def homepage_de(request):
+    return render(request, "de/homepage.html", {})
+
+
+@login_required
+@user_passes_test(de_check)
+def list_students(request):
+    students = models.ProfileUser.objects.all()
+    return render(request, "de/list_students.html", {"students": students})
+
+
+@login_required
+@user_passes_test(de_check)
+def insert_new_users(request):
+    columns = {
+        "Firstname": {
+            "index": 0,
+        },
+        "Lastname": {
+            "index": 1,
+        },
+        "Email": {
+            "index": 2,
+        },
+        "Entrance year": {
+            "index": 3,
+            "help": "sous la forme 20XX"
+        },
+        "Cesure": {
+            "index": 4,
+            "help": "doit être 0 ou 1"
+        },
+    }
+
+    # Handle file upload
+    if request.method == 'POST':
+        form = forms.UploadNewStudentsForm(request.POST, request.FILES)
+        if form.is_valid():
+            email_index = columns['Email']["index"]
+            firstname_index = columns["Firstname"]["index"]
+            lastname_index = columns["Lastname"]["index"]
+            year_entrance_index = columns["Entrance year"]["index"]
+            cesure_index = columns["Cesure"]["index"]
+
+            header_skipped = False
+
+            f = TextIOWrapper(request.FILES['file'].file, encoding="utf-8")
+            spamreader = csv.reader(f, delimiter=";")
+
+            for student in spamreader:
+                if not header_skipped and form.cleaned_data["has_header"]:
+                    header_skipped = True
+                    continue
+
+                user = User.objects.create_user(student[email_index], student[email_index], '')
+                user.groups.set(form.cleaned_data["group"])
+                user.save()
+
+                profile_user = models.ProfileUser()
+                profile_user.firstname = student[firstname_index]
+                profile_user.lastname = student[lastname_index]
+                profile_user.year_entrance = student[year_entrance_index]
+                if len(student) < (cesure_index+1):
+                    profile_user.cesure = False
+                else:
+                    profile_user.cesure = student[cesure_index] == 1
+                profile_user.user = user
+                profile_user.save()
+            
+            return redirect(reverse('de.list_students'))
+    else:
+        form = forms.UploadNewStudentsForm() # A empty, unbound form
+
+    return render(request, "de/insert_new_users.html", {"columns": columns, "form": form})

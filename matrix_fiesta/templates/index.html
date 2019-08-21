@@ -32,6 +32,11 @@
             Evaluate the students
           </a>
           {% endif %}
+          {% if request.user|is_de %} 
+          <a class="item {{ nav_homepage_de_active }}" href="{% url "de.homepage" %}">
+            DE
+          </a>
+          {% endif %}
           <div class="right menu">
 <!--             <div class="item">
               <div class="ui icon input">
