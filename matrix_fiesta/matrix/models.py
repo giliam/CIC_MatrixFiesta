@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
@@ -14,9 +16,17 @@ class DatedModel(models.Model):
 class ProfileUser(DatedModel):
     firstname = models.CharField(max_length=150)
     lastname = models.CharField(max_length=150)
-    schoolyear = models.ForeignKey("SchoolYear", on_delete=models.SET_NULL, null=True)
+    year_entrance = models.PositiveIntegerField(default=0)
+    cesure = models.BooleanField(default=False)
 
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
+
+    def get_schoolyear(self):
+        current_year = datetime.datetime.now().year
+        current_schoolyear = min(4, (current_year - self.year_entrance)+1)
+        if self.cesure:
+            current_schoolyear -= 1
+        return current_schoolyear
 
     def __str__(self):
         return "%s %s" % (self.firstname, self.lastname.upper())

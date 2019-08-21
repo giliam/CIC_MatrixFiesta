@@ -103,7 +103,7 @@ def ues_list(request):
 def matrix_ues(request):
     profile_user = models.ProfileUser.objects.get(user=request.user)
 
-    ues = models.UE.objects.filter(semestre__schoolyear=profile_user.schoolyear).prefetch_related('ecues', 'semestre', "ecues__courses", "ecues__courses__achievements")
+    ues = models.UE.objects.filter(semestre__schoolyear__order=profile_user.get_schoolyear()).prefetch_related('ecues', 'semestre', "ecues__courses", "ecues__courses__achievements")
     values = models.EvaluationValue.objects.all()
 
     evaluations = models.StudentEvaluation.objects.filter(
@@ -122,7 +122,7 @@ def matrix_ues(request):
 @user_passes_test(student_check)
 def matrix_course(request, slug):
     profile_user = models.ProfileUser.objects.get(user=request.user)
-    course = models.Course.objects.get(slug=slug, ecue__ue__semestre__schoolyear=profile_user.schoolyear)
+    course = models.Course.objects.get(slug=slug, ecue__ue__semestre__schoolyear__order=profile_user.get_schoolyear())
     achievements = models.LearningAchievement.objects.filter(course=course)
     evaluations = models.StudentEvaluation.objects.filter(
         student=profile_user, 
@@ -141,7 +141,7 @@ def matrix_course(request, slug):
 def evaluate_achievement(request, slug):
     student = models.ProfileUser.objects.get(user=request.user)
 
-    achievement = models.LearningAchievement.objects.get(slug=slug, course__ecue__ue__semestre__schoolyear=student.schoolyear)
+    achievement = models.LearningAchievement.objects.get(slug=slug, course__ecue__ue__semestre__schoolyear__order=student.get_schoolyear())
     try:
         evaluation_existante = models.StudentEvaluation.objects.get(achievement=achievement, student=student, teacher_evaluation=False)
         # return redirect('ues.matrix_course', achievement.course.slug)
@@ -173,7 +173,7 @@ def evaluate_achievement(request, slug):
 def self_evaluate_all(request):
     student = models.ProfileUser.objects.get(user=request.user)
 
-    ues = models.UE.objects.filter(semestre__schoolyear=student.schoolyear).prefetch_related('ecues', 'semestre', "ecues__courses", "ecues__courses__achievements")
+    ues = models.UE.objects.filter(semestre__schoolyear__order=student.get_schoolyear()).prefetch_related('ecues', 'semestre', "ecues__courses", "ecues__courses__achievements")
     values = models.EvaluationValue.objects.all()
     # Gets all evaluations on this small class
     evaluations = models.StudentEvaluation.objects.filter(
