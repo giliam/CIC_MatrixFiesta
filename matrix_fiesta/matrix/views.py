@@ -280,6 +280,7 @@ def homepage_teachers(request):
     teacher = models.ProfileUser.objects.get(user=request.user)
 
     classes = models.SmallClass.objects.filter(
+        promotion_year__current=True,
         teacher=teacher
     ).prefetch_related(
         'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
@@ -343,9 +344,10 @@ def homepage_teachers(request):
 def all_students_teachers(request):
     teacher = models.ProfileUser.objects.get(user=request.user)
 
-    classes = models.SmallClass.objects.all().prefetch_related(
+    classes = models.SmallClass.objects.filter(promotion_year__current=True).prefetch_related(
         'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
     )
+    print(classes)
 
     # Gets all evaluations for the classes of the teacher.
     evaluations = models.StudentEvaluation.objects.filter(
@@ -613,27 +615,33 @@ def insert_new_users(request):
             spamreader = csv.reader(f, delimiter=";")
 
             if "DE" in form.cleaned_data["group"]:
-                exit()
+                raise ValueError(_("DE shouldn't be in the groups selected"))
+            else:
+                entrance_years = {}
 
-            for student in spamreader:
-                if not header_skipped and form.cleaned_data["has_header"]:
-                    header_skipped = True
-                    continue
+                for student in spamreader:
+                    if not header_skipped and form.cleaned_data["has_header"]:
+                        header_skipped = True
+                        continue
 
-                user = User.objects.create_user(student[email_index], student[email_index], '')
-                user.groups.set(form.cleaned_data["group"])
-                user.save()
+                    user = User.objects.create_user(student[email_index], student[email_index], '')
+                    user.groups.set(form.cleaned_data["group"])
+                    user.save()
 
-                profile_user = models.ProfileUser()
-                profile_user.firstname = student[firstname_index]
-                profile_user.lastname = student[lastname_index]
-                profile_user.year_entrance = student[year_entrance_index]
-                if len(student) < (cesure_index+1):
-                    profile_user.cesure = False
-                else:
-                    profile_user.cesure = student[cesure_index] == 1
-                profile_user.user = user
-                profile_user.save()
+                    profile_user = models.ProfileUser()
+                    profile_user.firstname = student[firstname_index]
+                    profile_user.lastname = student[lastname_index]
+                    # gets the object from entrance year
+                    entrance_year = student[year_entrance_index]
+                    if not entrance_year in entrance_years.keys():
+                        entrance_years[entrance_year] = models.PromotionYear.objects.filter(value=entrance_year)
+                    profile_user.year_entrance = entrance_years[entrance_year]
+                    if len(student) < (cesure_index+1):
+                        profile_user.cesure = False
+                    else:
+                        profile_user.cesure = student[cesure_index] == 1
+                    profile_user.user = user
+                    profile_user.save()
             
             return redirect(reverse('de.list_students'))
     else:

@@ -9,6 +9,7 @@ class SlugNameAdmin(admin.ModelAdmin):
 
 admin.site.register(models.ProfileUser)
 admin.site.register(models.SchoolYear)
+admin.site.register(models.PromotionYear)
 admin.site.register(models.Semestre)
 admin.site.register(models.UE)
 admin.site.register(models.ECUE)

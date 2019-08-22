@@ -16,27 +16,6 @@ class DatedModel(models.Model):
         abstract = True
 
 
-class ProfileUser(DatedModel):
-    firstname = models.CharField(max_length=150)
-    lastname = models.CharField(max_length=150)
-    year_entrance = models.PositiveIntegerField(default=0)
-    cesure = models.BooleanField(default=False)
-
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
-
-    def get_schoolyear(self):
-        current_year = datetime.datetime.now().year
-        current_schoolyear = min(4, (current_year - self.year_entrance)+1)
-        if self.cesure:
-            current_schoolyear -= 1
-        return current_schoolyear
-
-    def __str__(self):
-        return "%s %s" % (self.firstname, self.lastname.upper())
-
-    class Meta:
-        verbose_name = _("User")
-
 class SchoolYear(DatedModel):
     name = models.CharField(max_length=150)
     order = models.PositiveIntegerField(default=0)
@@ -47,6 +26,41 @@ class SchoolYear(DatedModel):
     class Meta:
         verbose_name = _("School year")
         ordering = ['order']
+
+
+class PromotionYear(DatedModel):
+    name = models.CharField(max_length=150)
+    value = models.PositiveIntegerField(default=0)
+    current = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "%d" % (self.value)
+
+    class Meta:
+        verbose_name = _("Promotion year")
+        ordering = ['value']
+
+
+class ProfileUser(DatedModel):
+    firstname = models.CharField(max_length=150)
+    lastname = models.CharField(max_length=150)
+    year_entrance = models.ForeignKey(PromotionYear, on_delete=models.SET_NULL, null=True, related_name="students")
+    cesure = models.BooleanField(default=False)
+
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
+
+    def get_schoolyear(self):
+        current_year = datetime.datetime.now().year
+        current_schoolyear = min(4, (current_year - self.year_entrance.value)+1)
+        if self.cesure:
+            current_schoolyear -= 1
+        return current_schoolyear
+
+    def __str__(self):
+        return "%s %s" % (self.firstname, self.lastname.upper())
+
+    class Meta:
+        verbose_name = _("User")
 
 
 class Semestre(DatedModel):
@@ -168,6 +182,7 @@ class SmallClass(DatedModel):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="small_classes")
     students = models.ManyToManyField(ProfileUser, related_name="small_classes_student",
         limit_choices_to={'user__groups__name': GroupsNames.STUDENTS_LEVEL.value})
+    promotion_year = models.ForeignKey(PromotionYear, on_delete=models.SET_NULL, null=True, related_name="small_classes")
 
     def __str__(self):
         return _("SC of %(course)s by %(teacher)s (%(std_count)d students)") % {
