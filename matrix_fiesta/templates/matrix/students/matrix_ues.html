@@ -6,7 +6,12 @@
 
 {% block content %}
 
-<p><a style="color:white" href="{% url "ues.self_evaluate_all" %}" class="ui purple button">{% trans "Self evaluation" %}</a></p>
+{% if not archives is None %}
+    <h1>{% trans "Archives for year:" %} {{archives}}</h1>
+    <p><a href="{% url "ues.matrix" %}" class="ui button purple">{% trans "Return to main list" %}</a></p>
+{% else %}
+    <p><a style="color:white" href="{% url "ues.self_evaluate_all" %}" class="ui purple button">{% trans "Self evaluation" %}</a></p>
+{% endif %}
 
 <table class="ui blue table celled">
 {% for ue in ues %}
@@ -25,7 +30,17 @@
         </tr>
         {% for course in ecue.courses.all %}
             <tr style="background-color: #a7d4f699;">
-                <td colspan="{{values|length|add:1}}"><strong><a href="{% url "ues.matrix_course" course.slug %}">{{course.name}}</a></strong></td>
+                <td colspan="{{values|length|add:1}}">
+                    <strong>
+                        {% if archives is None %}
+                        <a href="{% url "ues.matrix_course" course.slug %}">
+                            {{course.name}}
+                        </a>
+                        {% else %}
+                            {{course.name}}
+                        {% endif %}
+                    </strong>
+                </td>
             </tr>
             {% for achievement in course.achievements.all %}
                 <tr>
@@ -74,4 +89,26 @@
     </tr>
     {% endfor %}
 </table>
+
+
+
+<div class="ui accordion">
+<div style="margin-top: 20px;" class="ui title button red">
+    Archives
+</div>
+<div class="content">
+<p>{% for promotion_year in promotion_years %}
+{% if promotion_year.current %}
+<a class="ui button yellow small" href="{% url "ues.matrix" %}">{{ promotion_year.name }}</a>
+{% else %}
+<a class="ui button yellow small" href="{% url "ues.matrix_archives" promotion_year.value %}">{{ promotion_year.name }}</a>
+{% endif %}
+{% endfor %}</p>
+</div>
+
+<script type="text/javascript">    
+$('.ui.accordion')
+  .accordion()
+;
+</script>
 {% endblock %}

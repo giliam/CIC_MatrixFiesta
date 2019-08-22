@@ -1,7 +1,17 @@
 {% extends "index.html" %}
 {% load i18n %}
+{% load common_extras %}
 
 {% block title %}{% trans "Homepage" %}{% endblock %}
 {% block content %}
-{% trans "Welcome !" %}
+{% trans "Welcome on this achievement evaluation website!" %}
+{% if request.user|is_student %}
+    {% trans "It was specifically designed so you can evaluate yourself on the different parts of the program." %}
+{% endif %}
+{% if request.user|is_teacher %}
+    {% trans "It allows you to evaluate your students." %}
+{% endif %}
+{% if request.user|is_de %}
+    {% trans "Here, you can manage the promotion." %}
+{% endif %}
 {% endblock %}

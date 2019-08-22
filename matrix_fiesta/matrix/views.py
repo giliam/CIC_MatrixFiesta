@@ -111,10 +111,15 @@ def ues_list(request):
 
 @login_required
 @user_passes_test(student_check)
-def matrix_ues(request):
+def matrix_ues(request, archives=None):
     profile_user = models.ProfileUser.objects.get(user=request.user)
 
-    ues = models.UE.objects.filter(semestre__schoolyear__order=profile_user.get_schoolyear()).prefetch_related(
+    promotion_years = models.PromotionYear.objects.filter(value__gte=profile_user.year_entrance.value, current=False)
+
+    if not archives is None:
+        archives = int(archives)
+
+    ues = models.UE.objects.filter(semestre__schoolyear__order=profile_user.get_schoolyear(archives)).prefetch_related(
         'ecues', 'semestre', "ecues__courses", "ecues__courses__achievements"
     )
     values = models.EvaluationValue.objects.all()
@@ -128,7 +133,9 @@ def matrix_ues(request):
 
     return render(request, "matrix/students/matrix_ues.html", {
         "ues":ues, "values":values,
-        "achievements_evaluations": achievements_evaluations, "existing_achiev_eval": existing_achiev_eval})
+        "achievements_evaluations": achievements_evaluations, "existing_achiev_eval": existing_achiev_eval,
+        "promotion_years": promotion_years, "archives": archives
+    })
 
 
 @login_required
@@ -276,15 +283,25 @@ def self_evaluate_all(request):
 
 @login_required
 @user_passes_test(teacher_check)
-def homepage_teachers(request):
+def homepage_teachers(request, archives=None):
     teacher = models.ProfileUser.objects.get(user=request.user)
 
-    classes = models.SmallClass.objects.filter(
-        promotion_year__current=True,
-        teacher=teacher
-    ).prefetch_related(
-        'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
-    ).all()
+    if not archives is None:
+        archives = int(archives)
+
+        classes = models.SmallClass.objects.filter(
+            promotion_year__value=archives,
+            teacher=teacher
+        ).prefetch_related(
+            'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
+        ).all()
+    else:
+        classes = models.SmallClass.objects.filter(
+            promotion_year__current=True,
+            teacher=teacher
+        ).prefetch_related(
+            'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
+        ).all()
 
     # Gets all evaluations for the classes of the teacher.
     evaluations = models.StudentEvaluation.objects.filter(
@@ -333,9 +350,11 @@ def homepage_teachers(request):
         if len(students) > 0:
             averages[small_class.id]["average"] = sum(map(lambda x: x[0], averages[small_class.id].values()))/len(small_class.students.all())
 
+    promotion_years = models.PromotionYear.objects.filter(current=False)
 
     return render(request, "matrix/teachers/homepage.html", {
-        "classes": classes, "averages": averages, "nb_achievements": nb_achievements
+        "classes": classes, "averages": averages, "nb_achievements": nb_achievements, "archives": archives,
+        "promotion_years": promotion_years
     })
 
 

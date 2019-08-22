@@ -49,8 +49,10 @@ class ProfileUser(DatedModel):
 
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
 
-    def get_schoolyear(self):
-        current_year = datetime.datetime.now().year
+    def get_schoolyear(self, current_year=None):
+        if current_year is None:
+            current_year = datetime.datetime.now().year
+        
         current_schoolyear = min(4, (current_year - self.year_entrance.value)+1)
         if self.cesure:
             current_schoolyear -= 1

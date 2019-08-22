@@ -6,6 +6,12 @@
 {% load common_extras %}
 
 {% block content %}
+
+    {% if not archives is None %}
+        <h1>{% trans "Archives for year:" %} {{archives}}</h1>
+        <p><a href="{% url "ues.homepage_teachers" %}" class="ui button purple">{% trans "Return to main list" %}</a></p>
+    {% endif %}
+
     {% for small_class in classes %}
     <div class="ui accordion">
         <div class="title">
@@ -25,8 +31,24 @@
                 <tbody>
                     {% for student in small_class.students.all %}
                     <tr>
-                        <td><a href="{% url "ues.status_student" small_class.id student.id %}">{{ student }}</a></td>
-                        <td><a href="{% url "ues.evaluate_student_all" small_class.id student.id %}">{% trans "Overall evaluation" %}</a></td>
+                        <td>
+                            {% if archives is None %}
+                            <a href="{% url "ues.status_student" small_class.id student.id %}">
+                            {% endif %}
+                            {{ student }}
+                            {% if archives is None %}
+                            </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if archives is None %}
+                            <a href="{% url "ues.evaluate_student_all" small_class.id student.id %}">
+                            {% endif %}
+                            {% trans "Overall evaluation" %}
+                            {% if archives is None %}
+                            </a>
+                            {% endif %}
+                        </td>
                         <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:0 }}</td>
                         <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:1 }} / {{nb_achievements|get_item:small_class.id}}</td>
                     </tr>
@@ -48,6 +70,20 @@
     {% empty %}
         <p>{% trans "No class assigned yet." %}</p>
     {% endfor %}
+
+<div class="ui accordion">
+<div style="margin-top: 20px;" class="ui title button red">
+    Archives
+</div>
+<div class="content">
+<p>{% for promotion_year in promotion_years %}
+{% if promotion_year.current %}
+<a class="ui button yellow small" href="{% url "ues.homepage_teachers" %}">{{ promotion_year.name }}</a>
+{% else %}
+<a class="ui button yellow small" href="{% url "ues.homepage_teachers_archives" promotion_year.value %}">{{ promotion_year.name }}</a>
+{% endif %}
+{% endfor %}</p>
+</div>
 
 <script type="text/javascript">
 /*
