@@ -22,3 +22,5 @@ You can also load sample data from *matrix_fiesta/fixtures/* folder
 You can then run the server
 
 > `python manage.py runserver`
+
+A superuser exists with **admin** login and **matrix_fiesta** password. All other users have the same password.
