@@ -156,4 +156,4 @@ INTERNAL_IPS = [
     # ...
 ]
 
-LOGIN_URL = '/matrix/connexion/'
+LOGIN_URL = '/matrix/log_in/'

@@ -6,8 +6,28 @@
 
 {% block content %}
 
+<h1>{% trans "Learning achievements matrix" %}</h1>
 {% if not archives is None %}
-    <h1>{% trans "Archives for year:" %} {{archives}}</h1>
+    <h2>{% trans "Archives for year:" %} {{archives}}</h2>
+{% endif %}
+
+<div class="ui horizontal list" style="margin-bottom: 10px">
+    <div class="item">
+        <div class="content">
+            <h2>{% trans "UEs" %}</h2>
+        </div>
+    </div>
+    {% for ue in ues %}
+    <div class="item">
+        <div class="content">
+            <div class="header">{{ue.semestre}}</div>
+            <a href="#ue_{{ue.id}}">{{ue.name}}</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if not archives is None %}
     <p><a href="{% url "ues.matrix" %}" class="ui button purple">{% trans "Return to main list" %}</a></p>
 {% else %}
     <p><a style="color:white" href="{% url "ues.self_evaluate_all" %}" class="ui purple button">{% trans "Self evaluation" %}</a></p>
@@ -15,7 +35,7 @@
 
 <table class="ui blue table celled">
 {% for ue in ues %}
-    <thead>
+    <thead id="ue_{{ue.id}}">
         <tr>
             <th>{{ue}}</th>
             {% for value in values %}

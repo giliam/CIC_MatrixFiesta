@@ -27,6 +27,7 @@ urlpatterns = [
     # DE part
     path('de/', views.homepage_de, name="de.homepage_de"),
     path('de/list/students', views.list_users, name="de.list_students"),
+    path('de/start/new/year', views.start_new_year, name="de.start_new_year"),
     path('de/list/teachers', views.list_users, {'group_filter': GroupsNames.TEACHERS_LEVEL}, name="de.list_teachers"),
     path('de/list/de', views.list_users, {'group_filter': GroupsNames.DIRECTOR_LEVEL}, name="de.list_de"),
     path('de/insert/new/users', views.insert_new_users, name="de.insert_new_users"),

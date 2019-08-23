@@ -583,6 +583,12 @@ def homepage_de(request):
 
 @login_required
 @user_passes_test(de_check)
+def start_new_year(request):
+    return render(request, "de/homepage.html", {})
+
+
+@login_required
+@user_passes_test(de_check)
 def list_users(request, group_filter=auths.GroupsNames.STUDENTS_LEVEL):
     if type(group_filter) != auths.GroupsNames:
         return render(request, "de/homepage.html", {})
