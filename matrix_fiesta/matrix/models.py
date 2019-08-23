@@ -13,6 +13,7 @@ class DatedModel(models.Model):
 
     class Meta:
         verbose_name = _("DatedModel")
+        verbose_name_plural = _("DatedModels")
         abstract = True
 
 
@@ -25,6 +26,7 @@ class SchoolYear(DatedModel):
 
     class Meta:
         verbose_name = _("School year")
+        verbose_name_plural = _("School years")
         ordering = ['order']
 
 
@@ -38,6 +40,7 @@ class PromotionYear(DatedModel):
 
     class Meta:
         verbose_name = _("Promotion year")
+        verbose_name_plural = _("Promotion years")
         ordering = ['value']
 
 
@@ -63,6 +66,7 @@ class ProfileUser(DatedModel):
 
     class Meta:
         verbose_name = _("User")
+        verbose_name_plural = _("Users")
 
 
 class Semestre(DatedModel):
@@ -79,6 +83,7 @@ class Semestre(DatedModel):
 
     class Meta:
         verbose_name = _("Semestre")
+        verbose_name_plural = _("Semestres")
         ordering = ['order']
 
 
@@ -91,6 +96,7 @@ class UE(DatedModel):
 
     class Meta:
         verbose_name = _("UE")
+        verbose_name_plural = _("UEs")
         ordering = ['semestre', 'name']
 
 
@@ -103,6 +109,7 @@ class ECUE(DatedModel):
 
     class Meta:
         verbose_name = _("ECUE")
+        verbose_name_plural = _("ECUEs")
         ordering = ['ue', 'name']
 
 
@@ -120,6 +127,7 @@ class Course(DatedModel):
 
     class Meta:
         verbose_name = _("Course")
+        verbose_name_plural = _("Courses")
         ordering = ['ecue', 'name']
 
 
@@ -133,6 +141,7 @@ class EvaluationValue(DatedModel):
 
     class Meta:
         verbose_name = _("Evaluation value")
+        verbose_name_plural = _("Evaluation values")
         ordering = ["order"]
 
 
@@ -153,6 +162,7 @@ class LearningAchievement(DatedModel):
     
     class Meta:
         verbose_name = _("Learning achievement")
+        verbose_name_plural = _("Learning achievements")
         ordering = ["course", "name"]
 
 
@@ -172,6 +182,7 @@ class StudentEvaluation(DatedModel):
 
     class Meta:
         verbose_name = _("Student evaluation")
+        verbose_name_plural = _("Student evaluations")
         ordering = ["-added_date"]
 
 
@@ -194,4 +205,5 @@ class SmallClass(DatedModel):
 
     class Meta:
         verbose_name = _("Small class")
+        verbose_name_plural = _("Small classes")
         ordering = ["course"]
