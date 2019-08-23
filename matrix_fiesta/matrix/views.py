@@ -360,13 +360,12 @@ def homepage_teachers(request, archives=None):
 
 @login_required
 @user_passes_test(teacher_check)
-def all_students_teachers(request):
+def all_small_classes(request):
     teacher = models.ProfileUser.objects.get(user=request.user)
 
     classes = models.SmallClass.objects.filter(promotion_year__current=True).prefetch_related(
         'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
     )
-    print(classes)
 
     # Gets all evaluations for the classes of the teacher.
     evaluations = models.StudentEvaluation.objects.filter(
@@ -416,8 +415,52 @@ def all_students_teachers(request):
             averages[small_class.id]["average"] = sum(map(lambda x: x[0], averages[small_class.id].values()))/len(small_class.students.all())
 
 
-    return render(request, "matrix/teachers/list_all_students.html", {
+    return render(request, "matrix/teachers/list_all_sc.html", {
         "classes": classes, "averages": averages, "nb_achievements": nb_achievements
+    })
+
+
+
+@login_required
+@user_passes_test(teacher_check)
+def all_students(request, schoolyear=1):
+    teacher = models.ProfileUser.objects.get(user=request.user)
+
+    ues = models.UE.objects.filter(semestre__schoolyear__order=schoolyear).prefetch_related(
+        'ecues', 'semestre', "ecues__courses", "ecues__courses__achievements"
+    )
+
+    # Gets all evaluations for the classes of the teacher.
+    evaluations = models.StudentEvaluation.objects.filter(
+        teacher_evaluation=True, last_evaluation=True,
+        achievement__course__ecue__ue__in=ues
+    ).prefetch_related(
+        'evaluation_value', 'achievement__course__small_classes', 'student', 
+        'achievement', 'achievement__course', 'achievement__course__ecue', 
+        'achievement__course__ecue__ue'
+    ).all()
+    
+    evaluations_sorted = {}
+    students = {}
+    for evaluation in evaluations:
+        student_id = evaluation.student.id
+        ue_id = evaluation.achievement.course.ecue.ue.id
+
+        if not student_id in evaluations_sorted.keys():
+            evaluations_sorted[student_id] = {}
+        if not ue_id in evaluations_sorted[student_id].keys():
+            evaluations_sorted[student_id][ue_id] = {"count":0.0, "sum":0.0}
+
+        evaluations_sorted[student_id][ue_id]["count"] += 1.0
+        evaluations_sorted[student_id][ue_id]["sum"] += evaluation.evaluation_value.integer_value
+
+        if not student_id in students.keys():
+            students[student_id] = evaluation.student
+
+    return render(request, "matrix/teachers/list_all_students.html", {
+        "ues": ues, 
+        "evaluations_sorted": evaluations_sorted,
+        "students": students
     })
 
 
@@ -435,8 +478,6 @@ def status_student(request, small_class_id, student_id):
          teacher_evaluation=True,
          achievement__course=small_class.course
     ).prefetch_related('achievement', 'evaluation_value')
-
-    print(small_class.course.achievements)
 
     achievements_evaluations, existing_achiev_eval = _get_achievement_evaluations(evaluations)
 
@@ -474,7 +515,7 @@ def evaluate_achievement_student(request, small_class_id, student_id, slug):
             evaluation_student.teacher_evaluation = True
             evaluation_student.last_evaluation = True
             evaluation_student.save()
-            return redirect('ues.status_student', small_class_id, student.id)
+            return redirect('teachers.status_student', small_class_id, student.id)
     else:
         form = forms.StudentEvaluationForm()
     return render(request, "matrix/teachers/evaluate_achievement.html", {
@@ -560,7 +601,7 @@ def evaluate_student_all(request, small_class_id, student_id):
                     evaluation.last_evaluation = True
                     evaluation.save()
             # Then redirects to the status
-            return redirect('ues.status_student', small_class_id, student.id)
+            return redirect('teachers.status_student', small_class_id, student.id)
 
     return render(request, "matrix/teachers/student_overall_evaluation.html", {
         "small_class":small_class, "values": values, "student": student,

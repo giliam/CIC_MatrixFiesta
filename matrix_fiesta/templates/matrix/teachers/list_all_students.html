@@ -6,48 +6,39 @@
 {% load common_extras %}
 
 {% block content %}
-    {% for small_class in classes %}
-    <div class="ui accordion">
-        <div class="title">
-            <h2><i class="dropdown icon"></i> {{ small_class.course }}</h2>
-            <h3 style="margin-top:-0.8rem">{% blocktrans with teacher=small_class.teacher %}By {{ teacher }}{% endblocktrans %}</h3>
-        </div>
-        <div class="content ">
-            <div class="transition visible">
-            <table class="ui blue table sortable celled">
-                <thead>
-                    <tr>
-                        <th>{% trans "Student name" %}</th>
-                        <th>{% trans "Average" %}</th>
-                        <th>{% trans "Nb of evaluations" %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for student in small_class.students.all %}
-                    <tr>
-                        <td>{{ student }}</td>
-                        <td>{% trans "Overall evaluation" %}</td>
-                        <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:0 }}</td>
-                        <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:1 }} / {{nb_achievements|get_item:small_class.id}}</td>
-                    </tr>
-                    {% empty %}
-                    <tr><td colspan="4">{% trans "No student enrolled yet." %}</td></tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot>
-                    <tr class="">
-                        <td colspan="2"><em>{% trans "Average of the class" %}</em></td>
-                        <td>{{ averages|get_item:small_class.id|get_item:"average"}}</td>
-                        <td>{{ small_class.students.all|length }} {% trans "student(s)" %}</td>
-                    </tr>
-                </tfoot>
-            </table>
-            </div>
-        </div>
-    </div>
-    {% empty %}
-        <p>{% trans "No class assigned yet." %}</p>
-    {% endfor %}
+<table class="ui blue table sortable celled">
+    <thead>
+        <tr>
+            <th>{% trans "Student name" %}</th>
+            {% for ue in ues %}
+            <th>{{ue}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for student_id, evaluations in evaluations_sorted.items %}
+        <tr>
+            <td>{{ students|get_item:student_id }}</td>
+            {% for ue in ues %}
+                {% with evaluation=evaluations|get_item:ue.id %}
+                {% if evaluation.count > 0 %}
+                <td>{{evaluation.sum|divide:evaluation.count}} ({{evaluation.count}} grades)</td>
+                {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </tr>
+        {% empty %}
+        <tr><td colspan="{{ues|length|add:1}}">{% trans "No student enrolled yet." %}</td></tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td><em>{% trans "Average of the class" %}</em></td>
+            <td colspan="{{ues|length}}"></td>
+        </tr>
+    </tfoot>
+</table>
+
 
 <script type="text/javascript">
 /*

@@ -13,6 +13,13 @@ def get_item(dictionary, key):
         return dictionary.get(key)
 
 
+@register.filter
+def divide(a, b):
+    if b == 0:
+        raise ValueError("b should not be null.")
+    return a/b
+
+
 @register.filter()
 def is_student(user):
     return auths.check_is_student(user)

@@ -6,24 +6,18 @@
 {% load common_extras %}
 
 {% block content %}
-
-    {% if not archives is None %}
-        <h1>{% trans "Archives for year:" %} {{archives}}</h1>
-        <p><a href="{% url "teachers.homepage_teachers" %}" class="ui button purple">{% trans "Return to main list" %}</a></p>
-    {% endif %}
-
     {% for small_class in classes %}
     <div class="ui accordion">
         <div class="title">
             <h2><i class="dropdown icon"></i> {{ small_class.course }}</h2>
+            <h3 style="margin-top:-0.8rem">{% blocktrans with teacher=small_class.teacher %}By {{ teacher }}{% endblocktrans %}</h3>
         </div>
-        <div class="content active">
+        <div class="content ">
             <div class="transition visible">
             <table class="ui blue table sortable celled">
                 <thead>
                     <tr>
                         <th>{% trans "Student name" %}</th>
-                        <th>{% trans "Evaluate" %}</th>
                         <th>{% trans "Average" %}</th>
                         <th>{% trans "Nb of evaluations" %}</th>
                     </tr>
@@ -31,24 +25,8 @@
                 <tbody>
                     {% for student in small_class.students.all %}
                     <tr>
-                        <td>
-                            {% if archives is None %}
-                            <a href="{% url "teachers.status_student" small_class.id student.id %}">
-                            {% endif %}
-                            {{ student }}
-                            {% if archives is None %}
-                            </a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if archives is None %}
-                            <a href="{% url "teachers.evaluate_student_all" small_class.id student.id %}">
-                            {% endif %}
-                            {% trans "Overall evaluation" %}
-                            {% if archives is None %}
-                            </a>
-                            {% endif %}
-                        </td>
+                        <td>{{ student }}</td>
+                        <td>{% trans "Overall evaluation" %}</td>
                         <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:0 }}</td>
                         <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:1 }} / {{nb_achievements|get_item:small_class.id}}</td>
                     </tr>
@@ -57,7 +35,7 @@
                     {% endfor %}
                 </tbody>
                 <tfoot>
-                    <tr class="active">
+                    <tr class="">
                         <td colspan="2"><em>{% trans "Average of the class" %}</em></td>
                         <td>{{ averages|get_item:small_class.id|get_item:"average"}}</td>
                         <td>{{ small_class.students.all|length }} {% trans "student(s)" %}</td>
@@ -70,20 +48,6 @@
     {% empty %}
         <p>{% trans "No class assigned yet." %}</p>
     {% endfor %}
-
-<div class="ui accordion">
-<div style="margin-top: 20px;" class="ui title button red">
-    Archives
-</div>
-<div class="content">
-<p>{% for promotion_year in promotion_years %}
-{% if promotion_year.current %}
-<a class="ui button yellow small" href="{% url "teachers.homepage_teachers" %}">{{ promotion_year.name }}</a>
-{% else %}
-<a class="ui button yellow small" href="{% url "teachers.homepage_teachers_archives" promotion_year.value %}">{{ promotion_year.name }}</a>
-{% endif %}
-{% endfor %}</p>
-</div>
 
 <script type="text/javascript">
 /*

@@ -29,10 +29,13 @@
           </a>
           {% endif %}
           {% if request.user|is_teacher %} 
-          <a class="item {{ nav_homepage_teachers_active }}" href="{% url "ues.homepage_teachers" %}">
+          <a class="item {{ nav_homepage_teachers_active }}" href="{% url "teachers.homepage_teachers" %}">
             {% trans "Evaluate your students" %}
           </a>
-          <a class="item {{ nav_all_students_teachers_active }}" href="{% url "ues.all_students_teachers" %}">
+          <a class="item {{ nav_all_small_classes_active }}" href="{% url "teachers.all_small_classes" %}">
+            {% trans "Show all SC" %}
+          </a>
+          <a class="item {{ nav_all_students_active }}" href="{% url "teachers.all_students" %}">
             {% trans "Show all students" %}
           </a>
           {% endif %}

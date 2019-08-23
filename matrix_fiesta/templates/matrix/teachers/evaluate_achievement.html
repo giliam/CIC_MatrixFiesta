@@ -9,7 +9,7 @@
 
 {% blocktrans %}{{achievement}} for {{student}}{% endblocktrans %}
 
-<form method="post" action="{% url "ues.evaluate_achievement_student" small_class.id student.id achievement.slug %}">
+<form method="post" action="{% url "teachers.evaluate_achievement_student" small_class.id student.id achievement.slug %}">
 {% csrf_token %}
 {{ form.as_p }}
 <input type="submit" value="{% trans "Submit" %}" />
