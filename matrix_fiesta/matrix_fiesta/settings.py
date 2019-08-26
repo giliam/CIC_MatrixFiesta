@@ -28,7 +28,7 @@ SECRET_KEY = secret_key_from_file('secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = parameters.ALLOWED_HOSTS if hasattr(parameters, "ALLOWED_HOSTS") else []
 
 
 # Application definition
