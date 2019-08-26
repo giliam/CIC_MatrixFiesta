@@ -27,7 +27,7 @@
                     <tr>
                         <td>{{ student }}</td>
                         <td>{% trans "Overall evaluation" %}</td>
-                        <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:0 }}</td>
+                        <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:0|floatformat:2 }}</td>
                         <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:1 }} / {{nb_achievements|get_item:small_class.id}}</td>
                     </tr>
                     {% empty %}
@@ -37,7 +37,7 @@
                 <tfoot>
                     <tr class="">
                         <td colspan="2"><em>{% trans "Average of the class" %}</em></td>
-                        <td>{{ averages|get_item:small_class.id|get_item:"average"}}</td>
+                        <td>{{ averages|get_item:small_class.id|get_item:"average"|floatformat:2 }}</td>
                         <td>{{ small_class.students.all|length }} {% trans "student(s)" %}</td>
                     </tr>
                 </tfoot>
