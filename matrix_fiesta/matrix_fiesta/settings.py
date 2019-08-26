@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = secret_key_from_file('secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = parameters.DEBUG if hasattr(parameters, "DEBUG") else False
 
 ALLOWED_HOSTS = parameters.ALLOWED_HOSTS if hasattr(parameters, "ALLOWED_HOSTS") else []
 
@@ -44,8 +44,11 @@ INSTALLED_APPS = [
     'common',
     'matrix',
     # 'django_extensions',
-    'debug_toolbar',
+    # 'debug_toolbar',
 ]
+
+if DEBUG:
+    INSTALLED_APPS += ["debug_toolbar"]
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
