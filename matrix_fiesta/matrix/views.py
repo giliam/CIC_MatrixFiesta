@@ -281,35 +281,7 @@ def self_evaluate_all(request):
 ##
 
 
-@login_required
-@user_passes_test(teacher_check)
-def homepage_teachers(request, archives=None):
-    teacher = models.ProfileUser.objects.get(user=request.user)
-
-    if not archives is None:
-        archives = int(archives)
-
-        classes = models.SmallClass.objects.filter(
-            promotion_year__value=archives,
-            teacher=teacher
-        ).prefetch_related(
-            'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
-        ).all()
-    else:
-        classes = models.SmallClass.objects.filter(
-            promotion_year__current=True,
-            teacher=teacher
-        ).prefetch_related(
-            'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
-        ).all()
-
-    # Gets all evaluations for the classes of the teacher.
-    evaluations = models.StudentEvaluation.objects.filter(
-        achievement__course__small_classes__in=classes, teacher_evaluation=True, last_evaluation=True
-    ).prefetch_related(
-        'evaluation_value', 'achievement__course__small_classes', 'student', 'achievement', 'achievement__course', 'achievement__course__ecue', 'achievement__course__ecue__ue'
-    ).all()
-    
+def _compute_averages(evaluations, classes):
     evaluations_sorted = {}
     for evaluation in evaluations:
         if not evaluation.student.id in evaluations_sorted.keys():
@@ -347,13 +319,59 @@ def homepage_teachers(request, archives=None):
                     count_
                 )
 
+        # If there is any student, computes the average
         if len(students) > 0:
             averages[small_class.id]["average"] = sum(map(lambda x: x[0], averages[small_class.id].values()))/len(small_class.students.all())
+
+    return averages, nb_achievements
+
+
+@login_required
+@user_passes_test(teacher_check)
+def homepage_teachers(request, archives=None):
+    teacher = models.ProfileUser.objects.get(user=request.user)
+
+    if not archives is None:
+        archives = int(archives)
+
+        classes = models.SmallClass.objects.filter(
+            promotion_year__value=archives,
+            teacher=teacher
+        ).prefetch_related(
+            'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
+        ).all()
+    else:
+        classes = models.SmallClass.objects.filter(
+            promotion_year__current=True,
+            teacher=teacher
+        ).prefetch_related(
+            'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
+        ).all()
+
+    # Gets all evaluations for the classes of the teacher.
+    evaluations = models.StudentEvaluation.objects.filter(
+        achievement__course__small_classes__in=classes, teacher_evaluation=True, last_evaluation=True
+    ).prefetch_related(
+        'evaluation_value', 'achievement__course__small_classes', 'student', 'achievement', 'achievement__course', 'achievement__course__ecue', 'achievement__course__ecue__ue'
+    ).all()
+
+    # Gets all evaluations for the classes of the students.
+    evaluations_students = models.StudentEvaluation.objects.filter(
+        achievement__course__small_classes__in=classes, teacher_evaluation=False, last_evaluation=True
+    ).prefetch_related(
+        'evaluation_value', 'achievement__course__small_classes', 'student', 'achievement', 'achievement__course', 'achievement__course__ecue', 'achievement__course__ecue__ue'
+    ).all()
+    
+    averages, nb_achievements = _compute_averages(evaluations, classes)
+    averages_students, nb_achievements_students = _compute_averages(evaluations_students, classes)
 
     promotion_years = models.PromotionYear.objects.filter(current=False)
 
     return render(request, "matrix/teachers/homepage.html", {
-        "classes": classes, "averages": averages, "nb_achievements": nb_achievements, "archives": archives,
+        "classes": classes, 
+        "averages": averages, "nb_achievements": nb_achievements, 
+        "averages_students": averages_students, "nb_achievements_students": nb_achievements_students, 
+        "archives": archives,
         "promotion_years": promotion_years
     })
 

@@ -22,7 +22,7 @@
             {% for ue in ues %}
                 {% with evaluation=evaluations|get_item:ue.id %}
                 {% if evaluation.count > 0 %}
-                <td>{{evaluation.sum|divide:evaluation.count}} ({{evaluation.count}} grades)</td>
+                <td>{{ evaluation.sum|divide:evaluation.count|floatformat:2 }} ({{ evaluation.count|floatformat:0 }} {% trans "grades" %})</td> 
                 {% endif %}
                 {% endwith %}
             {% endfor %}

@@ -168,7 +168,7 @@ class LearningAchievement(DatedModel):
 
 class StudentEvaluation(DatedModel):
     achievement = models.ForeignKey(LearningAchievement, on_delete=models.CASCADE)
-    student = models.ForeignKey(ProfileUser, on_delete=models.CASCADE)
+    student = models.ForeignKey(ProfileUser, on_delete=models.CASCADE, related_name="evaluations_student")
     evaluation_value = models.ForeignKey(EvaluationValue, on_delete=models.SET_NULL, null=True)
     teacher_evaluation = models.BooleanField(default=False)
     last_evaluation = models.BooleanField(default=False)

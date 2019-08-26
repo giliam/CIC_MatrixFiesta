@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-23 18:37+0200\n"
+"POT-Creation-Date: 2019-08-26 11:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,15 +146,15 @@ msgstr "Petite classe"
 msgid "Small classes"
 msgstr "Petites classes"
 
-#: .\matrix\views.py:616
+#: .\matrix\views.py:657
 msgid "formatted as 20XX"
 msgstr "renseigné au format 20XX"
 
-#: .\matrix\views.py:621
+#: .\matrix\views.py:662
 msgid "must be 0 or 1"
 msgstr "doit être 0 ou 1"
 
-#: .\matrix\views.py:643
+#: .\matrix\views.py:684
 msgid "DE shouldn't be in the groups selected"
 msgstr "La DE ne devrait pas être dans les groupes sélectionnés."
 
@@ -273,26 +273,30 @@ msgid "Evaluate your students"
 msgstr "Évaluer vos élèves"
 
 #: .\templates\index.html:36
+msgid "Show all SC"
+msgstr "Toutes les petites classes"
+
+#: .\templates\index.html:39
 msgid "Show all students"
 msgstr "Tous les élèves"
 
-#: .\templates\index.html:41
+#: .\templates\index.html:44
 msgid "DE"
 msgstr "DE"
 
-#: .\templates\index.html:54
+#: .\templates\index.html:57
 msgid "Admin"
 msgstr "Admin"
 
-#: .\templates\index.html:59
+#: .\templates\index.html:62
 msgid "Log out"
 msgstr "Déconnexion"
 
-#: .\templates\index.html:63 .\templates\users\login.html:5
+#: .\templates\index.html:66 .\templates\users\login.html:5
 msgid "Log in"
 msgstr "Connexion"
 
-#: .\templates\index.html:73
+#: .\templates\index.html:76
 msgid "Nothing to see here!"
 msgstr "Rien à voir ici !"
 
@@ -401,12 +405,14 @@ msgid "Submit"
 msgstr "Envoyer"
 
 #: .\templates\matrix\teachers\homepage.html:4
+#: .\templates\matrix\teachers\list_all_sc.html:4
 #: .\templates\matrix\teachers\list_all_students.html:4
 msgid "Teacher homepage"
 msgstr "Page d'accueil des enseignants"
 
 #: .\templates\matrix\teachers\homepage.html:25
-#: .\templates\matrix\teachers\list_all_students.html:20
+#: .\templates\matrix\teachers\list_all_sc.html:20
+#: .\templates\matrix\teachers\list_all_students.html:12
 msgid "Student name"
 msgstr "Nom de l'étudiant"
 
@@ -416,45 +422,51 @@ msgid "Evaluate"
 msgstr "Évaluer"
 
 #: .\templates\matrix\teachers\homepage.html:27
-#: .\templates\matrix\teachers\list_all_students.html:21
+#: .\templates\matrix\teachers\list_all_sc.html:21
 msgid "Average"
 msgstr "Moyenne"
 
 #: .\templates\matrix\teachers\homepage.html:28
-#: .\templates\matrix\teachers\list_all_students.html:22
+#: .\templates\matrix\teachers\list_all_sc.html:22
 msgid "Nb of evaluations"
 msgstr "Nombre d'acquis"
 
 #: .\templates\matrix\teachers\homepage.html:47
-#: .\templates\matrix\teachers\list_all_students.html:29
+#: .\templates\matrix\teachers\list_all_sc.html:29
 #: .\templates\matrix\teachers\status_student.html:12
 msgid "Overall evaluation"
 msgstr "Évaluation globale"
 
 #: .\templates\matrix\teachers\homepage.html:56
-#: .\templates\matrix\teachers\list_all_students.html:34
+#: .\templates\matrix\teachers\list_all_sc.html:34
+#: .\templates\matrix\teachers\list_all_students.html:31
 msgid "No student enrolled yet."
 msgstr "Pas encore d'élève inscrit."
 
 #: .\templates\matrix\teachers\homepage.html:61
-#: .\templates\matrix\teachers\list_all_students.html:39
+#: .\templates\matrix\teachers\list_all_sc.html:39
+#: .\templates\matrix\teachers\list_all_students.html:36
 msgid "Average of the class"
 msgstr "Moyenne de la classe"
 
 #: .\templates\matrix\teachers\homepage.html:63
-#: .\templates\matrix\teachers\list_all_students.html:41
+#: .\templates\matrix\teachers\list_all_sc.html:41
 msgid "student(s)"
 msgstr "élève(s)"
 
 #: .\templates\matrix\teachers\homepage.html:71
-#: .\templates\matrix\teachers\list_all_students.html:49
+#: .\templates\matrix\teachers\list_all_sc.html:49
 msgid "No class assigned yet."
 msgstr "Pas encore de petite classe assignée."
 
-#: .\templates\matrix\teachers\list_all_students.html:13
+#: .\templates\matrix\teachers\list_all_sc.html:13
 #, python-format
 msgid "By %(teacher)s"
 msgstr "Par %(teacher)s"
+
+#: .\templates\matrix\teachers\list_all_students.html:25
+msgid "grades"
+msgstr "notes"
 
 #: .\templates\matrix\teachers\status_student.html:4
 msgid "Student situation"
