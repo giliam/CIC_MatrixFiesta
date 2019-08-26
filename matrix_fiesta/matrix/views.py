@@ -651,7 +651,7 @@ def homepage_de(request):
 @login_required
 @user_passes_test(de_check)
 def start_new_year(request):
-    return render(request, "de/homepage.html", {})
+    return render(request, "de/start_new_year.html", {})
 
 
 @login_required
