@@ -19,7 +19,10 @@ urlpatterns = [
     path('teachers/', views.homepage_teachers, {'archives': None}, name="teachers.homepage_teachers"),
     re_path(r'teachers/archives/(?P<archives>[0-9]+)/', views.homepage_teachers, name="teachers.homepage_teachers_archives"),
     path('teachers/all/small/classes', views.all_small_classes, name="teachers.all_small_classes"),
+    
     path('teachers/all/students', views.all_students, name="teachers.all_students"),
+    re_path(r'teachers/all/students/(?P<schoolyear>[0-9]+)/', views.all_students, name="teachers.all_students_archives"),
+
     re_path(r'teachers/achievement/(?P<small_class_id>[0-9]+)/student/(?P<student_id>[0-9]+)/evaluate/(?P<slug>[-\w]+)', 
                             views.evaluate_achievement_student, name="teachers.evaluate_achievement_student"),
     re_path(r'teachers/achievements/status/student/([0-9]+)/([0-9]+)', views.status_student, name="teachers.status_student"),

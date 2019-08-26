@@ -47,6 +47,15 @@
     </tfoot>
 </table>
 
+<div class="ui accordion">
+<div style="margin-top: 20px;" class="ui title button red">
+    Archives
+</div>
+<div class="content">
+<p>{% for school_year in school_years %}
+<a class="ui button yellow small" href="{% url "teachers.all_students_archives" school_year.order %}">{{ school_year.name }}</a>
+{% endfor %}</p>
+</div>
 
 <script type="text/javascript">
 /*

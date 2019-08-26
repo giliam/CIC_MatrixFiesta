@@ -372,7 +372,7 @@ def homepage_teachers(request, archives=None):
         "averages": averages, "nb_achievements": nb_achievements, 
         "averages_students": averages_students, "nb_achievements_students": nb_achievements_students, 
         "archives": archives,
-        "promotion_years": promotion_years
+        "promotion_years": promotion_years,
     })
 
 
@@ -442,6 +442,9 @@ def all_small_classes(request):
 @login_required
 @user_passes_test(teacher_check)
 def all_students(request, schoolyear=1):
+    # Converts the schoolyear
+    schoolyear = int(schoolyear)
+
     teacher = models.ProfileUser.objects.get(user=request.user)
 
     ues = models.UE.objects.filter(semestre__schoolyear__order=schoolyear).prefetch_related(
@@ -463,7 +466,7 @@ def all_students(request, schoolyear=1):
     for student in all_students:
         if student.get_schoolyear() == schoolyear:
             students[student.id] = student
-    
+
     evaluations_sorted = {}
     for evaluation in evaluations:
         student_id = evaluation.student.id
@@ -476,13 +479,14 @@ def all_students(request, schoolyear=1):
 
         evaluations_sorted[student_id][ue_id]["count"] += 1.0
         evaluations_sorted[student_id][ue_id]["sum"] += evaluation.evaluation_value.integer_value
-
-    print(students)
+    
+    school_years = models.SchoolYear.objects.filter()
 
     return render(request, "matrix/teachers/list_all_students.html", {
         "ues": ues, 
         "evaluations_sorted": evaluations_sorted,
-        "students": students
+        "students": students,
+        "school_years": school_years,
     })
 
 
