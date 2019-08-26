@@ -457,9 +457,14 @@ def all_students(request, schoolyear=1):
         'achievement', 'achievement__course', 'achievement__course__ecue', 
         'achievement__course__ecue__ue'
     ).all()
+
+    all_students = models.ProfileUser.objects.filter(user__groups__name__contains=auths.GroupsNames.STUDENTS_LEVEL.value)
+    students = {}
+    for student in all_students:
+        if student.get_schoolyear() == schoolyear:
+            students[student.id] = student
     
     evaluations_sorted = {}
-    students = {}
     for evaluation in evaluations:
         student_id = evaluation.student.id
         ue_id = evaluation.achievement.course.ecue.ue.id
@@ -472,8 +477,7 @@ def all_students(request, schoolyear=1):
         evaluations_sorted[student_id][ue_id]["count"] += 1.0
         evaluations_sorted[student_id][ue_id]["sum"] += evaluation.evaluation_value.integer_value
 
-        if not student_id in students.keys():
-            students[student_id] = evaluation.student
+    print(students)
 
     return render(request, "matrix/teachers/list_all_students.html", {
         "ues": ues, 

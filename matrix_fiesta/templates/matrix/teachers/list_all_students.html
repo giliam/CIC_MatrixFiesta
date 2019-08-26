@@ -16,23 +16,31 @@
         </tr>
     </thead>
     <tbody>
-        {% for student_id, evaluations in evaluations_sorted.items %}
+        {% for student_id, student in students.items %}
+        {% with evaluations=evaluations_sorted|get_item:student_id %}
         <tr>
-            <td>{{ students|get_item:student_id }}</td>
+            <td>{{ student }}</td>
             {% for ue in ues %}
-                {% with evaluation=evaluations|get_item:ue.id %}
-                {% if evaluation.count > 0 %}
-                <td>{{ evaluation.sum|divide:evaluation.count|floatformat:2 }} ({{ evaluation.count|floatformat:0 }} {% trans "grades" %})</td> 
+                {% if evaluations %}
+                    {% with evaluation=evaluations|get_item:ue.id %}
+                    {% if evaluation.count > 0 %}
+                    <td>{{ evaluation.sum|divide:evaluation.count|floatformat:2 }} ({{ evaluation.count|floatformat:0 }} {% trans "grades" %})</td> 
+                    {% else %}
+                    <td class="error">-</td>
+                    {% endif %}
+                    {% endwith %}
+                {% else %}
+                    <td class="error">-</td>
                 {% endif %}
-                {% endwith %}
             {% endfor %}
         </tr>
+        {% endwith %}
         {% empty %}
         <tr><td colspan="{{ues|length|add:1}}">{% trans "No student enrolled yet." %}</td></tr>
         {% endfor %}
     </tbody>
     <tfoot>
-        <tr>
+        <tr class="active">
             <td><em>{% trans "Average of the class" %}</em></td>
             <td colspan="{{ues|length}}"></td>
         </tr>
