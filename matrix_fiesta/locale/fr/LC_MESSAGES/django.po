@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-26 11:32+0200\n"
+"POT-Creation-Date: 2019-08-26 11:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,15 +146,15 @@ msgstr "Petite classe"
 msgid "Small classes"
 msgstr "Petites classes"
 
-#: .\matrix\views.py:657
+#: .\matrix\views.py:675
 msgid "formatted as 20XX"
 msgstr "renseigné au format 20XX"
 
-#: .\matrix\views.py:662
+#: .\matrix\views.py:680
 msgid "must be 0 or 1"
 msgstr "doit être 0 ou 1"
 
-#: .\matrix\views.py:684
+#: .\matrix\views.py:702
 msgid "DE shouldn't be in the groups selected"
 msgstr "La DE ne devrait pas être dans les groupes sélectionnés."
 
@@ -427,34 +427,49 @@ msgid "Average"
 msgstr "Moyenne"
 
 #: .\templates\matrix\teachers\homepage.html:28
-#: .\templates\matrix\teachers\list_all_sc.html:22
-msgid "Nb of evaluations"
-msgstr "Nombre d'acquis"
+msgid "Student's evaluation"
+msgstr "Évaluation de l'étudiant"
 
-#: .\templates\matrix\teachers\homepage.html:47
+#: .\templates\matrix\teachers\homepage.html:29
+msgid "Status"
+msgstr "Statut"
+
+#: .\templates\matrix\teachers\homepage.html:48
 #: .\templates\matrix\teachers\list_all_sc.html:29
 #: .\templates\matrix\teachers\status_student.html:12
 msgid "Overall evaluation"
 msgstr "Évaluation globale"
 
-#: .\templates\matrix\teachers\homepage.html:56
+#: .\templates\matrix\teachers\homepage.html:57
+msgid "Not fully evaluated yet!"
+msgstr "Non évalué"
+
+#: .\templates\matrix\teachers\homepage.html:61
+msgid "Different!"
+msgstr "Différent !"
+
+#: .\templates\matrix\teachers\homepage.html:65
+msgid "Same!"
+msgstr "Ok !"
+
+#: .\templates\matrix\teachers\homepage.html:70
 #: .\templates\matrix\teachers\list_all_sc.html:34
 #: .\templates\matrix\teachers\list_all_students.html:31
 msgid "No student enrolled yet."
 msgstr "Pas encore d'élève inscrit."
 
-#: .\templates\matrix\teachers\homepage.html:61
+#: .\templates\matrix\teachers\homepage.html:75
 #: .\templates\matrix\teachers\list_all_sc.html:39
 #: .\templates\matrix\teachers\list_all_students.html:36
 msgid "Average of the class"
 msgstr "Moyenne de la classe"
 
-#: .\templates\matrix\teachers\homepage.html:63
+#: .\templates\matrix\teachers\homepage.html:76
 #: .\templates\matrix\teachers\list_all_sc.html:41
 msgid "student(s)"
 msgstr "élève(s)"
 
-#: .\templates\matrix\teachers\homepage.html:71
+#: .\templates\matrix\teachers\homepage.html:87
 #: .\templates\matrix\teachers\list_all_sc.html:49
 msgid "No class assigned yet."
 msgstr "Pas encore de petite classe assignée."
@@ -463,6 +478,10 @@ msgstr "Pas encore de petite classe assignée."
 #, python-format
 msgid "By %(teacher)s"
 msgstr "Par %(teacher)s"
+
+#: .\templates\matrix\teachers\list_all_sc.html:22
+msgid "Nb of evaluations"
+msgstr "Nombre d'acquis"
 
 #: .\templates\matrix\teachers\list_all_students.html:25
 msgid "grades"

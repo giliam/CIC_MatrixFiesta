@@ -26,6 +26,7 @@
                         <th>{% trans "Evaluate" %}</th>
                         <th>{% trans "Average" %}</th>
                         <th>{% trans "Student's evaluation" %}</th>
+                        <th>{% trans "Status" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,6 +52,19 @@
                         </td>
                         <td {% if averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}class="error"{% endif %}>{{ averages|get_item:small_class.id|get_item:student.id|get_item:0|floatformat:2 }} ({{ averages|get_item:small_class.id|get_item:student.id|get_item:1 }} / {{nb_achievements|get_item:small_class.id}})</td>
                         <td {% if averages_students|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements_students|get_item:small_class.id %}class="error"{% endif %}>{{ averages_students|get_item:small_class.id|get_item:student.id|get_item:0|floatformat:2 }} ({{ averages_students|get_item:small_class.id|get_item:student.id|get_item:1 }} / {{nb_achievements_students|get_item:small_class.id}})</td>
+                        {% if averages_students|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements_students|get_item:small_class.id or averages|get_item:small_class.id|get_item:student.id|get_item:1 < nb_achievements|get_item:small_class.id %}
+                            <td style="background-color: #fbbd08;">
+                                {% trans "Not fully evaluated yet!" %}
+                            </td>
+                        {% elif averages_students|get_item:small_class.id|get_item:student.id|get_item:0 != averages|get_item:small_class.id|get_item:student.id|get_item:0 %}
+                            <td style="background-color: #db2828;">
+                                {% trans "Different!" %}
+                            </td>
+                        {% else %}
+                            <td style="background-color: #21ba45;">
+                                {% trans "Same!" %}
+                            </td>
+                        {% endif %}
                     </tr>
                     {% empty %}
                     <tr><td colspan="4">{% trans "No student enrolled yet." %}</td></tr>
@@ -62,6 +76,7 @@
                         <td>{{ small_class.students.all|length }} {% trans "student(s)" %}</td>
                         <td>{{ averages|get_item:small_class.id|get_item:"average"|floatformat:2 }}</td>
                         <td>{{ averages_students|get_item:small_class.id|get_item:"average"|floatformat:2 }}</td>
+                        <td></td>
                     </tr>
                 </tfoot>
             </table>
