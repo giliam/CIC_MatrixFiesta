@@ -2,6 +2,10 @@
 {% load i18n %}
 {% block title %}{% trans "Matrix" %}{% endblock %}
 
+{% block css_addon %}<style type="text/css">
+.hidden { display: none; }
+</style>{% endblock %}
+
 {% load common_extras %}
 
 {% block content %}
@@ -45,11 +49,11 @@
     </thead>
     <tbody>
     {% for ecue in ue.ecues.all %}
-        <tr style="background-color: #2F56B2; color:white;">
-            <td colspan="{{values|length|add:1}}"><strong>ECUE - {{ecue.name}}</strong></td>
+        <tr id="ecue_{{ecue.id}}" style="background-color: #2F56B2; color:white;">
+            <td colspan="{{values|length|add:1}}"><i class="dropdown icon"></i> <strong>ECUE - {{ecue.name}}</strong></td>
         </tr>
         {% for course in ecue.courses.all %}
-            <tr style="background-color: #a7d4f699;">
+            <tr class="hidden ecue_content_{{ecue.id}}" style="background-color: #a7d4f699;">
                 <td colspan="{{values|length|add:1}}">
                     <strong>
                         {% if archives is None %}
@@ -63,7 +67,7 @@
                 </td>
             </tr>
             {% for achievement in course.achievements.all %}
-                <tr>
+                <tr class="hidden ecue_content_{{ecue.id}}">
                     <td>{{achievement.name}}</td>
                     {% for value in values %}
                         {% if value in existing_achiev_eval|get_item:achievement.id %}
@@ -88,12 +92,12 @@
                     {% endfor %}
                 </tr>
             {% empty %}
-                <tr>
+                <tr class="hidden ecue_content_{{ecue.id}}">
                     <td class="center aligned disabled" colspan="{{values|length|add:1}}"><em>{% trans "No achievement here yet." %}</em></td>
                 </tr>
                 {% endfor %}
             {% empty %}
-            <tr>
+            <tr class="hidden ecue_content_{{ecue.id}}">
                 <td class="center aligned disabled" colspan="{{values|length|add:1}}"><em>{% trans "No course here yet." %}</em></td>
             </tr>
             {% endfor %}
@@ -130,5 +134,13 @@
 $('.ui.accordion')
   .accordion()
 ;
+
+{% for ue in ues %}
+    {% for ecue in ue.ecues.all %}
+    $("#ecue_{{ecue.id}}").click(function(){
+      $(".ecue_content_{{ecue.id}}").toggle();
+    });
+    {% endfor %}
+{% endfor %}
 </script>
 {% endblock %}
