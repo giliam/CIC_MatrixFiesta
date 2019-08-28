@@ -13,7 +13,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 from matrix_fiesta.generate_secret_key import secret_key_from_file
-from matrix_fiesta import parameters
+if os.path.isfile('matrix_fiesta/parameters.py'):
+    from matrix_fiesta import parameters
+else:
+    parameters = object
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,7 +31,7 @@ SECRET_KEY = secret_key_from_file('secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = parameters.DEBUG if hasattr(parameters, "DEBUG") else False
 
-ALLOWED_HOSTS = parameters.ALLOWED_HOSTS if hasattr(parameters, "ALLOWED_HOSTS") else []
+ALLOWED_HOSTS = parameters.ALLOWED_HOSTS if hasattr(parameters, "ALLOWED_HOSTS") else ['127.0.0.1']
 
 
 # Application definition
@@ -45,13 +48,11 @@ INSTALLED_APPS = [
     'matrix',
     # 'django_extensions',
     # 'debug_toolbar',
+    'django_cas_ng',
 ]
 
-if DEBUG:
-    INSTALLED_APPS += ["debug_toolbar"]
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -62,12 +63,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if DEBUG:
+    INSTALLED_APPS += ["debug_toolbar"]
+    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+
 ROOT_URLCONF = 'matrix_fiesta.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': parameters.TEMPLATES_DIRS if hasattr(parameters, "TEMPLATES_DIRS") else [],
+        'DIRS': parameters.TEMPLATES_DIRS if hasattr(parameters, "TEMPLATES_DIRS") else ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -140,10 +145,16 @@ LOCALE_PATHS = (
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = parameters.STATICFILES_DIRS if hasattr(parameters, "STATICFILES_DIRS") else (
-    "assets/",
+STATICFILES_DIRS = (
+    parameters.STATICFILES_DIRS 
+    if hasattr(parameters, "STATICFILES_DIRS") else ("assets/",)
 )
-STATIC_ROOT = parameters.STATIC_ROOT if hasattr(parameters, "STATIC_ROOT") else "/var/www/example.com/static/"
+
+STATIC_ROOT = (
+    parameters.STATIC_ROOT 
+    if hasattr(parameters, "STATIC_ROOT") 
+    else os.path.join(BASE_DIR, "static")
+)
 
 REST_FRAMEWORK = parameters.REST_FRAMEWORK if hasattr(parameters, "REST_FRAMEWORK") else {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -153,6 +164,11 @@ REST_FRAMEWORK = parameters.REST_FRAMEWORK if hasattr(parameters, "REST_FRAMEWOR
     ]
 }
 
+AUTHENTICATION_BACKENDS = (
+     'django.contrib.auth.backends.ModelBackend',
+     'django_cas_ng.backends.CASBackend',
+)
+
 INTERNAL_IPS = [
     # ...
     '127.0.0.1',
@@ -160,3 +176,6 @@ INTERNAL_IPS = [
 ]
 
 LOGIN_URL = '/matrix/log_in/'
+
+CAS_SERVER_URL = 'https://auth.mines-paristech.fr/cas/'
+CAS_VERSION = 3

@@ -227,6 +227,10 @@ def self_evaluate_all(request):
                     for course in ecue.courses.all():
                         for achievement in course.achievements.all():
                             new_value = form.get_cleaned_data(achievement)
+
+                            if new_value is None:
+                                continue
+
                             # Either updates an existing achievement
                             if achievement.id in achievements_evaluations.keys():
                                 last_value = achievements_evaluations[achievement.id]["last"]["value"]

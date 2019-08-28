@@ -15,6 +15,7 @@
         <thead>
             <tr>
                 <th>{{ue}}</th>
+                <th class="center aligned">{% trans "Not evaluated yet" %}</th>
                 {% for value in values %}
                     <th class="center aligned">{{value}}</th>
                 {% endfor %}
@@ -36,7 +37,7 @@
                             <td>{{achievement.name}}</td>
                             {% for value, text in form_field.choices %}
                                 <td class="center aligned {% if form_initial|get_item:0 == value %} active{% endif %}">
-                                    <input type="radio" name="{{achievement.get_field_name}}" value="{{ value }}"{% if form_initial|get_item:0 == value %} checked{% endif %} />
+                                    <input type="radio" name="{{achievement.get_field_name}}" value="{{ value }}"{% if form_initial|get_item:0 == value %} checked{% endif %} {% if value == 0 %}disabled{% endif %}/>
                                 </td>
                             {% endfor %}
                         {% endwith %}
