@@ -458,14 +458,16 @@ def homepage_teachers(request, archives=None):
     evaluations = models.StudentEvaluation.objects.filter(
         achievement__course__small_classes__in=classes, teacher_evaluation=True, last_evaluation=True
     ).prefetch_related(
-        'evaluation_value', 'achievement__course__small_classes', 'student', 'achievement', 'achievement__course', 'achievement__course__ecue', 'achievement__course__ecue__ue'
+        'evaluation_value', 'achievement__course__small_classes', 'student',
+        'achievement', 'achievement__course'
     ).all()
 
     # Gets all evaluations for the classes of the students.
     evaluations_students = models.StudentEvaluation.objects.filter(
         achievement__course__small_classes__in=classes, teacher_evaluation=False, last_evaluation=True
     ).prefetch_related(
-        'evaluation_value', 'achievement__course__small_classes', 'student', 'achievement', 'achievement__course', 'achievement__course__ecue', 'achievement__course__ecue__ue'
+        'evaluation_value', 'achievement__course__small_classes', 'student',
+        'achievement', 'achievement__course'
     ).all()
     
     averages, nb_achievements = _compute_averages(evaluations, classes)
