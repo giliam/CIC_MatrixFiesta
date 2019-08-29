@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load i18n %}
+{% load static %}
 {% block title %}{% trans "Matrix" %}{% endblock %}
 
 {% block css_addon %}<style type="text/css">
@@ -31,13 +32,16 @@
     {% endfor %}
 </div>
 
+<p>
 {% if not archives is None %}
-    <p><a href="{% url "ues.matrix" %}" class="ui button purple">{% trans "Return to main list" %}</a></p>
+    <a href="{% url "ues.matrix" %}" class="ui button purple">{% trans "Return to main list" %}</a>
 {% else %}
-    <p><a style="color:white" href="{% url "ues.self_evaluate_all" %}" class="ui purple button">{% trans "Self evaluation" %}</a></p>
+    <a style="color:white" href="{% url "ues.self_evaluate_all" %}" class="ui purple button">{% trans "Self evaluation" %}</a>
 {% endif %}
+    <button id="display_all" class="ui violet button show_all">{% trans "Display all" %}</button>
+</p>
 
-<table class="ui blue table celled">
+<table id="all_ues" class="ui blue table celled">
 {% for ue in ues %}
     <thead id="ue_{{ue.id}}">
         <tr>
@@ -53,7 +57,7 @@
             <td colspan="{{values|length|add:1}}"><i id="ecue_arrow_{{ecue.id}}" class="angle down icon"></i> <strong>ECUE - {{ecue.name}}</strong></td>
         </tr>
         {% for course in ecue.courses.all %}
-            <tr class="hidden ecue_content_{{ecue.id}}" style="background-color: #a7d4f699;">
+            <tr class="hidden ecue_content_{{ecue.id}} ecue_contents" style="background-color: #a7d4f699;">
                 <td colspan="{{values|length|add:1}}">
                     <strong>
                         {% if archives is None %}
@@ -67,7 +71,7 @@
                 </td>
             </tr>
             {% for achievement in course.achievements.all %}
-                <tr class="hidden ecue_content_{{ecue.id}}">
+                <tr class="hidden ecue_contents ecue_content_{{ecue.id}}">
                     <td>{{achievement.name}}</td>
                     {% for value in values %}
                         {% if value in existing_achiev_eval|get_item:achievement.id %}
@@ -94,12 +98,12 @@
                     {% endfor %}
                 </tr>
             {% empty %}
-                <tr class="hidden ecue_content_{{ecue.id}}">
+                <tr class="hidden ecue_contents ecue_content_{{ecue.id}}">
                     <td class="center aligned disabled" colspan="{{values|length|add:1}}"><em>{% trans "No achievement here yet." %}</em></td>
                 </tr>
                 {% endfor %}
             {% empty %}
-            <tr class="hidden ecue_content_{{ecue.id}}">
+            <tr class="hidden ecue_contents ecue_content_{{ecue.id}}">
                 <td class="center aligned disabled" colspan="{{values|length|add:1}}"><em>{% trans "No course here yet." %}</em></td>
             </tr>
             {% endfor %}
@@ -132,6 +136,9 @@
 {% endfor %}</p>
 </div>
 
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.semanticui.min.js"></script>
 <script type="text/javascript">    
 $('.ui.accordion')
   .accordion()
@@ -146,5 +153,17 @@ $('.ui.accordion')
     });
     {% endfor %}
 {% endfor %}
+
+$("#display_all").click(function(){
+    if($(this).hasClass("hide_all")){
+        $(this).html("{% trans "Display all" %}");
+        $(".ecue_contents").hide();
+    } else {
+        $(this).html("{% trans "Hide all" %}");
+        $(".ecue_contents").show();
+    }
+    $(this).toggleClass("hide_all show_all");
+});
+
 </script>
 {% endblock %}
