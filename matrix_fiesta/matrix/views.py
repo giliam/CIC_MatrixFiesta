@@ -55,6 +55,10 @@ def _get_achievement_evaluations(evaluations):
 
         existing_achiev_eval[evaluation.achievement.id] = [evaluation.evaluation_value]
 
+    for achiev_id, data in achievements_evaluations.items():
+        data["history"].sort(key=lambda x: x["date"], reverse=True)
+        achievements_evaluations[achiev_id] = data
+
     return achievements_evaluations, existing_achiev_eval
 
 
@@ -158,12 +162,103 @@ def matrix_course(request, slug):
 
 @login_required
 @user_passes_test(student_check)
+def evaluate_course(request, slug):
+    student = models.ProfileUser.objects.get(user=request.user)
+    course = models.Course.objects.get(slug=slug, ecue__ue__semestre__schoolyear__order=student.get_schoolyear())
+    achievements = models.LearningAchievement.objects.filter(course=course)
+    evaluations = models.StudentEvaluation.objects.filter(
+        student=student, 
+        teacher_evaluation=False
+    ).prefetch_related('achievement', 'evaluation_value')
+    values = models.EvaluationValue.objects.all()
+
+    achievements_evaluations, _ = _get_achievement_evaluations(evaluations)
+
+    if request.method == "POST":
+        form = forms.StudentEvaluationAllForm(request.POST)
+    else:
+        form = forms.StudentEvaluationAllForm()
+
+    # Adds a field for all achievements
+    for achievement in course.achievements.all():
+        if achievement.id in achievements_evaluations.keys():
+            form.add_achievement_evaluation(achievement, achievements_evaluations[achievement.id]["last"]["value"])
+        else:
+            form.add_achievement_evaluation(achievement)
+
+    # Saves eventually the quries
+    if request.method == "POST":
+        if form.is_valid():
+            for achievement in course.achievements.all():
+                new_value = form.get_cleaned_data(achievement)
+
+                if new_value is None:
+                    continue
+
+                # Either updates an existing achievement
+                if achievement.id in achievements_evaluations.keys():
+                    last_value = achievements_evaluations[achievement.id]["last"]["value"]
+                    if last_value == new_value:
+                        models.StudentEvaluation.objects.filter(
+                            achievement=achievement, 
+                            student=student, 
+                            teacher_evaluation=False,
+                        ).update(
+                            last_evaluation=False
+                        )
+
+                        evaluation = evaluations.get(
+                            teacher_evaluation=False,
+                            achievement=achievement,
+                            student=student,
+                            evaluation_value=new_value
+                        )
+                    else:
+                        evaluation = models.StudentEvaluation()
+                        evaluation.achievement = achievement
+                        evaluation.student = student
+                        evaluation.evaluation_value = new_value
+                        evaluation.teacher_evaluation = False
+                    evaluation.last_evaluation = True
+                    evaluation.save()
+                # Or creates a new one
+                else:
+                    models.StudentEvaluation.objects.filter(
+                        achievement=achievement, student=student, teacher_evaluation=False
+                    ).update(last_evaluation=False)
+                    evaluation = models.StudentEvaluation()
+                    evaluation.achievement = achievement
+                    evaluation.student = student
+                    evaluation.evaluation_value = new_value
+                    evaluation.teacher_evaluation = False
+                    evaluation.last_evaluation = True
+                    evaluation.save()
+            # Then redirects to the status
+            return redirect('ues.matrix_course', course.slug)
+
+    return render(request, "matrix/students/course_self_evaluation.html", {
+        "course":course, "achievements":achievements, "evaluations":evaluations,
+        "achievements_evaluations":achievements_evaluations,
+        "form": form, "values": values
+    })
+
+
+@login_required
+@user_passes_test(student_check)
 def evaluate_achievement(request, slug):
     student = models.ProfileUser.objects.get(user=request.user)
 
-    achievement = models.LearningAchievement.objects.get(slug=slug, course__ecue__ue__semestre__schoolyear__order=student.get_schoolyear())
+    achievement = models.LearningAchievement.objects.get(
+        slug=slug,
+        course__ecue__ue__semestre__schoolyear__order=student.get_schoolyear()
+    )
+
     try:
-        evaluation_existante = models.StudentEvaluation.objects.get(achievement=achievement, student=student, teacher_evaluation=False)
+        evaluation_existante = models.StudentEvaluation.objects.get(
+            achievement=achievement,
+            student=student,
+            teacher_evaluation=False
+        )
         # return redirect('ues.matrix_course', achievement.course.slug)
     except models.StudentEvaluation.DoesNotExist:
         pass
@@ -185,7 +280,9 @@ def evaluate_achievement(request, slug):
             return redirect('ues.matrix_course', achievement.course.slug)
     else:
         form = forms.StudentEvaluationForm()
-    return render(request, "matrix/students/evaluate_achievement.html", {"form":form, "achievement": achievement})
+    return render(request, "matrix/students/evaluate_achievement.html",
+        {"form":form, "achievement": achievement}
+    )
 
 
 @login_required
@@ -193,7 +290,12 @@ def evaluate_achievement(request, slug):
 def self_evaluate_all(request):
     student = models.ProfileUser.objects.get(user=request.user)
 
-    ues = models.UE.objects.filter(semestre__schoolyear__order=student.get_schoolyear()).prefetch_related('ecues', 'semestre', "ecues__courses", "ecues__courses__achievements")
+    ues = models.UE.objects.filter(semestre__schoolyear__order=student.get_schoolyear()).prefetch_related(
+        "ecues",
+        "semestre",
+        "ecues__courses",
+        "ecues__courses__achievements"
+    )
     values = models.EvaluationValue.objects.all()
     # Gets all evaluations on this small class
     evaluations = models.StudentEvaluation.objects.filter(

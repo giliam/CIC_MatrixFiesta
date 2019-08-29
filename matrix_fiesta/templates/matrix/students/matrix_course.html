@@ -7,6 +7,11 @@
 {% block content %}
 <h2>{{course}}</h2>
 
+<p>
+    <a href="{% url "ues.evaluate_course" course.slug %}" class="ui violet button">{% trans "Self evaluation" %}</a>
+    <a style="color:white" href="{% url "ues.matrix" %}" class="ui purple button">{% trans "Return to main list" %}</a>
+</p>
+
 <table class="ui blue table">
     <thead>
         <tr>
@@ -22,12 +27,12 @@
         <td><strong>{{c_achievement.name}}</strong></td>
             {% if c_achievement.id in achievements_evaluations.keys %}
             {% with current_eval=achievements_evaluations|get_item:c_achievement.id %}
-                <td>Évalué : <em>{{ current_eval|get_item:"last"|get_item:"value" }} - {{current_eval|get_item:"last"|get_item:"date" }}</em></td>
+                <td><strong>{{ current_eval|get_item:"last"|get_item:"value" }}</strong> - <em>{{current_eval|get_item:"last"|get_item:"date" }}</em></td>
                 <td>{% for prec_eval in current_eval|get_item:"history" %}
-                    <span style="font-size: 0.8em;">{{ prec_eval.value }} - {{ prec_eval.date }} ;</span>
+                    <span style="font-size: 0.85em; opacity: {{ current_eval|get_item:"history"|length|compute_opacity:forloop.counter0 }};">{{ prec_eval.value }} - <em>{{ prec_eval.date }}</em></span><br />
                 {% endfor %}</td>
             {% endwith %}
-            <td><a href="{% url "ues.evaluate_achievement" c_achievement.slug %}">{% trans "New evaluation?" %}</a></td>
+            <td><a href="{% url "ues.evaluate_achievement" c_achievement.slug %}" class="ui basic button yellow">{% trans "New evaluation?" %}</a></td>
         {% else %}
         <td colspan="3"><a href="{% url "ues.evaluate_achievement" c_achievement.slug %}">{% trans "Non evaluated" %}</a></td>
         {% endif %}

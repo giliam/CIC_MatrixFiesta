@@ -50,7 +50,7 @@
     <tbody>
     {% for ecue in ue.ecues.all %}
         <tr id="ecue_{{ecue.id}}" style="background-color: #2F56B2; color:white;">
-            <td colspan="{{values|length|add:1}}"><i class="dropdown icon"></i> <strong>ECUE - {{ecue.name}}</strong></td>
+            <td colspan="{{values|length|add:1}}"><i id="ecue_arrow_{{ecue.id}}" class="angle down icon"></i> <strong>ECUE - {{ecue.name}}</strong></td>
         </tr>
         {% for course in ecue.courses.all %}
             <tr class="hidden ecue_content_{{ecue.id}}" style="background-color: #a7d4f699;">
@@ -74,16 +74,18 @@
                             {% with current_eval=achievements_evaluations|get_item:achievement.id %}
                                 {% if value == current_eval|get_item:"last"|get_item:"value" %}
                                 <td class="center aligned positive">
-                                    <strong>{{current_eval|get_item:"last"|get_item:"date" }}</strong>
+                                    <div class="ui list">
+                                        <div class="item"><strong>{{current_eval|get_item:"last"|get_item:"date" }}</strong></div>
                                 {% else %}
                                 <td class="center aligned">
+                                    <div class="ui list">
                                 {% endif %}
                                 {% for prec_eval in current_eval|get_item:"history" %}
                                     {% if value == prec_eval.value %}
-                                        <em>{{ prec_eval.date }}</em>
+                                        <div class="item"><em>{{ prec_eval.date }}</em></div>
                                     {% endif %}
                                 {% endfor %}
-                                <br />
+                                    </div>
                                 </td>
                             {% endwith %}
                         {% else %}
@@ -139,6 +141,8 @@ $('.ui.accordion')
     {% for ecue in ue.ecues.all %}
     $("#ecue_{{ecue.id}}").click(function(){
       $(".ecue_content_{{ecue.id}}").toggle();
+      $("#ecue_arrow_{{ecue.id}}").toggleClass('down up');
+
     });
     {% endfor %}
 {% endfor %}

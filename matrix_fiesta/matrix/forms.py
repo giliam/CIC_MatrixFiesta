@@ -47,11 +47,18 @@ class StudentEvaluationForm(forms.ModelForm):
     class Meta:
         model = models.StudentEvaluation
         fields = ('evaluation_value',)
+        labels = {
+            "evaluation_value": _("Evaluation value"),
+        }
 
 class TeacherEvaluationForm(forms.ModelForm):
     class Meta:
         model = models.StudentEvaluation
         fields = ('evaluation_value','student',)
+        labels = {
+            "evaluation_value": _("Evaluation value"),
+            "student": _("Student")
+        }
 
 
 def get_groups():

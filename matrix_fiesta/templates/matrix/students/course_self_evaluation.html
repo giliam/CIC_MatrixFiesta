@@ -1,0 +1,51 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% block title %}{% trans "Self global evaluation" %}{% endblock %}
+
+{% load common_extras %}
+
+{% block content %}
+
+<p>
+    <a style="color:white" href="{% url "ues.matrix_course" course.slug %}" class="ui violet button">{% trans "Return to course list" %}</a>
+    <a style="color:white" href="{% url "ues.matrix" %}" class="ui purple button">{% trans "Return to main list" %}</a></p>
+</p>
+
+<h1>{{course}}</h1>
+
+<form method="post" action="">
+    {% csrf_token %}
+    <table class="ui blue table celled">
+        <thead>
+            <tr>
+                <th></th>
+                <th class="center aligned">{% trans "Not evaluated yet" %}</th>
+                {% for value in values %}
+                    <th class="center aligned">{{value}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for achievement in course.achievements.all %}
+                <tr>
+                    {% with form_field=form.fields|get_item:achievement.get_field_name %}
+                    {% with form_initial=form.initial|get_item:achievement.get_field_name %}
+                        <td>{{achievement.name}}</td>
+                        {% for value, text in form_field.choices %}
+                            <td class="center aligned {% if form_initial|get_item:0 == value %} active{% endif %}">
+                                <input type="radio" name="{{achievement.get_field_name}}" value="{{ value }}"{% if form_initial|get_item:0 == value %} checked{% endif %} {% if value == 0 %}disabled{% endif %}/>
+                            </td>
+                        {% endfor %}
+                    {% endwith %}
+                    {% endwith %}
+                </tr>
+            {% empty %}
+            <tr>
+                <td class="center aligned disabled" colspan="{{values|length|add:2}}"><em>{% trans "No achievement here yet." %}</em></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <input type="submit" class="ui button green"/>
+</form>
+{% endblock %}

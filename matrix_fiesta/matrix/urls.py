@@ -12,6 +12,7 @@ urlpatterns = [
     path('students/', views.matrix_ues, {'archives': None}, name="ues.matrix"),
     re_path(r'students/archives/(?P<archives>[0-9]+)/', views.matrix_ues, name="ues.matrix_archives"),
     re_path(r'students/ues/(?P<slug>[-\w]+)', views.matrix_course, name="ues.matrix_course"),
+    re_path(r'students/course/evaluate/(?P<slug>[-\w]+)', views.evaluate_course, name="ues.evaluate_course"),
     re_path(r'students/achievement/evaluate/(?P<slug>[-\w]+)', views.evaluate_achievement, name="ues.evaluate_achievement"),
     re_path(r'students/achievement/self/evaluate/', views.self_evaluate_all, name="ues.self_evaluate_all"),
     

@@ -33,3 +33,11 @@ def is_teacher(user):
 @register.filter
 def is_de(user):
     return auths.check_is_de(user)
+
+
+@register.filter
+def compute_opacity(max_value, current_value):
+    if max_value == 0:
+        return str(1.0)
+    else:
+        return str(1.0-0.85*(current_value/max_value))
