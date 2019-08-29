@@ -694,6 +694,10 @@ def evaluate_student_all(request, small_class_id, student_id):
         if form.is_valid():
             for achievement in small_class.course.achievements.all():
                 new_value = form.get_cleaned_data(achievement)
+
+                if new_value is None:
+                    continue
+
                 # Either updates an existing achievement
                 if achievement.id in achievements_evaluations.keys():
                     last_value = achievements_evaluations[achievement.id]["last"]["value"]

@@ -7,12 +7,13 @@
 
 {% block content %}
 
-{% blocktrans %}{{achievement}} for {{student}}{% endblocktrans %}
+<h1>{% blocktrans with achievement_name=achievement.name %}{{achievement_name}} for <em>{{student}}</em>{% endblocktrans %}</h1>
+<p>{{achievement.course}}</p>
 
-<form method="post" action="{% url "teachers.evaluate_achievement_student" small_class.id student.id achievement.slug %}">
+<form method="post" action="{% url "teachers.evaluate_achievement_student" small_class.id student.id achievement.slug %}" class="ui form">
 {% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="{% trans "Submit" %}" />
+    {{ form.as_p }}
+    <input type="submit" class="ui button green" value="{% trans "Submit" %}" />
 </form>
 
 {% endblock %}

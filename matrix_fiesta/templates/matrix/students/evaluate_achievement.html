@@ -12,7 +12,7 @@
 <form method="post" action="{% url "ues.evaluate_achievement" achievement.slug %}" class="ui form">
 {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" class="ui button green"/>
+    <input type="submit" class="ui button green" value="{% trans "Submit" %}" />
 </form>
 
 {% endblock %}

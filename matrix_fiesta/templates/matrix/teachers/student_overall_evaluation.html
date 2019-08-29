@@ -7,18 +7,23 @@
 
 {% block content %}
 <h1>{{student}}</h1>
-<h2>{{small_class}}</h2>
 <h3>{% trans "Course:" %} {{small_class.course}}</h3>
+
+<p>
+    <a href="{% url "teachers.status_student" small_class.id student.id %}" class="ui button violet">{% trans "Return to student status" %}</a>
+    <a href="{% url "teachers.homepage_teachers" %}" class="ui button purple">{% trans "Return to your students" %}</a>
+</p>
 
 <form method="post" action="">
     {% csrf_token %}
 
-<table class="ui blue table">
+<table class="ui blue table celled">
     <thead>
         <tr>
             <th>{% trans "Achievement" %}</th>
+            <th class="center aligned">{% trans "Not evaluated yet" %}</th>
             {% for value in values %}
-                <th>{{value}}</th>
+                <th class="center aligned">{{value}}</th>
             {% endfor %}
         </tr>
     </thead>
@@ -29,7 +34,9 @@
             {% with form_initial=form.initial|get_item:achievement.get_field_name %}
                 <td>{{achievement.name}}</td>
                 {% for value, text in form_field.choices %}
-                    <td><input type="radio" name="{{achievement.get_field_name}}" value="{{ value }}"{% if form_initial|get_item:0 == value %} checked{% endif %} /></td>
+                    <td class="center aligned{% if form_initial|get_item:0 == value %} active{% endif %}">
+                        <input type="radio" name="{{achievement.get_field_name}}" value="{{ value }}"{% if form_initial|get_item:0 == value %} checked{% endif %} {% if value == 0 %}disabled{% endif %} />
+                    </td>
                 {% endfor %}
             {% endwith %}
             {% endwith %}
@@ -37,6 +44,6 @@
     {% endfor %}
     </tbody>
 </table>
-<input type="submit" value="{% trans "Submit" %}" />
+<input type="submit" class="ui button green" value="{% trans "Submit" %}" />
 </form>
 {% endblock %}
