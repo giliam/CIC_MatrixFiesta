@@ -1,5 +1,7 @@
 # CIC MatrixFiesta
 
+[![Build Status](https://travis-ci.org/giliam/CIC_MatrixFiesta.svg?branch=master)](https://travis-ci.org/giliam/CIC_MatrixFiesta)
+
 Website designed so students can evaluate themselves on the different parts of the program. Teachers can also provide an evaluation or validate students'.
 
 ## How to
