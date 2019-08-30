@@ -17,6 +17,9 @@ users_checks = {
 
 
 def check_is_(user, level):
+    if not user.is_authenticated:
+        return False
+    
     # If the user test has not been stored yet
     if not user.id in users_checks[level].keys():
         users_checks[level][user.id] = (
