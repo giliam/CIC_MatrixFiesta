@@ -91,6 +91,8 @@ def log_in(request):
             else: #sinon une erreur sera affichée
                 error = True
     else:
+        if request.user.is_authenticated:
+            return redirect('homepage')
         form = forms.ConnexionForm()
     return render(request, 'users/login.html',locals())
 

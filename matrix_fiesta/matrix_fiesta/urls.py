@@ -21,10 +21,8 @@ from django.views.generic.base import TemplateView
 import django_cas_ng.views
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='homepage.html'), name="homepage"),
-
+    path('', include('matrix.urls')),
     path('admin/', admin.site.urls),
-    path('matrix/', include('matrix.urls')),
     path('accounts/login', django_cas_ng.views.LoginView.as_view(), name='cas_ng_login'),
     path('accounts/logout', django_cas_ng.views.LogoutView.as_view(), name='cas_ng_logout'),
 ]

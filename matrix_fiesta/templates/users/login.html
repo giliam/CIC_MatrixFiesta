@@ -3,16 +3,26 @@
 
 {% block content %}
 <h1>{% trans "Log in" %}</h1>
-{% if error %}
-<p class="text-error"><strong>{% trans "Unknown user or wrong password." %}</strong></p>
-{% endif %}
-{% if user.is_authenticated %}
-{% blocktrans %}You are successfully logged in, {{user.username}}!{% endblocktrans %}
-{% else %}
-<form method="post" action="." class="ui form">
-{% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="{% trans "Submit" %}" />
-</form>
-{% endif %}
+
+<div class="ui grid">
+  <div class="eight wide column">
+    <h2>{% trans "If you have a CAS access" %}</h2>
+    <p><a href="{% url "cas_ng_login" %}" class="ui button red">{% trans "Connect through CAS authentication" %}</a></p>
+  </div>
+  <div class="eight wide column">
+    <h2>{% trans "If you don't" %}</h2>
+    {% if error %}
+    <p class="text-error"><strong>{% trans "Unknown user or wrong password." %}</strong></p>
+    {% endif %}
+    {% if user.is_authenticated %}
+    <p>{% trans "You are successfully logged in!" %}</p>
+    {% else %}
+    <form method="post" action="." class="ui form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="{% trans "Submit" %}" />
+    </form>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}

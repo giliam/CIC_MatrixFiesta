@@ -5,7 +5,7 @@ from common.auths import GroupsNames
 
 urlpatterns = [
     # General homepage
-    path('', views.homepage, name="matrix.homepage"),
+    path('', views.homepage, name="homepage"),
 
     # Student part
     path('students/ues/', views.ues_list, name="ues.list"),
