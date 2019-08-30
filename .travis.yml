@@ -3,7 +3,7 @@ python:
   - 3.6
 
 env:
-- DJANGO=2.2.4
+  - DJANGO=2.2.4
 
 before_install:
   - export DJANGO_SETTINGS_MODULE=matrix_fiesta.settings
@@ -23,4 +23,4 @@ script:
 
 branches:
   only:
-- master
+    - master
