@@ -45,12 +45,10 @@ class PromotionYear(DatedModel):
 
 
 class ProfileUser(DatedModel):
-    firstname = models.CharField(max_length=150)
-    lastname = models.CharField(max_length=150)
     year_entrance = models.ForeignKey(PromotionYear, on_delete=models.SET_NULL, null=True, related_name="students")
     cesure = models.BooleanField(default=False)
 
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def get_schoolyear(self, current_year=None):
         if current_year is None:
@@ -62,7 +60,7 @@ class ProfileUser(DatedModel):
         return current_schoolyear
 
     def __str__(self):
-        return "%s %s" % (self.firstname, self.lastname.upper())
+        return "%s %s" % (self.user.first_name, self.user.last_name.upper())
 
     class Meta:
         verbose_name = _("User")

@@ -829,12 +829,12 @@ def insert_new_users(request):
                         continue
 
                     user = User.objects.create_user(student[email_index], student[email_index], '')
+                    user.first_name = student[firstname_index]
+                    user.last_name = student[lastname_index]
                     user.groups.set(form.cleaned_data["group"])
                     user.save()
 
                     profile_user = models.ProfileUser()
-                    profile_user.firstname = student[firstname_index]
-                    profile_user.lastname = student[lastname_index]
                     # gets the object from entrance year
                     entrance_year = student[year_entrance_index]
                     if not entrance_year in entrance_years.keys():

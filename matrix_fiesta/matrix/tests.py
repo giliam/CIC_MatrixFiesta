@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 
 from matrix import models
@@ -16,48 +17,56 @@ class ProfileUserTestCase(TestCase):
 
         data = [ 
             {
+                "id": 1,
                 "firstname": "Foo_noces",
                 "lastname": "Bar_noces",
                 "year_entrance": p_y_2019,
                 "cesure": False,
                 "user": None
             }, {
+                "id": 2,
                 "firstname": "Foo_ces",
                 "lastname": "Bar_ces",
                 "year_entrance": p_y_2019,
                 "cesure": True,
                 "user": None
             }, {
+                "id": 3,
                 "firstname": "2AFoo_noces",
                 "lastname": "2ABar_noces",
                 "year_entrance": p_y_2018,
                 "cesure": False,
                 "user": None
             }, {
+                "id": 4,
                 "firstname": "2AFoo_ces",
                 "lastname": "2ABar_ces",
                 "year_entrance": p_y_2018,
                 "cesure": True,
                 "user": None
             }, {
+                "id": 5,
                 "firstname": "3AFoo_noces",
                 "lastname": "3ABar_noces",
                 "year_entrance": p_y_2017,
                 "cesure": False,
                 "user": None
             }, {
+                "id": 6,
                 "firstname": "3AFoo_ces",
                 "lastname": "3ABar_ces",
                 "year_entrance": p_y_2017,
                 "cesure": True,
                 "user": None
             }, {
+                "id": 7,
                 "firstname": "4AFoo_noces",
                 "lastname": "4ABar_noces",
                 "year_entrance": p_y_2016,
                 "cesure": False,
                 "user": None
             }, {
+                "id": 8,
                 "firstname": "4AFoo_ces",
                 "lastname": "4ABar_ces",
                 "year_entrance": p_y_2016,
@@ -67,6 +76,16 @@ class ProfileUserTestCase(TestCase):
         ]
 
         for e in data:
+            user = User.objects.create(
+                username=e["id"],
+                first_name=e["firstname"],
+                last_name=e["lastname"],
+            )
+            
+            e["user"] = user
+            del e["firstname"]
+            del e["lastname"]
+
             models.ProfileUser.objects.create(
                 **e
             )
@@ -76,14 +95,14 @@ class ProfileUserTestCase(TestCase):
 
         p_y_2019 = models.PromotionYear.objects.get(value=current_year)
         p_y_2018 = models.PromotionYear.objects.get(value=current_year-1)
-        noces = models.ProfileUser.objects.get(firstname="Foo_noces")
-        ces = models.ProfileUser.objects.get(firstname="Foo_ces")
-        noces_2A = models.ProfileUser.objects.get(firstname="2AFoo_noces")
-        ces_2A = models.ProfileUser.objects.get(firstname="2AFoo_ces")
-        noces_3A = models.ProfileUser.objects.get(firstname="3AFoo_noces")
-        ces_3A = models.ProfileUser.objects.get(firstname="3AFoo_ces")
-        noces_4A = models.ProfileUser.objects.get(firstname="4AFoo_noces")
-        ces_4A = models.ProfileUser.objects.get(firstname="4AFoo_ces")
+        noces = models.ProfileUser.objects.get(id=1)
+        ces = models.ProfileUser.objects.get(id=2)
+        noces_2A = models.ProfileUser.objects.get(id=3)
+        ces_2A = models.ProfileUser.objects.get(id=4)
+        noces_3A = models.ProfileUser.objects.get(id=5)
+        ces_3A = models.ProfileUser.objects.get(id=6)
+        noces_4A = models.ProfileUser.objects.get(id=7)
+        ces_4A = models.ProfileUser.objects.get(id=8)
 
         self.assertEqual(noces.get_schoolyear(), 1)
         self.assertEqual(ces.get_schoolyear(), 1)
