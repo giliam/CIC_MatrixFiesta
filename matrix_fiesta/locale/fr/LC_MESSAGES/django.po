@@ -214,7 +214,7 @@ msgstr "Prénom de l'étudiant"
 
 #: .\templates\de\list_users.html:13
 msgid "Student lastname"
-msgstr "Nom de l'étudiany"
+msgstr "Nom de l'étudiant"
 
 #: .\templates\de\list_users.html:14
 msgid "Email"
