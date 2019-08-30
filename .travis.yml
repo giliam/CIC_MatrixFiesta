@@ -1,0 +1,26 @@
+language: python
+python:
+  - 3.6
+
+env:
+- DJANGO=2.2.4
+
+before_install:
+  - export DJANGO_SETTINGS_MODULE=matrix_fiesta.settings
+  - export PYTHONPATH=$HOME/builds/giliam/CIC_MatrixFiesta
+  - export PIP_USE_MIRRORS=true
+
+install:
+  - pip install -r requirements.txt
+  - pip install django==$DJANGO --quiet
+
+before_script:
+  - cd matrix_fiesta/
+
+script:
+  - python manage.py migrate --noinput
+  - python manage.py test --noinput
+
+branches:
+  only:
+- master
