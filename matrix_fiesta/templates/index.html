@@ -56,11 +56,11 @@
             </a>
             {% endif %}
             {% if user.is_authenticated %}    
-            <a class="ui item {{ nav_users_active }}" href="{% url "users.log_out" %}">
+            <a class="ui item {{ nav_users_active }}" href="{% url "cas_ng_logout" %}">
               {% trans "Log out" %}
             </a>
             {% else %}
-            <a class="ui item {{ nav_users_active }}" href="{% url "users.log_in" %}">
+            <a class="ui item {{ nav_users_active }}" href="{% url "cas_ng_login" %}">
               {% trans "Log in" %}
             </a>
             {% endif %}
