@@ -57,7 +57,7 @@ class ProfileUser(DatedModel):
             current_year = datetime.datetime.now().year
         
         current_schoolyear = min(4, (current_year - self.year_entrance.value)+1)
-        if self.cesure:
+        if self.cesure and current_schoolyear > 2:
             current_schoolyear -= 1
         return current_schoolyear
 

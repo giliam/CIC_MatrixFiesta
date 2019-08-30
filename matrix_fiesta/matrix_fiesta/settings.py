@@ -179,3 +179,13 @@ LOGIN_URL = '/matrix/log_in/'
 
 CAS_SERVER_URL = 'https://auth.mines-paristech.fr/cas/'
 CAS_VERSION = 3
+
+
+# According to 
+# https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
+TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
+)
