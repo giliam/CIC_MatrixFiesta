@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_cas_ng.middleware.CASMiddleware',
 ]
 
 if DEBUG:
@@ -166,7 +167,8 @@ REST_FRAMEWORK = parameters.REST_FRAMEWORK if hasattr(parameters, "REST_FRAMEWOR
 
 AUTHENTICATION_BACKENDS = (
      'django.contrib.auth.backends.ModelBackend',
-     'django_cas_ng.backends.CASBackend',
+#     'django_cas_ng.backends.CASBackend',
+     'matrix.backends.MatrixCASBackend',
 )
 
 INTERNAL_IPS = [
@@ -175,10 +177,11 @@ INTERNAL_IPS = [
     # ...
 ]
 
-LOGIN_URL = '/matrix/log_in/'
+#LOGIN_URL = '/matrix/log_in/'
 
 CAS_SERVER_URL = 'https://auth.mines-paristech.fr/cas/'
 CAS_VERSION = 3
+CAS_CREATE_USER = False
 
 # According to 
 # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
