@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-29 11:39+0200\n"
+"POT-Creation-Date: 2019-08-30 16:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr "Nom d'utilisateur"
 msgid "Password"
 msgstr "Mot de passe"
 
-#: .\matrix\forms.py:51 .\matrix\forms.py:59 .\matrix\models.py:143
+#: .\matrix\forms.py:51 .\matrix\forms.py:59 .\matrix\models.py:141
 msgid "Evaluation value"
 msgstr "Valeur de l'évaluation"
 
@@ -66,99 +66,99 @@ msgstr "Promotion"
 msgid "Promotion years"
 msgstr "Promotions"
 
-#: .\matrix\models.py:68
+#: .\matrix\models.py:66
 msgid "User"
 msgstr "Utilisateur"
 
-#: .\matrix\models.py:69
+#: .\matrix\models.py:67
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: .\matrix\models.py:85
+#: .\matrix\models.py:83
 msgid "Semestre"
 msgstr "Semestre"
 
-#: .\matrix\models.py:86
+#: .\matrix\models.py:84
 msgid "Semestres"
 msgstr "Semestres"
 
-#: .\matrix\models.py:98
+#: .\matrix\models.py:96
 msgid "UE"
 msgstr "UE"
 
-#: .\matrix\models.py:99 .\templates\matrix\students\matrix_ues.html:22
+#: .\matrix\models.py:97 .\templates\matrix\students\matrix_ues.html:22
 msgid "UEs"
 msgstr "UEs"
 
-#: .\matrix\models.py:108
+#: .\matrix\models.py:106
 #, python-format
 msgid "ECUE %(name)s - %(ue)s"
 msgstr "ECUE %(name)s - %(ue)s"
 
-#: .\matrix\models.py:111
+#: .\matrix\models.py:109
 #: .\templates\matrix\students\overall_self_evaluation.html:27
 msgid "ECUE"
 msgstr "ECUE"
 
-#: .\matrix\models.py:112
+#: .\matrix\models.py:110
 msgid "ECUEs"
 msgstr "ECUEs"
 
-#: .\matrix\models.py:129
+#: .\matrix\models.py:127
 msgid "Course"
 msgstr "Cours"
 
-#: .\matrix\models.py:130
+#: .\matrix\models.py:128
 msgid "Courses"
 msgstr "Cours"
 
-#: .\matrix\models.py:144
+#: .\matrix\models.py:142
 msgid "Evaluation values"
 msgstr "Valeurs de l'évaluation"
 
-#: .\matrix\models.py:164
+#: .\matrix\models.py:162
 msgid "Learning achievement"
 msgstr "Acquis d'apprentissage"
 
-#: .\matrix\models.py:165
+#: .\matrix\models.py:163
 msgid "Learning achievements"
 msgstr "Acquis d'apprentissage"
 
-#: .\matrix\models.py:177
+#: .\matrix\models.py:175
 #, python-format
 msgid "%(achiev)s, %(student)s : %(eval)s (teacher: %(teacher)s)"
 msgstr "%(achiev)s, %(student)s : %(eval)s (enseignant : %(teacher)s)"
 
-#: .\matrix\models.py:184
+#: .\matrix\models.py:182
 msgid "Student evaluation"
 msgstr "Évaluation de l'étudiant"
 
-#: .\matrix\models.py:185
+#: .\matrix\models.py:183
 msgid "Student evaluations"
 msgstr "Évaluations des étudiants"
 
-#: .\matrix\models.py:201
+#: .\matrix\models.py:199
 #, python-format
 msgid "SC of %(course)s by %(teacher)s (%(std_count)d students)"
 msgstr "PC de %(course)s par %(teacher)s (%(std_count)d élèves)"
 
-#: .\matrix\models.py:207
+#: .\matrix\models.py:205
 msgid "Small class"
 msgstr "Petite classe"
 
-#: .\matrix\models.py:208
+#: .\matrix\models.py:206
 msgid "Small classes"
 msgstr "Petites classes"
 
-#: .\matrix\views.py:793
+#: .\matrix\views.py:797
 msgid "formatted as 20XX"
 msgstr "renseigné au format 20XX"
 
-#: .\matrix\views.py:798
+#: .\matrix\views.py:802
 msgid "must be 0 or 1"
 msgstr "doit être 0 ou 1"
 
-#: .\matrix\views.py:820
+#: .\matrix\views.py:824
 msgid "DE shouldn't be in the groups selected"
 msgstr "La DE ne devrait pas être dans les groupes sélectionnés."
 
@@ -344,7 +344,7 @@ msgstr "Auto-évaluation des acquis"
 #: .\templates\matrix\students\evaluate_achievement.html:15
 #: .\templates\matrix\teachers\evaluate_achievement.html:16
 #: .\templates\matrix\teachers\student_overall_evaluation.html:47
-#: .\templates\users\login.html:15
+#: .\templates\users\login.html:23
 msgid "Submit"
 msgstr "Envoyer"
 
@@ -433,6 +433,7 @@ msgid "Evaluate an achievement"
 msgstr "Évaluer un acquis"
 
 #: .\templates\matrix\teachers\evaluate_achievement.html:10
+#, python-format
 msgid "%(achievement_name)s for <em>%(student)s</em>"
 msgstr "%(achievement_name)s pour <em>%(student)s</em>"
 
@@ -545,14 +546,25 @@ msgstr "Évaluation globale de l'étudiant"
 msgid "Return to student status"
 msgstr "Retour au statut de l'étudiant"
 
-#: .\templates\users\login.html:7
+#: .\templates\users\login.html:9
+msgid "If you have a CAS access"
+msgstr "Si vous avez un accès par le CAS"
+
+#: .\templates\users\login.html:10
+msgid "Connect through CAS authentication"
+msgstr "Se connecter à travers le CAS"
+
+#: .\templates\users\login.html:13
+msgid "If you don't"
+msgstr "Sinon"
+
+#: .\templates\users\login.html:15
 msgid "Unknown user or wrong password."
 msgstr "Utilisateur inexistant ou mauvais de mot de passe."
 
-#: .\templates\users\login.html:10
-#, python-format
-msgid "You are successfully logged in, %(user.username)s!"
-msgstr "Vous êtes connecté, %(user.username)s !"
+#: .\templates\users\login.html:18
+msgid "You are successfully logged in!"
+msgstr "Vous êtes bien connecté !"
 
 #~ msgid "Welcome !"
 #~ msgstr "Bienvenue !"
