@@ -130,7 +130,7 @@ class Course(DatedModel):
 
 
 class EvaluationValue(DatedModel):
-    value = models.CharField(max_length=10)
+    value = models.CharField(max_length=150)
     integer_value = models.IntegerField(default=0)
     order = models.PositiveIntegerField(default=0)
 
