@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.files.storage import default_storage
 from django.db.models import Sum, Avg, Value, Count
 from django.db.models.functions import Coalesce
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.debug import sensitive_post_parameters
@@ -781,6 +782,9 @@ def list_users(request, group_filter=auths.GroupsNames.STUDENTS_LEVEL):
 @login_required
 @user_passes_test(de_check)
 def insert_new_users(request):
+    if not request.user.is_superuser:
+        raise HttpResponseForbidden("Only super users can perform this action")
+
     columns = {
         "Firstname": {
             "index": 0,
@@ -856,3 +860,19 @@ def insert_new_users(request):
         form = forms.UploadNewStudentsForm() # A empty, unbound form
 
     return render(request, "de/insert_new_users.html", {"columns": columns, "form": form})
+
+
+def error_404(request, exception):
+    return render(request, 'error/404.html')
+
+
+def error_500(request):
+    return render(request, 'error/500.html')
+
+
+def error_403(request, exception):
+    return render(request, 'error/403.html')
+
+
+def error_400(request, exception):
+    return render(request, 'error/400.html')

@@ -27,6 +27,11 @@ urlpatterns = [
     path('accounts/logout', django_cas_ng.views.LogoutView.as_view(), name='cas_ng_logout'),
 ]
 
+handler404 = 'matrix.views.error_404'
+handler500 = 'matrix.views.error_500'
+handler403 = 'matrix.views.error_403'
+handler400 = 'matrix.views.error_400'
+
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
