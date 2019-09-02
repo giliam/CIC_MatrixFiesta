@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-30 16:23+0200\n"
+"POT-Creation-Date: 2019-09-02 12:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,15 +150,15 @@ msgstr "Petite classe"
 msgid "Small classes"
 msgstr "Petites classes"
 
-#: .\matrix\views.py:797
+#: .\matrix\views.py:801
 msgid "formatted as 20XX"
 msgstr "renseigné au format 20XX"
 
-#: .\matrix\views.py:802
+#: .\matrix\views.py:806
 msgid "must be 0 or 1"
 msgstr "doit être 0 ou 1"
 
-#: .\matrix\views.py:824
+#: .\matrix\views.py:828
 msgid "DE shouldn't be in the groups selected"
 msgstr "La DE ne devrait pas être dans les groupes sélectionnés."
 
@@ -243,6 +243,43 @@ msgstr "Non"
 #: .\templates\de\start_new_year.html:7
 msgid "Start new year"
 msgstr "Commencer une nouvelle année"
+
+#: .\templates\error\400.html:5
+msgid "Error 400"
+msgstr "Erreur 400"
+
+#: .\templates\error\400.html:9
+msgid "Bad request!"
+msgstr "Mauvaise requête !"
+
+#: .\templates\error\400.html:11 .\templates\error\403.html:11
+#: .\templates\error\404.html:11 .\templates\error\500.html:11
+msgid "Please contact the administrator!"
+msgstr "Merci de contacter l'administrateur !"
+
+#: .\templates\error\403.html:5
+msgid "Error 403"
+msgstr "Erreur 403"
+
+#: .\templates\error\403.html:9
+msgid "Forbidden!"
+msgstr "Accès interdit !"
+
+#: .\templates\error\404.html:5
+msgid "Error 404"
+msgstr "Erreur 404"
+
+#: .\templates\error\404.html:9
+msgid "Page not found!"
+msgstr "Page introuvable !"
+
+#: .\templates\error\500.html:5
+msgid "Error 500"
+msgstr "Erreur 500"
+
+#: .\templates\error\500.html:9
+msgid "Internal server error!"
+msgstr "Erreur interne au serveur !"
 
 #: .\templates\homepage.html:5 .\templates\index.html:22
 msgid "Homepage"
