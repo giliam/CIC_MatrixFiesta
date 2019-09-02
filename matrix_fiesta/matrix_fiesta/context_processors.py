@@ -1,6 +1,6 @@
 #définit quel élément de la navbar est actif selon l'application actuelle.
 def activeNavbar(request):
-    if request.resolver_match:
+    if request.resolver_match and request.resolver_match.url_name:
         requests_elements = request.resolver_match.url_name.split(".")
     else:
         return {}

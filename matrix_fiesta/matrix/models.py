@@ -48,6 +48,8 @@ class ProfileUser(DatedModel):
     year_entrance = models.ForeignKey(PromotionYear, on_delete=models.SET_NULL, null=True, related_name="students")
     cesure = models.BooleanField(default=False)
 
+    cas_user = models.BooleanField(default=True)
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def get_schoolyear(self, current_year=None):
