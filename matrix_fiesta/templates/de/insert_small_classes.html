@@ -14,6 +14,7 @@
     {% endfor %}
 
 </ul>
+<p>{% trans "Non student users will be ignored. You can also upload a second <strong>csv file</strong> (delimited by <em>;</em>) containing the name of the teachers with the same columns. Non teacher users will be ignored." %}</p>
 
 <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}

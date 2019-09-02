@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-02 12:30+0200\n"
+"POT-Creation-Date: 2019-09-02 16:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,29 +18,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\matrix\forms.py:9
+#: .\matrix\forms.py:10
 msgid "User name"
 msgstr "Nom d'utilisateur"
 
-#: .\matrix\forms.py:10
+#: .\matrix\forms.py:11
 msgid "Password"
 msgstr "Mot de passe"
 
-#: .\matrix\forms.py:51 .\matrix\forms.py:59 .\matrix\models.py:141
+#: .\matrix\forms.py:54 .\matrix\forms.py:63 .\matrix\models.py:143
 msgid "Evaluation value"
 msgstr "Valeur de l'évaluation"
 
-#: .\matrix\forms.py:60
+#: .\matrix\forms.py:64
 msgid "Student"
 msgstr "Étudiant"
 
-#: .\matrix\forms.py:71
+#: .\matrix\forms.py:76
 msgid "File has a header ?"
 msgstr "Le fichier a-t-il un entête ?"
 
-#: .\matrix\forms.py:72
+#: .\matrix\forms.py:77
 msgid "Select a file"
 msgstr "Sélectionner un fichier"
+
+#: .\matrix\forms.py:82
+msgid "File(s) has(ve) a header ?"
+msgstr "Le(s) fichier(s) a(ont)-t-il(s) un entête ?"
+
+#: .\matrix\forms.py:83
+msgid "Select a file for the students"
+msgstr "Sélectionner un fichier pour les élèves"
+
+#: .\matrix\forms.py:85
+msgid "Select a file for the teachers"
+msgstr "Sélectionner un fichier pour les enseignants"
 
 #: .\matrix\models.py:15
 msgid "DatedModel"
@@ -66,101 +78,104 @@ msgstr "Promotion"
 msgid "Promotion years"
 msgstr "Promotions"
 
-#: .\matrix\models.py:66
+#: .\matrix\models.py:68
 msgid "User"
 msgstr "Utilisateur"
 
-#: .\matrix\models.py:67
+#: .\matrix\models.py:69
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: .\matrix\models.py:83
+#: .\matrix\models.py:85
 msgid "Semestre"
 msgstr "Semestre"
 
-#: .\matrix\models.py:84
+#: .\matrix\models.py:86
 msgid "Semestres"
 msgstr "Semestres"
 
-#: .\matrix\models.py:96
+#: .\matrix\models.py:98
 msgid "UE"
 msgstr "UE"
 
-#: .\matrix\models.py:97 .\templates\matrix\students\matrix_ues.html:22
+#: .\matrix\models.py:99 .\templates\matrix\students\matrix_ues.html:22
 msgid "UEs"
 msgstr "UEs"
 
-#: .\matrix\models.py:106
+#: .\matrix\models.py:108
 #, python-format
 msgid "ECUE %(name)s - %(ue)s"
 msgstr "ECUE %(name)s - %(ue)s"
 
-#: .\matrix\models.py:109
+#: .\matrix\models.py:111
 #: .\templates\matrix\students\overall_self_evaluation.html:27
 msgid "ECUE"
 msgstr "ECUE"
 
-#: .\matrix\models.py:110
+#: .\matrix\models.py:112
 msgid "ECUEs"
 msgstr "ECUEs"
 
-#: .\matrix\models.py:127
+#: .\matrix\models.py:129
 msgid "Course"
 msgstr "Cours"
 
-#: .\matrix\models.py:128
+#: .\matrix\models.py:130
 msgid "Courses"
 msgstr "Cours"
 
-#: .\matrix\models.py:142
+#: .\matrix\models.py:144
 msgid "Evaluation values"
 msgstr "Valeurs de l'évaluation"
 
-#: .\matrix\models.py:162
+#: .\matrix\models.py:164
 msgid "Learning achievement"
 msgstr "Acquis d'apprentissage"
 
-#: .\matrix\models.py:163
+#: .\matrix\models.py:165
 msgid "Learning achievements"
 msgstr "Acquis d'apprentissage"
 
-#: .\matrix\models.py:175
+#: .\matrix\models.py:177
 #, python-format
 msgid "%(achiev)s, %(student)s : %(eval)s (teacher: %(teacher)s)"
 msgstr "%(achiev)s, %(student)s : %(eval)s (enseignant : %(teacher)s)"
 
-#: .\matrix\models.py:182
+#: .\matrix\models.py:184
 msgid "Student evaluation"
 msgstr "Évaluation de l'étudiant"
 
-#: .\matrix\models.py:183
+#: .\matrix\models.py:185
 msgid "Student evaluations"
 msgstr "Évaluations des étudiants"
 
-#: .\matrix\models.py:199
-#, python-format
-msgid "SC of %(course)s by %(teacher)s (%(std_count)d students)"
-msgstr "PC de %(course)s par %(teacher)s (%(std_count)d élèves)"
+#: .\matrix\models.py:202
+msgid "SC %(name)s of %(course)s by %(teacher)s"
+msgstr "PC %(name)s %(course)s par %(teacher)s"
 
-#: .\matrix\models.py:205
+#: .\matrix\models.py:209
 msgid "Small class"
 msgstr "Petite classe"
 
-#: .\matrix\models.py:206
+#: .\matrix\models.py:210
 msgid "Small classes"
 msgstr "Petites classes"
 
-#: .\matrix\views.py:801
+#: .\matrix\views.py:808
 msgid "formatted as 20XX"
 msgstr "renseigné au format 20XX"
 
-#: .\matrix\views.py:806
+#: .\matrix\views.py:813
 msgid "must be 0 or 1"
 msgstr "doit être 0 ou 1"
 
-#: .\matrix\views.py:828
+#: .\matrix\views.py:835
 msgid "DE shouldn't be in the groups selected"
 msgstr "La DE ne devrait pas être dans les groupes sélectionnés."
+
+#: .\matrix\views.py:947
+msgid "Groupe #%d"
+msgstr "Groupe #%d"
 
 #: .\templates\de\homepage.html:4 .\templates\de\start_new_year.html:4
 msgid "DE homepage"
@@ -183,6 +198,10 @@ msgid "List teachers"
 msgstr "Liste des enseignants"
 
 #: .\templates\de\homepage.html:12
+msgid "Create small classes"
+msgstr "Créer des petites classes"
+
+#: .\templates\de\homepage.html:14
 msgid "Insert new users"
 msgstr "Insérer de nouveaux utilisateurs (csv)"
 
@@ -201,8 +220,31 @@ msgstr ""
 "l'ordre):"
 
 #: .\templates\de\insert_new_users.html:21
+#: .\templates\de\insert_small_classes.html:22
 msgid "Upload"
 msgstr "Upload"
+
+#: .\templates\de\insert_small_classes.html:4
+#: .\templates\de\insert_small_classes.html:7
+msgid "Insert small classes"
+msgstr "Insérer des petites classes"
+
+#: .\templates\de\insert_small_classes.html:9
+msgid ""
+"To insert small classes, you need to upload a <strong>csv file</strong> "
+"(delimited by <em>;</em>) with the following columns:"
+msgstr ""
+"Pour insérer de nouveaux étudiants, vous devez uploader un <strong>fichier "
+"csv</strong> (délimité par <em>;</em>) avec les colonnes suivants (dans "
+"l'ordre):"
+
+#: .\templates\de\insert_small_classes.html:17
+msgid ""
+"Non student users will be ignored. You can also upload a second <strong>csv "
+"file</strong> (delimited by <em>;</em>) containing the name of the teachers "
+"with the same columns. Non teacher users will be ignored."
+msgstr ""
+"Les utilisateurs non-étudiants seront ignorés. Vous pouvez aussi uploader un second <strong>fichier csv</strong> (délimité par <em>;</em>) contenant le nom des enseignants avec les mêmes colonnes. Les utilisateurs non-enseignants seront ignorés."
 
 #: .\templates\de\list_users.html:4 .\templates\de\list_users.html:7
 msgid "Students list"

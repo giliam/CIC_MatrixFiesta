@@ -869,6 +869,43 @@ def insert_new_users(request):
     return render(request, "de/insert_new_users.html", {"columns": columns, "form": form})
 
 
+def get_users_from_mails(file_bin, level, email_index, group_index, has_header=False):
+    header_skipped = False
+    users = {}
+
+    # Reads file uploaded
+    # cf. https://stackoverflow.com/a/16243182/8980220
+    f = TextIOWrapper(file_bin, encoding="utf-8")
+    spamreader = csv.reader(f, delimiter=";")
+
+    # Sorts users to have access to their group
+    for student in spamreader:
+        if not header_skipped and has_header:
+            header_skipped = True
+            continue
+
+        email_value = student[email_index]
+        group_value = student[group_index]
+        
+        users[email_value] = group_value
+
+    profile_users = models.ProfileUser.objects.filter(
+        user__email__in=users.keys(),
+        user__groups__name__contains=level.value
+    ).prefetch_related('user')
+
+    groups = {}
+    for student in profile_users.all():
+        group_value = users[student.user.email]
+
+        if not group_value in groups.keys():
+            groups[group_value] = []
+        
+        groups[group_value].append(student)
+
+    return groups
+
+
 @login_required
 @user_passes_test(de_check)
 def create_small_classes(request):
@@ -888,55 +925,41 @@ def create_small_classes(request):
             email_index = columns['Email']["index"]
             group_index = columns["Groupe"]["index"]
 
-            header_skipped = False
+            # Creates the groups of profiles_students
+            groups_students = get_users_from_mails(
+                request.FILES['file_students'].file, auths.GroupsNames.STUDENTS_LEVEL,
+                email_index, group_index, form.cleaned_data["has_header"]
+            )
 
-            # Reads file uploaded
-            # cf. https://stackoverflow.com/a/16243182/8980220
-            f = TextIOWrapper(request.FILES['file'].file, encoding="utf-8")
-            spamreader = csv.reader(f, delimiter=";")
-
-            # Sorts users to have access to their group
-            users = {}
-            for student in spamreader:
-                if not header_skipped and form.cleaned_data["has_header"]:
-                    header_skipped = True
-                    continue
-
-                email_value = student[email_index]
-                group_value = student[group_index]
-                
-                users[email_value] = group_value
-
-            profile_users = models.ProfileUser.objects.filter(user__email__in=users.keys()).prefetch_related('user')
-
-            # Creates the groups of profile_users
-            groups = {}
-            for student in profile_users.all():
-                group_value = users[student.user.email]
-
-                if not group_value in groups.keys():
-                    groups[group_value] = []
-                
-                groups[group_value].append(student)
+            # And creates the teachers' group.
+            if not request.FILES.get('file_teachers', None) is None:
+                groups_teachers = get_users_from_mails(
+                    request.FILES['file_teachers'].file, auths.GroupsNames.TEACHERS_LEVEL,
+                    email_index, group_index, form.cleaned_data["has_header"]
+                )
 
             small_class = form.save(commit=False)
 
             total_classified_students = 0
 
-            for group_id, group_mails in groups.items():
+            for group_id, group_mails in groups_students.items():
                 small_class.pk = None
                 small_class.name = _("Groupe #%d" % int(group_id))
+
+                if group_id in groups_teachers.keys():
+                    small_class.teacher = groups_teachers[group_id][0]
+
                 small_class.save()
-                small_class.students.set(groups[group_id])
+                small_class.students.set(groups_students[group_id])
                 small_class.save()
 
-                print("Saved a new small class", small_class, "with", len(groups[group_id]), "students")
+                print("Saved a new small class", small_class, "with", len(groups_students[group_id]), "students")
 
-                total_classified_students += len(groups[group_id])
+                total_classified_students += len(groups_students[group_id])
 
             print("Saved", total_classified_students, "students")
             
-            # return redirect(reverse('de.list_students'))
+            return redirect(reverse('de.homepage_de'))
     else:
         form = forms.UploadSmallClassesForm() # A empty, unbound form
 

@@ -79,13 +79,16 @@ class UploadNewStudentsForm(forms.Form):
 
 
 class UploadSmallClassesForm(forms.ModelForm):
-    has_header = forms.BooleanField(label=_("File has a header ?"), required=False)
-    file = forms.FileField(label=_('Select a file'))
+    has_header = forms.BooleanField(label=_("File(s) has(ve) a header ?"), required=False)
+    file_students = forms.FileField(label=_('Select a file for the students'))
+    file_teachers = forms.FileField(
+        label=_('Select a file for the teachers'), required=False
+    )
     
     class Meta:
         model = models.SmallClass
         fields = ('course', 'promotion_year',)
-        # labels = {
-        #     "course": _("Evaluation value"),
-        #     "promotion_year": _("Evaluation value"),
-        # }
+        labels = {
+            "course": _("Course"),
+            "promotion_year": _("Promotion year"),
+        }
