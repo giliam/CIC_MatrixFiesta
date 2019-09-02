@@ -830,7 +830,9 @@ def insert_new_users(request):
                         header_skipped = True
                         continue
 
-                    user = User.objects.create_user(student[email_index], student[email_index], '')
+                    username = student[email_index].split("@")[0]
+
+                    user = User.objects.create_user(username, student[email_index], '')
                     user.first_name = student[firstname_index]
                     user.last_name = student[lastname_index]
                     user.groups.set(form.cleaned_data["group"])
@@ -840,7 +842,7 @@ def insert_new_users(request):
                     # gets the object from entrance year
                     entrance_year = student[year_entrance_index]
                     if not entrance_year in entrance_years.keys():
-                        entrance_years[entrance_year] = models.PromotionYear.objects.filter(value=entrance_year)
+                        entrance_years[entrance_year] = models.PromotionYear.objects.get(value=entrance_year)
                     profile_user.year_entrance = entrance_years[entrance_year]
                     if len(student) < (cesure_index+1):
                         profile_user.cesure = False
