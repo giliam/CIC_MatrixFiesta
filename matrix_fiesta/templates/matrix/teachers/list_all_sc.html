@@ -9,7 +9,7 @@
     {% for small_class in classes %}
     <div class="ui accordion">
         <div class="title">
-            <h2><i class="dropdown icon"></i> {{ small_class.course }}</h2>
+            <h2><i class="dropdown icon"></i> {{ small_class.name }} - {{ small_class.course }}</h2>
             <h3 style="margin-top:-0.8rem">{% blocktrans with teacher=small_class.teacher %}By {{ teacher }}{% endblocktrans %}</h3>
         </div>
         <div class="content ">

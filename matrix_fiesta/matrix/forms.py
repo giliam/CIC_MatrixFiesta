@@ -5,9 +5,11 @@ from django.utils.translation import gettext as _
 from matrix import models
 from common.auths import GroupsNames
 
+
 class ConnexionForm(forms.Form):
     username = forms.CharField(label=_("User name"), max_length=30)
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+
 
 class StudentEvaluationAllForm(forms.Form):
     # Based on https://www.caktusgroup.com/blog/2018/05/07/creating-dynamic-forms-django/
@@ -43,6 +45,7 @@ class StudentEvaluationAllForm(forms.Form):
         else:
             raise KeyError
 
+
 class StudentEvaluationForm(forms.ModelForm):
     class Meta:
         model = models.StudentEvaluation
@@ -50,6 +53,7 @@ class StudentEvaluationForm(forms.ModelForm):
         labels = {
             "evaluation_value": _("Evaluation value"),
         }
+
 
 class TeacherEvaluationForm(forms.ModelForm):
     class Meta:
@@ -67,7 +71,21 @@ def get_groups():
     except:
         return []
 
+
 class UploadNewStudentsForm(forms.Form):
     has_header = forms.BooleanField(label=_("File has a header ?"), required=False)
     file = forms.FileField(label=_('Select a file'))
     group = forms.MultipleChoiceField(choices=get_groups)
+
+
+class UploadSmallClassesForm(forms.ModelForm):
+    has_header = forms.BooleanField(label=_("File has a header ?"), required=False)
+    file = forms.FileField(label=_('Select a file'))
+    
+    class Meta:
+        model = models.SmallClass
+        fields = ('course', 'promotion_year',)
+        # labels = {
+        #     "course": _("Evaluation value"),
+        #     "promotion_year": _("Evaluation value"),
+        # }

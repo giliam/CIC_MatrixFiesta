@@ -187,6 +187,7 @@ class StudentEvaluation(DatedModel):
 
 
 class SmallClass(DatedModel):
+    name = models.CharField(max_length=150, null=True, default="")
     teacher = models.ForeignKey(
         ProfileUser, on_delete=models.SET_NULL, 
         related_name="small_classes_teacher", null=True,
@@ -198,9 +199,10 @@ class SmallClass(DatedModel):
     promotion_year = models.ForeignKey(PromotionYear, on_delete=models.SET_NULL, null=True, related_name="small_classes")
 
     def __str__(self):
-        return _("SC of %(course)s by %(teacher)s (%(std_count)d students)") % {
-            "course": self.course, "teacher": self.teacher,
-            "std_count": self.students.count()
+        return _("SC %(name)s of %(course)s by %(teacher)s") % {
+            "name": self.name,
+            "course": self.course,
+            "teacher": self.teacher
         }
 
     class Meta:

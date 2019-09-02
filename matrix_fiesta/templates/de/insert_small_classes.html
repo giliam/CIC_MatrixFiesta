@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Insert small classes" %}{% endblock %}
+
+{% block content %}
+<h1>{% trans "Insert small classes" %}</h1>
+
+<p>{% trans "To insert small classes, you need to upload a <strong>csv file</strong> (delimited by <em>;</em>) with the following columns:" %}
+</p>
+<ul>
+    {% for column, info in columns.items %}
+    <li><tt>{{column}}</tt>{% if info.help %} ({{info.help}}){% endif %}</li>
+    {% endfor %}
+
+</ul>
+
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+    <p><input type="submit" value="{% trans "Upload" %}"/></p>
+</form>
+{% endblock %}

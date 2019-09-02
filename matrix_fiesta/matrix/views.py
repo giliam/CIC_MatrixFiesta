@@ -493,14 +493,16 @@ def all_small_classes(request):
     teacher = models.ProfileUser.objects.get(user=request.user)
 
     classes = models.SmallClass.objects.filter(promotion_year__current=True).prefetch_related(
-        'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
+        'course', 'course__achievements', 'course__ecue', 'course__ecue__ue',
+        'course__ecue__ue__semestre', 'students', 'students__user'
     )
 
     # Gets all evaluations for the classes of the teacher.
     evaluations = models.StudentEvaluation.objects.filter(
         teacher_evaluation=True, last_evaluation=True
     ).prefetch_related(
-        'evaluation_value', 'achievement__course__small_classes', 'student', 'achievement', 'achievement__course', 'achievement__course__ecue', 'achievement__course__ecue__ue'
+        'evaluation_value', 'achievement__course__small_classes', 'student', 'student__user',
+        'achievement', 'achievement__course', 'achievement__course__ecue', 'achievement__course__ecue__ue'
     ).all()
     
     evaluations_sorted = {}
@@ -567,12 +569,15 @@ def all_students(request, schoolyear=1):
         teacher_evaluation=True, last_evaluation=True,
         achievement__course__ecue__ue__in=ues
     ).prefetch_related(
-        'evaluation_value', 'achievement__course__small_classes', 'student', 
+        'evaluation_value', 'achievement__course__small_classes',
+        'student', 'student__user', 'student__year_entrance',
         'achievement', 'achievement__course', 'achievement__course__ecue', 
         'achievement__course__ecue__ue'
     ).all()
 
-    all_students = models.ProfileUser.objects.filter(user__groups__name__contains=auths.GroupsNames.STUDENTS_LEVEL.value)
+    all_students = models.ProfileUser.objects.filter(
+        user__groups__name__contains=auths.GroupsNames.STUDENTS_LEVEL.value
+    ).prefetch_related('year_entrance', 'user')
     students = {}
     for student in all_students:
         if student.get_schoolyear() == schoolyear:
@@ -775,7 +780,9 @@ def list_users(request, group_filter=auths.GroupsNames.STUDENTS_LEVEL):
     if type(group_filter) != auths.GroupsNames:
         return render(request, "de/homepage.html", {})
 
-    students = models.ProfileUser.objects.filter(user__groups__name__contains=group_filter.value)
+    students = models.ProfileUser.objects.filter(
+        user__groups__name__contains=group_filter.value
+    ).prefetch_related('user', 'year_entrance', 'user__groups')
     return render(request, "de/list_users.html", {"students": students})
 
 
@@ -860,6 +867,80 @@ def insert_new_users(request):
         form = forms.UploadNewStudentsForm() # A empty, unbound form
 
     return render(request, "de/insert_new_users.html", {"columns": columns, "form": form})
+
+
+@login_required
+@user_passes_test(de_check)
+def create_small_classes(request):
+    columns = {
+        "Email": {
+            "index": 0,
+        },
+        "Groupe": {
+            "index": 1
+        }
+    }
+
+    # Handle file upload
+    if request.method == 'POST':
+        form = forms.UploadSmallClassesForm(request.POST, request.FILES)
+        if form.is_valid():
+            email_index = columns['Email']["index"]
+            group_index = columns["Groupe"]["index"]
+
+            header_skipped = False
+
+            # Reads file uploaded
+            # cf. https://stackoverflow.com/a/16243182/8980220
+            f = TextIOWrapper(request.FILES['file'].file, encoding="utf-8")
+            spamreader = csv.reader(f, delimiter=";")
+
+            # Sorts users to have access to their group
+            users = {}
+            for student in spamreader:
+                if not header_skipped and form.cleaned_data["has_header"]:
+                    header_skipped = True
+                    continue
+
+                email_value = student[email_index]
+                group_value = student[group_index]
+                
+                users[email_value] = group_value
+
+            profile_users = models.ProfileUser.objects.filter(user__email__in=users.keys()).prefetch_related('user')
+
+            # Creates the groups of profile_users
+            groups = {}
+            for student in profile_users.all():
+                group_value = users[student.user.email]
+
+                if not group_value in groups.keys():
+                    groups[group_value] = []
+                
+                groups[group_value].append(student)
+
+            small_class = form.save(commit=False)
+
+            total_classified_students = 0
+
+            for group_id, group_mails in groups.items():
+                small_class.pk = None
+                small_class.name = _("Groupe #%d" % int(group_id))
+                small_class.save()
+                small_class.students.set(groups[group_id])
+                small_class.save()
+
+                print("Saved a new small class", small_class, "with", len(groups[group_id]), "students")
+
+                total_classified_students += len(groups[group_id])
+
+            print("Saved", total_classified_students, "students")
+            
+            # return redirect(reverse('de.list_students'))
+    else:
+        form = forms.UploadSmallClassesForm() # A empty, unbound form
+
+    return render(request, "de/insert_small_classes.html", {"columns": columns, "form": form})
 
 
 def error_404(request, exception):

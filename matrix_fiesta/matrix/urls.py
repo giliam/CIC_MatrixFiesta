@@ -36,6 +36,7 @@ urlpatterns = [
     path('de/list/teachers', views.list_users, {'group_filter': GroupsNames.TEACHERS_LEVEL}, name="de.list_teachers"),
     path('de/list/de', views.list_users, {'group_filter': GroupsNames.DIRECTOR_LEVEL}, name="de.list_de"),
     path('de/insert/new/users', views.insert_new_users, name="de.insert_new_users"),
+    path('de/create/small/classes', views.create_small_classes, name="de.create_small_classes"),
     
     # User
     path('log_in/', 
