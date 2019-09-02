@@ -1,3 +1,4 @@
+from django.contrib.auth import views as auth_views
 from django.urls import path, re_path
 
 from matrix import views
@@ -44,6 +45,13 @@ urlpatterns = [
     path('log_out/',
             views.log_out,
             name='users.log_out'),
+    path(
+        'change/password/',
+        auth_views.PasswordChangeView.as_view(
+            template_name='users/change_password.html',
+            success_url="homepage"
+        ),
+    ),
 ]
 
 
