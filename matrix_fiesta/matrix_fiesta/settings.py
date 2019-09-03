@@ -82,6 +82,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'matrix_fiesta.context_processors.activeNavbar',
+                'matrix_fiesta.context_processors.discourseUrl',
                 'django.template.context_processors.i18n',
             ],
         },
@@ -213,3 +214,9 @@ LOGGING = {
         },
     },
 }
+
+
+
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
