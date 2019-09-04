@@ -490,6 +490,9 @@ def homepage_teachers(request, archives=None):
 @login_required
 @user_passes_test(teacher_check)
 def all_small_classes(request):
+    if not request.user.is_superuser:
+        raise HttpResponseForbidden(_("Only super users can perform this action"))
+    
     teacher = models.ProfileUser.objects.get(user=request.user)
 
     classes = models.SmallClass.objects.filter(promotion_year__current=True).prefetch_related(
@@ -555,6 +558,9 @@ def all_small_classes(request):
 @login_required
 @user_passes_test(teacher_check)
 def all_students(request, schoolyear=1):
+    if not request.user.is_superuser:
+        raise HttpResponseForbidden(_("Only super users can perform this action"))
+
     # Converts the schoolyear
     schoolyear = int(schoolyear)
 
@@ -790,7 +796,7 @@ def list_users(request, group_filter=auths.GroupsNames.STUDENTS_LEVEL):
 @user_passes_test(de_check)
 def insert_new_users(request):
     if not request.user.is_superuser:
-        raise HttpResponseForbidden("Only super users can perform this action")
+        raise HttpResponseForbidden(_("Only super users can perform this action"))
 
     columns = {
         "Firstname": {

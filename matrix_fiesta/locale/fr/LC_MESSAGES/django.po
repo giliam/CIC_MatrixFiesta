@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-04 09:15+0200\n"
+"POT-Creation-Date: 2019-09-04 11:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,7 +102,7 @@ msgstr "Semestres"
 msgid "UE"
 msgstr "UE"
 
-#: .\matrix\models.py:99 .\templates\matrix\students\matrix_ues.html:22
+#: .\matrix\models.py:99 .\templates\matrix\students\matrix_ues.html:18
 msgid "UEs"
 msgstr "UEs"
 
@@ -162,19 +162,23 @@ msgstr "Petite classe"
 msgid "Small classes"
 msgstr "Petites classes"
 
-#: .\matrix\views.py:808
+#: .\matrix\views.py:494 .\matrix\views.py:562 .\matrix\views.py:799
+msgid "Only super users can perform this action"
+msgstr "Seuls les administrateurs peuvent faire cette action"
+
+#: .\matrix\views.py:814
 msgid "formatted as 20XX"
 msgstr "renseigné au format 20XX"
 
-#: .\matrix\views.py:813
+#: .\matrix\views.py:819
 msgid "must be 0 or 1"
 msgstr "doit être 0 ou 1"
 
-#: .\matrix\views.py:835
+#: .\matrix\views.py:841
 msgid "DE shouldn't be in the groups selected"
 msgstr "La DE ne devrait pas être dans les groupes sélectionnés."
 
-#: .\matrix\views.py:947
+#: .\matrix\views.py:953
 #, python-format
 msgid "Groupe #%d"
 msgstr "Groupe #%d"
@@ -364,35 +368,35 @@ msgstr "Votre matrice"
 msgid "Evaluate your students"
 msgstr "Évaluer vos élèves"
 
-#: .\templates\index.html:50
+#: .\templates\index.html:52
 msgid "Show all SC"
 msgstr "Toutes les petites classes"
 
-#: .\templates\index.html:53
+#: .\templates\index.html:55
 msgid "Show all students"
 msgstr "Tous les élèves"
 
-#: .\templates\index.html:58
+#: .\templates\index.html:60
 msgid "DE"
 msgstr "DE"
 
-#: .\templates\index.html:71
+#: .\templates\index.html:73
 msgid "Admin"
 msgstr "Admin"
 
-#: .\templates\index.html:76
+#: .\templates\index.html:78
 msgid "Log out"
 msgstr "Déconnexion"
 
-#: .\templates\index.html:80 .\templates\users\login.html:5
+#: .\templates\index.html:82 .\templates\users\login.html:5
 msgid "Log in"
 msgstr "Connexion"
 
-#: .\templates\index.html:90
+#: .\templates\index.html:92
 msgid "Nothing to see here!"
 msgstr "Rien à voir ici !"
 
-#: .\templates\index.html:103
+#: .\templates\index.html:105
 msgid "Report an issue"
 msgstr "Signaler un problème"
 
@@ -407,7 +411,7 @@ msgstr "Retour à la liste des acquis du cours"
 
 #: .\templates\matrix\students\course_self_evaluation.html:11
 #: .\templates\matrix\students\matrix_course.html:12
-#: .\templates\matrix\students\matrix_ues.html:37
+#: .\templates\matrix\students\matrix_ues.html:33
 #: .\templates\matrix\students\overall_self_evaluation.html:9
 #: .\templates\matrix\teachers\homepage.html:12
 msgid "Return to main list"
@@ -420,7 +424,7 @@ msgid "Not evaluated yet"
 msgstr "Non évalué"
 
 #: .\templates\matrix\students\course_self_evaluation.html:44
-#: .\templates\matrix\students\matrix_ues.html:102
+#: .\templates\matrix\students\matrix_ues.html:98
 #: .\templates\matrix\students\overall_self_evaluation.html:48
 msgid "No achievement here yet."
 msgstr "Pas encore d'acquis d'apprentissage ici."
@@ -441,7 +445,7 @@ msgid "Course matrix"
 msgstr "Matrice du cours"
 
 #: .\templates\matrix\students\matrix_course.html:11
-#: .\templates\matrix\students\matrix_ues.html:39
+#: .\templates\matrix\students\matrix_ues.html:35
 msgid "Self evaluation"
 msgstr "Auto-évaluation"
 
@@ -479,36 +483,36 @@ msgstr "Pas d'acquis à évaluer."
 msgid "Matrix"
 msgstr "Matrice"
 
-#: .\templates\matrix\students\matrix_ues.html:14
+#: .\templates\matrix\students\matrix_ues.html:10
 msgid "Learning achievements matrix"
 msgstr "Matrice des acquis d'apprentissage"
 
-#: .\templates\matrix\students\matrix_ues.html:16
+#: .\templates\matrix\students\matrix_ues.html:12
 #: .\templates\matrix\teachers\homepage.html:11
 msgid "Archives for year:"
 msgstr "Archives de l'année "
 
-#: .\templates\matrix\students\matrix_ues.html:41
-#: .\templates\matrix\students\matrix_ues.html:159
+#: .\templates\matrix\students\matrix_ues.html:37
+#: .\templates\matrix\students\matrix_ues.html:156
 msgid "Display all"
 msgstr "Tout montrer"
 
-#: .\templates\matrix\students\matrix_ues.html:107
+#: .\templates\matrix\students\matrix_ues.html:103
 #: .\templates\matrix\students\overall_self_evaluation.html:53
 msgid "No course here yet."
 msgstr "Pas encore de cours ici."
 
-#: .\templates\matrix\students\matrix_ues.html:112
+#: .\templates\matrix\students\matrix_ues.html:108
 #: .\templates\matrix\students\overall_self_evaluation.html:58
 msgid "No ECUE here yet."
 msgstr "Pas encore d'ECUE ici."
 
-#: .\templates\matrix\students\matrix_ues.html:118
+#: .\templates\matrix\students\matrix_ues.html:114
 #: .\templates\matrix\students\overall_self_evaluation.html:64
 msgid "No UE here yet."
 msgstr "Pas encore d'UE ici."
 
-#: .\templates\matrix\students\matrix_ues.html:162
+#: .\templates\matrix\students\matrix_ues.html:159
 msgid "Hide all"
 msgstr "Tout cacher"
 
