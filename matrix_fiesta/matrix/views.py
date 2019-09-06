@@ -497,7 +497,7 @@ def all_small_classes(request):
 
     classes = models.SmallClass.objects.filter(promotion_year__current=True).prefetch_related(
         'course', 'course__achievements', 'course__ecue', 'course__ecue__ue',
-        'course__ecue__ue__semestre', 'students', 'students__user'
+        'course__ecue__ue__semestre', 'students', 'students__user', 'teacher', 'teacher__user'
     )
 
     # Gets all evaluations for the classes of the teacher.
