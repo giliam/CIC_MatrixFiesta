@@ -146,7 +146,7 @@ class EvaluationValue(DatedModel):
 
 
 class LearningAchievement(DatedModel):
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=250)
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, related_name="achievements", null=True)
     activated = models.BooleanField(default=True)
     slug = models.SlugField(unique=True)
