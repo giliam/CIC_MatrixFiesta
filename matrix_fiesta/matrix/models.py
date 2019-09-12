@@ -122,7 +122,7 @@ class Course(DatedModel):
         return "%(name)s - %(ecue)s" % {"name": self.name, "ecue": self.ecue}
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.name)[:50]
         super(Course, self).save(*args, **kwargs)
 
     class Meta:
@@ -146,7 +146,7 @@ class EvaluationValue(DatedModel):
 
 
 class LearningAchievement(DatedModel):
-    name = models.CharField(max_length=250)
+    name = models.CharField(max_length=150)
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, related_name="achievements", null=True)
     activated = models.BooleanField(default=True)
     slug = models.SlugField(unique=True)
@@ -155,7 +155,7 @@ class LearningAchievement(DatedModel):
         return "%s : %s" % (self.course, self.name)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.name)[:50]
         super(LearningAchievement, self).save(*args, **kwargs)
 
     def get_field_name(self):
