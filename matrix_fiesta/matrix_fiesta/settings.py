@@ -194,7 +194,7 @@ TEMPLATE_LOADERS = (
 )
 
 
-LOGGING = {
+LOGGING = parameters.LOGGING if hasattr(parameters, "LOGGING") else {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
@@ -221,9 +221,11 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:11211',
+        }
     }
-}
+
+DJANGO_LOG_LEVEL = "INFO"
