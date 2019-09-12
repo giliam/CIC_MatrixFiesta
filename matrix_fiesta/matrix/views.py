@@ -150,7 +150,7 @@ def matrix_ues(request, archives=None):
 def matrix_course(request, slug):
     profile_user = models.ProfileUser.objects.get(user=request.user)
     course = models.Course.objects.get(slug=slug, ecue__ue__semestre__schoolyear__order=profile_user.get_schoolyear())
-    achievements = models.LearningAchievement.objects.filter(course=course)
+    achievements = models.LearningAchievement.objects.filter(course=course, activated=True)
     evaluations = models.StudentEvaluation.objects.filter(
         student=profile_user, 
         teacher_evaluation=False
@@ -959,12 +959,8 @@ def create_small_classes(request):
                 small_class.students.set(groups_students[group_id])
                 small_class.save()
 
-                print("Saved a new small class", small_class, "with", len(groups_students[group_id]), "students")
-
                 total_classified_students += len(groups_students[group_id])
 
-            print("Saved", total_classified_students, "students")
-            
             return redirect(reverse('de.homepage_de'))
     else:
         form = forms.UploadSmallClassesForm() # A empty, unbound form
