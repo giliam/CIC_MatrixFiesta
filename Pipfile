@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pylint = "*"
 
 [packages]
 django-debug-toolbar = "*"
@@ -16,6 +17,7 @@ sqlparse = "*"
 Django = "*"
 Markdown = "*"
 django-cas-ng = "*"
+python-memcached = "*"
 
 [requires]
 python_version = "3.6"
