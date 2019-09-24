@@ -447,21 +447,23 @@ def homepage_teachers(request, archives=None):
             promotion_year__value=archives,
             teacher=teacher
         ).prefetch_related(
-            'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
+            'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre',
+            'students', 'students__user'
         ).all()
     else:
         classes = models.SmallClass.objects.filter(
             promotion_year__current=True,
             teacher=teacher
         ).prefetch_related(
-            'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre', 'students'
+            'course', 'course__achievements', 'course__ecue', 'course__ecue__ue', 'course__ecue__ue__semestre',
+            'students', 'students__user'
         ).all()
 
     # Gets all evaluations for the classes of the teacher.
     evaluations = models.StudentEvaluation.objects.filter(
         achievement__course__small_classes__in=classes, teacher_evaluation=True, last_evaluation=True
     ).prefetch_related(
-        'evaluation_value', 'achievement__course__small_classes', 'student',
+        'evaluation_value', 'achievement__course__small_classes', 'student', 'student__user',
         'achievement', 'achievement__course'
     ).all()
 
@@ -469,7 +471,7 @@ def homepage_teachers(request, archives=None):
     evaluations_students = models.StudentEvaluation.objects.filter(
         achievement__course__small_classes__in=classes, teacher_evaluation=False, last_evaluation=True
     ).prefetch_related(
-        'evaluation_value', 'achievement__course__small_classes', 'student',
+        'evaluation_value', 'achievement__course__small_classes', 'student', 'student__user',
         'achievement', 'achievement__course'
     ).all()
     

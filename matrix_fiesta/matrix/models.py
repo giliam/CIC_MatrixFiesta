@@ -67,6 +67,7 @@ class ProfileUser(DatedModel):
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
+        ordering = ['user__last_name', 'user__first_name']
 
 
 class Semestre(DatedModel):
