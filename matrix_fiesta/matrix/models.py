@@ -55,7 +55,7 @@ class ProfileUser(DatedModel):
     def get_schoolyear(self, current_year=None):
         if current_year is None:
             current_year = datetime.datetime.now().year
-        
+
         current_schoolyear = min(4, (current_year - self.year_entrance.value)+1)
         if self.cesure and current_schoolyear > 2:
             current_schoolyear -= 1
@@ -74,7 +74,7 @@ class Semestre(DatedModel):
     name = models.CharField(max_length=150)
     order = models.PositiveIntegerField(default=0)
     schoolyear = models.ForeignKey(
-        SchoolYear, 
+        SchoolYear,
         on_delete=models.SET_NULL, null=True,
         related_name="semestres"
     )
@@ -161,7 +161,7 @@ class LearningAchievement(DatedModel):
 
     def get_field_name(self):
         return "achievement_" + str(self.id)
-    
+
     class Meta:
         verbose_name = _("Learning achievement")
         verbose_name_plural = _("Learning achievements")
@@ -177,8 +177,8 @@ class StudentEvaluation(DatedModel):
 
     def __str__(self):
         return _("%(achiev)s, %(student)s : %(eval)s (teacher: %(teacher)s)") % {
-            "achiev": self.achievement, "student": self.student, 
-            "eval": self.evaluation_value, 
+            "achiev": self.achievement, "student": self.student,
+            "eval": self.evaluation_value,
             "teacher": self.teacher_evaluation
         }
 
@@ -191,7 +191,7 @@ class StudentEvaluation(DatedModel):
 class SmallClass(DatedModel):
     name = models.CharField(max_length=150, null=True, default="")
     teacher = models.ForeignKey(
-        ProfileUser, on_delete=models.SET_NULL, 
+        ProfileUser, on_delete=models.SET_NULL,
         related_name="small_classes_teacher", null=True,
         limit_choices_to={'user__groups__name': GroupsNames.TEACHERS_LEVEL.value}
     )

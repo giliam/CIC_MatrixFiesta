@@ -21,7 +21,7 @@ class StudentEvaluationAllForm(forms.Form):
         self.choices = [(0, 0)] + [(value.id, value.value) for value in self.values]
         self.worst_value = self.choices[0]
 
-    def add_achievement_evaluation(self, achievement, default_value=None):      
+    def add_achievement_evaluation(self, achievement, default_value=None):
         # Adds the field to the list of existing achievements related fields
         self.achievements_fields.append("achievement_"+str(achievement.id))
 
@@ -66,9 +66,9 @@ class TeacherEvaluationForm(forms.ModelForm):
 
 
 def get_groups():
-    try: 
+    try:
         return [(g.id, g) for g in auth_models.Group.objects.all() if g.name != GroupsNames.DIRECTOR_LEVEL.value]
-    except:
+    except BaseException:
         return []
 
 
@@ -84,7 +84,7 @@ class UploadSmallClassesForm(forms.ModelForm):
     file_teachers = forms.FileField(
         label=_('Select a file for the teachers'), required=False
     )
-    
+
     class Meta:
         model = models.SmallClass
         fields = ('course', 'promotion_year',)

@@ -1,13 +1,9 @@
 from io import TextIOWrapper
 import csv
-import os
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.core.files.storage import default_storage
-from django.db.models import Sum, Avg, Value, Count
-from django.db.models.functions import Coalesce
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, reverse
 from django.utils.translation import gettext as _
@@ -17,9 +13,8 @@ from matrix import forms
 from matrix import models
 from common import auths
 
-"""
-Authorizations functions
-"""
+
+# Authorizations functions
 def teacher_check(user):
     return auths.check_is_teacher(user)
 
@@ -31,9 +26,8 @@ def student_check(user):
 def de_check(user):
     return auths.check_is_de(user)
 
-"""
-Useful functions
-"""
+
+# Useful functions
 def _get_achievement_evaluations(evaluations):
     achievements_evaluations = {}
     existing_achiev_eval = {}
@@ -95,7 +89,7 @@ def log_in(request):
         if request.user.is_authenticated:
             return redirect('homepage')
         form = forms.ConnexionForm()
-    return render(request, 'users/login.html',locals())
+    return render(request, 'users/login.html', {"form": form, "user": user, "error": error})
 
 
 @login_required
@@ -132,7 +126,7 @@ def matrix_ues(request, archives=None):
     values = models.EvaluationValue.objects.all()
 
     evaluations = models.StudentEvaluation.objects.filter(
-        student=profile_user, 
+        student=profile_user,
         teacher_evaluation=False
     ).prefetch_related('achievement', 'evaluation_value')
 
@@ -152,7 +146,7 @@ def matrix_course(request, slug):
     course = models.Course.objects.get(slug=slug, ecue__ue__semestre__schoolyear__order=profile_user.get_schoolyear())
     achievements = models.LearningAchievement.objects.filter(course=course, activated=True)
     evaluations = models.StudentEvaluation.objects.filter(
-        student=profile_user, 
+        student=profile_user,
         teacher_evaluation=False
     ).prefetch_related('achievement', 'evaluation_value')
 
@@ -170,7 +164,7 @@ def evaluate_course(request, slug):
     course = models.Course.objects.get(slug=slug, ecue__ue__semestre__schoolyear__order=student.get_schoolyear())
     achievements = models.LearningAchievement.objects.filter(course=course)
     evaluations = models.StudentEvaluation.objects.filter(
-        student=student, 
+        student=student,
         teacher_evaluation=False
     ).prefetch_related('achievement', 'evaluation_value')
     values = models.EvaluationValue.objects.all()
@@ -203,8 +197,8 @@ def evaluate_course(request, slug):
                     last_value = achievements_evaluations[achievement.id]["last"]["value"]
                     if last_value == new_value:
                         models.StudentEvaluation.objects.filter(
-                            achievement=achievement, 
-                            student=student, 
+                            achievement=achievement,
+                            student=student,
                             teacher_evaluation=False,
                         ).update(
                             last_evaluation=False
@@ -257,7 +251,7 @@ def evaluate_achievement(request, slug):
     )
 
     try:
-        evaluation_existante = models.StudentEvaluation.objects.get(
+        models.StudentEvaluation.objects.get(
             achievement=achievement,
             student=student,
             teacher_evaluation=False
@@ -302,7 +296,7 @@ def self_evaluate_all(request):
     values = models.EvaluationValue.objects.all()
     # Gets all evaluations on this small class
     evaluations = models.StudentEvaluation.objects.filter(
-         student=student, 
+         student=student,
          teacher_evaluation=False,
     ).prefetch_related('achievement', 'evaluation_value')
 
@@ -341,8 +335,8 @@ def self_evaluate_all(request):
                                 last_value = achievements_evaluations[achievement.id]["last"]["value"]
                                 if last_value == new_value:
                                     models.StudentEvaluation.objects.filter(
-                                        achievement=achievement, 
-                                        student=student, 
+                                        achievement=achievement,
+                                        student=student,
                                         teacher_evaluation=False,
                                     ).update(
                                         last_evaluation=False
@@ -403,7 +397,7 @@ def _compute_averages(evaluations, classes):
     for small_class in classes:
         averages[small_class.id] = {}
         nb_achievements[small_class.id] = len(small_class.course.achievements.all())
-        
+
         students = small_class.students.all()
 
         if nb_achievements[small_class.id] == 0:
@@ -474,16 +468,16 @@ def homepage_teachers(request, archives=None):
         'evaluation_value', 'achievement__course__small_classes', 'student', 'student__user',
         'achievement', 'achievement__course'
     ).all()
-    
+
     averages, nb_achievements = _compute_averages(evaluations, classes)
     averages_students, nb_achievements_students = _compute_averages(evaluations_students, classes)
 
     promotion_years = models.PromotionYear.objects.filter(current=False)
 
     return render(request, "matrix/teachers/homepage.html", {
-        "classes": classes, 
-        "averages": averages, "nb_achievements": nb_achievements, 
-        "averages_students": averages_students, "nb_achievements_students": nb_achievements_students, 
+        "classes": classes,
+        "averages": averages, "nb_achievements": nb_achievements,
+        "averages_students": averages_students, "nb_achievements_students": nb_achievements_students,
         "archives": archives,
         "promotion_years": promotion_years,
     })
@@ -494,7 +488,7 @@ def homepage_teachers(request, archives=None):
 def all_small_classes(request):
     if not request.user.is_superuser:
         raise HttpResponseForbidden(_("Only super users can perform this action"))
-    
+
     teacher = models.ProfileUser.objects.get(user=request.user)
 
     classes = models.SmallClass.objects.filter(promotion_year__current=True).prefetch_related(
@@ -509,7 +503,7 @@ def all_small_classes(request):
         'evaluation_value', 'achievement__course__small_classes', 'student', 'student__user',
         'achievement', 'achievement__course', 'achievement__course__ecue', 'achievement__course__ecue__ue'
     ).all()
-    
+
     evaluations_sorted = {}
     for evaluation in evaluations:
         if not evaluation.student.id in evaluations_sorted.keys():
@@ -522,7 +516,7 @@ def all_small_classes(request):
     for small_class in classes:
         averages[small_class.id] = {}
         nb_achievements[small_class.id] = len(small_class.course.achievements.all())
-        
+
         students = small_class.students.all()
 
         if nb_achievements[small_class.id] == 0:
@@ -566,8 +560,6 @@ def all_students(request, schoolyear=1):
     # Converts the schoolyear
     schoolyear = int(schoolyear)
 
-    teacher = models.ProfileUser.objects.get(user=request.user)
-
     ues = models.UE.objects.filter(semestre__schoolyear__order=schoolyear).prefetch_related(
         'ecues', 'semestre', "ecues__courses", "ecues__courses__achievements"
     )
@@ -579,7 +571,7 @@ def all_students(request, schoolyear=1):
     ).prefetch_related(
         'evaluation_value', 'achievement__course__small_classes',
         'student', 'student__user', 'student__year_entrance',
-        'achievement', 'achievement__course', 'achievement__course__ecue', 
+        'achievement', 'achievement__course', 'achievement__course__ecue',
         'achievement__course__ecue__ue'
     ).all()
 
@@ -603,11 +595,11 @@ def all_students(request, schoolyear=1):
 
         evaluations_sorted[student_id][ue_id]["count"] += 1.0
         evaluations_sorted[student_id][ue_id]["sum"] += evaluation.evaluation_value.integer_value
-    
+
     school_years = models.SchoolYear.objects.filter()
 
     return render(request, "matrix/teachers/list_all_students.html", {
-        "ues": ues, 
+        "ues": ues,
         "evaluations_sorted": evaluations_sorted,
         "students": students,
         "school_years": school_years,
@@ -624,7 +616,7 @@ def status_student(request, small_class_id, student_id):
 
     values = models.EvaluationValue.objects.all()
     evaluations = models.StudentEvaluation.objects.filter(
-         student=student, 
+         student=student,
          teacher_evaluation=True,
          achievement__course=small_class.course
     ).prefetch_related('achievement', 'evaluation_value')
@@ -643,10 +635,10 @@ def evaluate_achievement_student(request, small_class_id, student_id, slug):
     achievement = models.LearningAchievement.objects.get(slug=slug)
 
     student = models.ProfileUser.objects.get(id=student_id)
-    
+
     small_class = models.SmallClass.objects.get(id=small_class_id, teacher__user=request.user, students__id__contains=student.id)
     try:
-        evaluation_existante = models.StudentEvaluation.objects.get(achievement=achievement, student=student, teacher_evaluation=True)
+        models.StudentEvaluation.objects.get(achievement=achievement, student=student, teacher_evaluation=True)
         # return redirect('ues.matrix_course', achievement.course.slug)
     except models.StudentEvaluation.DoesNotExist:
         pass
@@ -678,7 +670,7 @@ def evaluate_achievement_student(request, small_class_id, student_id, slug):
 def evaluate_student_all(request, small_class_id, student_id):
     student = models.ProfileUser.objects.get(id=student_id)
     teacher = models.ProfileUser.objects.get(user=request.user)
-    
+
     # Checks we are in a small class existing and taught by the user
     small_class = models.SmallClass.objects.filter(
         id=small_class_id
@@ -687,7 +679,7 @@ def evaluate_student_all(request, small_class_id, student_id):
     values = models.EvaluationValue.objects.all()
     # Gets all evaluations on this small class
     evaluations = models.StudentEvaluation.objects.filter(
-         student=student, 
+         student=student,
          teacher_evaluation=True,
          achievement__course=small_class.course
     ).prefetch_related('achievement', 'evaluation_value')
@@ -721,8 +713,8 @@ def evaluate_student_all(request, small_class_id, student_id):
                     last_value = achievements_evaluations[achievement.id]["last"]["value"]
                     if last_value == new_value:
                         models.StudentEvaluation.objects.filter(
-                            achievement=achievement, 
-                            student=student, 
+                            achievement=achievement,
+                            student=student,
                             teacher_evaluation=True
                         ).update(
                             last_evaluation=False
@@ -785,7 +777,7 @@ def start_new_year(request):
 @login_required
 @user_passes_test(de_check)
 def list_users(request, group_filter=auths.GroupsNames.STUDENTS_LEVEL):
-    if type(group_filter) != auths.GroupsNames:
+    if not isinstance(group_filter, auths.GroupsNames):
         return render(request, "de/homepage.html", {})
 
     students = models.ProfileUser.objects.filter(
@@ -869,7 +861,7 @@ def insert_new_users(request):
                         profile_user.cesure = student[cesure_index] == 1
                     profile_user.user = user
                     profile_user.save()
-            
+
             return redirect(reverse('de.list_students'))
     else:
         form = forms.UploadNewStudentsForm() # A empty, unbound form
@@ -894,7 +886,7 @@ def get_users_from_mails(file_bin, level, email_index, group_index, has_header=F
 
         email_value = student[email_index]
         group_value = student[group_index]
-        
+
         users[email_value] = group_value
 
     profile_users = models.ProfileUser.objects.filter(
@@ -908,7 +900,7 @@ def get_users_from_mails(file_bin, level, email_index, group_index, has_header=F
 
         if not group_value in groups.keys():
             groups[group_value] = []
-        
+
         groups[group_value].append(student)
 
     return groups
@@ -950,7 +942,7 @@ def create_small_classes(request):
 
             total_classified_students = 0
 
-            for group_id, group_mails in groups_students.items():
+            for group_id in groups_students.keys():
                 small_class.pk = None
                 small_class.name = _("Groupe #%d" % int(group_id))
 

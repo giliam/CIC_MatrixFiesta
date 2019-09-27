@@ -7,7 +7,7 @@ register = template.Library()
 
 @register.filter
 def get_item(dictionary, key):
-    if type(dictionary) == list or type(dictionary) == tuple:
+    if isinstance(dictionary, list) or isinstance(dictionary, tuple):
         return dictionary[key]
     else:
         return dictionary.get(key)

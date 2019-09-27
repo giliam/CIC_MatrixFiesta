@@ -15,7 +15,7 @@ class ProfileUserTestCase(TestCase):
         p_y_2017 = models.PromotionYear.objects.create(name="2017/2018", value=current_year-2, current=True)
         p_y_2016 = models.PromotionYear.objects.create(name="2016/2017", value=current_year-3, current=True)
 
-        data = [ 
+        data = [
             {
                 "id": 1,
                 "firstname": "Foo_noces",
@@ -81,7 +81,7 @@ class ProfileUserTestCase(TestCase):
                 first_name=e["firstname"],
                 last_name=e["lastname"],
             )
-            
+
             e["user"] = user
             del e["firstname"]
             del e["lastname"]
@@ -93,8 +93,6 @@ class ProfileUserTestCase(TestCase):
     def test_get_schoolyear(self):
         current_year = datetime.datetime.now().year
 
-        p_y_2019 = models.PromotionYear.objects.get(value=current_year)
-        p_y_2018 = models.PromotionYear.objects.get(value=current_year-1)
         noces = models.ProfileUser.objects.get(id=1)
         ces = models.ProfileUser.objects.get(id=2)
         noces_2A = models.ProfileUser.objects.get(id=3)
