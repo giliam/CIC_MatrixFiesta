@@ -1,6 +1,6 @@
 # CIC MatrixFiesta
 
-[![Build Status](https://travis-ci.org/giliam/CIC_MatrixFiesta.svg?branch=master)](https://travis-ci.org/giliam/CIC_MatrixFiesta)
+[![Build Status](https://travis-ci.org/giliam/CIC_MatrixFiesta.svg?branch=master)](https://travis-ci.org/giliam/CIC_MatrixFiesta) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/046108c026134cbeb180e2f162837dde)](https://www.codacy.com/manual/giliam/CIC_MatrixFiesta?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=giliam/CIC_MatrixFiesta&amp;utm_campaign=Badge_Grade)
 
 Website designed so students can evaluate themselves on the different parts of the program. Teachers can also provide an evaluation or validate students'.
 
