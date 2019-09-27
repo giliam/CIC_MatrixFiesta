@@ -89,7 +89,7 @@ def log_in(request):
         if request.user.is_authenticated:
             return redirect('homepage')
         form = forms.ConnexionForm()
-    return render(request, 'users/login.html', {"form": form, "user": user, "error": error})
+    return render(request, 'users/login.html', {"form": form, "user": request.user, "error": error})
 
 
 @login_required
@@ -204,12 +204,13 @@ def evaluate_course(request, slug):
                             last_evaluation=False
                         )
 
-                        evaluation = evaluations.get(
+                        evaluation_same = evaluations.filter(
                             teacher_evaluation=False,
                             achievement=achievement,
                             student=student,
                             evaluation_value=new_value
                         )
+                        evaluation = evaluation_same.all()[0]
                     else:
                         evaluation = models.StudentEvaluation()
                         evaluation.achievement = achievement
@@ -341,13 +342,14 @@ def self_evaluate_all(request):
                                     ).update(
                                         last_evaluation=False
                                     )
-
-                                    evaluation = evaluations.get(
+                                    
+                                    evaluation_same = evaluations.filter(
                                         teacher_evaluation=False,
                                         achievement=achievement,
                                         student=student,
                                         evaluation_value=new_value
                                     )
+                                    evaluation = evaluation_same.all()[0]
                                 else:
                                     evaluation = models.StudentEvaluation()
                                     evaluation.achievement = achievement
