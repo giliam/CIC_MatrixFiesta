@@ -7,7 +7,7 @@ from common.auths import GroupsNames
 
 
 class ConnexionForm(forms.Form):
-    username = forms.CharField(label=_("User name"), max_length=30)
+    username = forms.CharField(label=_("User name"), max_length=150)
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
 
