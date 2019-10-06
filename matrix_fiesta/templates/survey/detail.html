@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% load common_extras %}
+
+{% block title %}{% trans "Survey" %}{% endblock %}
+{% block content %}
+    <h2>{{survey}}</h2>
+        
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <p><input type="submit" value="{% trans "Submit" %}"/></p>
+    </form>
+{% endblock %}

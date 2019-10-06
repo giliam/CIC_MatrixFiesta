@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
-from matrix.models import ECUE, DatedModel
+from matrix.models import ECUE, DatedModel, ProfileUser
 
 class Survey(DatedModel):
     name = models.CharField(max_length=150)
@@ -35,6 +35,15 @@ class QuestionTypes(Enum):
     CHECKBOX = 5
 
 
+class QuestionChoice(models.Model):
+    value = models.CharField(max_length=150, null=False)
+
+    def __str__(self):
+        return str(self.value)
+
+    class Meta:
+        ordering = ['value']
+
 class Question(models.Model):
     question_type = models.PositiveIntegerField(
         choices = ((t.value, t) for t in list(QuestionTypes)),
@@ -45,6 +54,7 @@ class Question(models.Model):
     order = models.IntegerField(null=False, default=0)
     survey = models.ForeignKey(Survey, null=False,
         on_delete=models.CASCADE, related_name="questions")
+    choices = models.ManyToManyField(QuestionChoice)
 
     def __str__(self):
         return _("Question %s") % self.content
@@ -58,10 +68,11 @@ class Question(models.Model):
 class Response(DatedModel):
     survey = models.ForeignKey(Survey, null=False,
         on_delete=models.CASCADE, related_name="responses")
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(ProfileUser, null=True, on_delete=models.SET_NULL)
+    sent = models.BooleanField(default=True)
 
     def __str__(self):
-        return _("Reponse to %s by %s" % (self.survey, self.user))
+        return _("Reponse to %s by %s") % (self.survey, self.user)
     
     class Meta:
         verbose_name = _("Response")
@@ -76,7 +87,7 @@ class Answer(DatedModel):
     nb_elements = models.PositiveIntegerField(default=1)
     
     def __str__(self):
-        return _("Answer to %s (%s)" % (self.question, self.response))
+        return _("Answer to %s (%s)") % (self.question, self.response)
     
     class Meta:
         verbose_name = _("Answer")
