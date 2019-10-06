@@ -1,10 +1,7 @@
 from django.contrib import admin
 
+from common.admin import SlugNameAdmin
 from matrix import models
-
-class SlugNameAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"slug": ("name",)}
-
 
 class StudentEvaluationAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
