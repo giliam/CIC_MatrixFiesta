@@ -1,0 +1,11 @@
+{% load common_extras %}
+
+{% if answer|is_list %}
+<ul>
+    {% for elt in answer %}
+        <li>{{elt}}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>{{answer}}</p>
+{% endif %}

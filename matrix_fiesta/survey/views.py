@@ -19,16 +19,18 @@ class SurveyListView(ListView):
 @login_required
 @user_passes_test(auths.check_is_student)
 def detail_survey(request, survey):
-    survey = get_object_or_404(models.Survey, id=survey)
-    response = models.Response.objects.filter(user__user=request.user)
+    survey = get_object_or_404(models.Survey.objects.prefetch_related('questions'), id=survey)
+    response = models.Response.objects.filter(user__user=request.user).prefetch_related('answers', 'answers__question')
     
     # If already answered, show answer.
     if len(response) >= 1 and len(response.filter(sent=True).all()) >= 1:
         print("Show answer")
-        return render(request, "survey/answer.html", {"survey": survey, "response": response})
+        response = response[0]
+        response.prepare_answers_for_template(survey.questions.all())
+        return render(request, "survey/answer.html", {"survey": survey, "response": response, "QuestionTypes": models.QuestionTypes})
     elif len(response) >= 1:
         print("Edit answer")
-        return render(request, "survey/answer.html", {"survey": survey})
+        return render(request, "survey/answer.html", {"survey": survey, "QuestionTypes": models.QuestionTypes})
     else:
         print("Show form and answer")
         return answer_survey(request, survey.id)

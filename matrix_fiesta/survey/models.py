@@ -1,4 +1,5 @@
 from enum import Enum
+import json
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -79,12 +80,26 @@ class Response(DatedModel):
         verbose_name_plural = _("Responses")
         ordering = ['survey', 'user']
 
+    def prepare_answers_for_template(self, questions):
+        if not self.answers:
+            raise ValueError("The answers are not available yet in current response")
+        self.answers_questions = {}
+        for answer in self.answers.all():
+            self.answers_questions[answer.question.id] = answer.print()
+
+    def get_answer(self, elt):
+        pass
+    
+        
 
 class Answer(DatedModel):
     response = models.ForeignKey(Response, null=False, on_delete=models.CASCADE, related_name="answers")
     question = models.ForeignKey(Question, null=False, on_delete=models.CASCADE)
     value = models.TextField(null=False)
     nb_elements = models.PositiveIntegerField(default=1)
+    
+    def print(self):
+        return json.loads(self.value)
     
     def __str__(self):
         return _("Answer to %s (%s)") % (self.question, self.response)

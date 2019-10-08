@@ -41,3 +41,8 @@ def compute_opacity(max_value, current_value):
         return str(1.0)
     else:
         return str(1.0-0.85*(current_value/max_value))
+
+
+@register.filter
+def is_list(obj):
+    return isinstance(obj, list)

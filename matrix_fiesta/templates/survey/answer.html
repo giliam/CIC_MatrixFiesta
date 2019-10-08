@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% load common_extras %}
+
+{% block title %}{% trans "Survey" %}{% endblock %}
+{% block content %}
+    <h2>{{survey}}</h2>
+
+    {% for question in survey.questions.all %}
+        <p><strong>{{question.content}}</strong></p>
+        {% if response %}
+            {% with answer=response.answers_questions|get_item:question.id %}
+                {% include "survey/answer_question_type.html" with answer=answer %}
+            {% endwith %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
