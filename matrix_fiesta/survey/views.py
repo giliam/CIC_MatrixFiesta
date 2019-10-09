@@ -1,4 +1,6 @@
+from itertools import chain
 import json
+from operator import attrgetter
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, get_object_or_404, redirect, reverse
@@ -13,7 +15,11 @@ class SurveyListView(ListView):
     template_name = "survey/list.html"
 
     def get_queryset(self):
-        return models.Survey.objects.filter(opened=True)
+        qs1 = models.Survey.objects.filter(opened=True) #your first qs
+        qs2 = models.Response.objects.filter(user__user=self.request.user, survey__opened=False)  #your second qs
+        #you can add as many qs as you want
+        return {"surveys": qs1, "responses": qs2}
+        # return models.Survey.objects.filter(opened=True)
     
 
 @login_required
