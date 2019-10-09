@@ -60,6 +60,14 @@ class Question(models.Model):
     def __str__(self):
         return _("Question %s") % self.content
     
+    def is_iterable(self):
+        return self.question_type in [
+            QuestionTypes.SELECT.value, 
+            QuestionTypes.MULTIPLESELECT.value,
+            QuestionTypes.RADIO.value,
+            QuestionTypes.CHECKBOX.value
+        ]
+
     class Meta:
         verbose_name = _("Question")
         verbose_name_plural = _("Questions")
@@ -87,6 +95,13 @@ class Response(DatedModel):
         for answer in self.answers.all():
             self.answers_questions[answer.question.id] = answer.print()
 
+    def prepare_answers_for_form(self, questions):
+        if not self.answers:
+            raise ValueError("The answers are not available yet in current response")
+        self.answers_questions = {}
+        for answer in self.answers.all():
+            self.answers_questions[answer.question.id] = answer
+
     def get_answer(self, elt):
         pass
     
@@ -97,6 +112,7 @@ class Answer(DatedModel):
     question = models.ForeignKey(Question, null=False, on_delete=models.CASCADE)
     value = models.TextField(null=False)
     nb_elements = models.PositiveIntegerField(default=1)
+    choices = models.ManyToManyField(QuestionChoice)
     
     def print(self):
         return json.loads(self.value)

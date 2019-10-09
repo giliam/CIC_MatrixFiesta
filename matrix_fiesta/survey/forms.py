@@ -1,3 +1,5 @@
+import json
+
 from django import forms
 
 from survey.models import QuestionTypes
@@ -12,7 +14,7 @@ class ResponseForm(forms.Form):
         for question in self.questions.all():
             self.add_question(question)
 
-    def add_question(self, question, default_value=None):
+    def add_question(self, question):
         # Adds the field to the list of existing achievements related fields
         field_id = "question_"+str(question.id)
         self.questions_fields.append(field_id)
@@ -59,6 +61,17 @@ class ResponseForm(forms.Form):
                 label=question.content,
                 required=question.required
             )
+    
+    def set_initial(self, response):
+        if response is None:
+            return False
+        answer_by_question = {answer.question.id: answer for answer in response.answers.all()}
 
-        if not default_value is None:
-            self.initial[field_id] = (default_value.id, default_value.value)
+        for question in self.questions.all():
+            field_id = "question_"+str(question.id)
+            initial = response.answers_questions[question.id].value
+            if question.is_iterable():
+                self.fields[field_id].initial = [c.id for c in answer_by_question[question.id].choices.all()]
+            else:
+                self.fields[field_id].initial = answer_by_question[question.id].print()
+        return True
