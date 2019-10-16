@@ -57,6 +57,20 @@ class SurveyListDeView(ListView):
 
 
 @login_required
+@user_passes_test(auths.check_is_de)
+def de_detail_survey(request, survey):
+    survey = get_object_or_404(
+        models.Survey.objects.prefetch_related('questions'),
+        Q(id=survey)
+    )
+    responses = models.Response.objects.filter(survey=survey).prefetch_related(
+        'answers', 'answers__question'
+    )
+    
+    return render(request, "survey/detail_de.html", {"survey": survey})
+
+
+@login_required
 @user_passes_test(auths.check_is_student)
 def detail_survey(request, survey):
     profile_user = ProfileUser.objects.get(user=request.user)
@@ -65,7 +79,9 @@ def detail_survey(request, survey):
         Q(id=survey),
         Q(promotionyear=profile_user.year_entrance) | Q(promotionyear=None)
     )
-    response = models.Response.objects.filter(user__user=request.user).prefetch_related('answers', 'answers__question')
+    response = models.Response.objects.filter(
+        survey=survey, user__user=request.user
+    ).prefetch_related('answers', 'answers__question')
     
     # If already answered, show answer.
     if len(response) >= 1 and len(response.filter(sent=True).all()) >= 1:

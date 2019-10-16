@@ -8,7 +8,7 @@
     <ul>
         {% for survey in object_list.surveys %}
             <li>
-                <a href="{% url "survey.detail" survey.id %}">
+                <a href="{% url "survey.detail_de" survey.id %}">
                 {{ survey.name }}
                 </a>
                 ({% blocktrans count counter=survey.responses.all|length %}

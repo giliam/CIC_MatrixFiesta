@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% load common_extras %}
+
+{% block title %}{% trans "Survey" %}{% endblock %}
+{% block content %}
+    <h2>{{survey}}</h2>
+
+    {% for question in survey.questions.all %}
+        <p><strong>{{question.content}}</strong></p>
+    {% endfor %}
+{% endblock %}
