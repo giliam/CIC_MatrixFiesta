@@ -97,7 +97,7 @@ def detail_survey(request, survey):
         return redirect(reverse('survey.list'))
 
 
-def answer_survey(request, survey, response=None):
+def answer_survey(request, survey, initial_response=None):
     survey = get_object_or_404(models.Survey.objects.prefetch_related('questions', 'questions__choices'), id=survey)
     questions = survey.questions.all()
     if request.method == "POST":
@@ -115,8 +115,14 @@ def answer_survey(request, survey, response=None):
             choices_by_id = {c.id: c for c in choices.all()}
             
             # if this is not an edition, create a new response
-            if response is None:
+            if initial_response is None:
                 response = models.Response()
+            else:
+                response = initial_response
+                answers = {
+                    answer.question.id: answer for answer in response.answers.all()
+                }
+
             response.survey = survey
             response.anonymous = survey.allow_anonymous and form.cleaned_data["anonymous"]
             response.user = ProfileUser.objects.get(user=request.user)
@@ -127,7 +133,10 @@ def answer_survey(request, survey, response=None):
             for question in questions.all():
                 raw_answer = form.cleaned_data.get("question_"+str(question.id), None)
                 if raw_answer:
+                    if initial_response is None:
                     answer = models.Answer()
+                    else:
+                        answer = answers[question.id]
                     answer.response = response
                     answer.question = question
                     answer.save()
@@ -146,11 +155,11 @@ def answer_survey(request, survey, response=None):
                     answer.save()
             return redirect(reverse('survey.list'))
     else:
-        if response is None:
+        if initial_response is None:
             form = forms.ResponseForm(questions, anonymous=survey.allow_anonymous)
         else:
-            response.prepare_answers_for_form(questions)
+            initial_response.prepare_answers_for_form(questions)
             form = forms.ResponseForm(questions, anonymous=survey.allow_anonymous)
-            form.set_initial(response)
+            form.set_initial(initial_response)
     
     return render(request, 'survey/detail.html', {"survey": survey, "form": form})
