@@ -39,7 +39,7 @@
               </a>
               {% if request.user|is_student %} 
               <a class="item {{ nav_matrix_active }}" href="{% url "ues.matrix" %}">
-                {% trans "Your evaluation" %}
+                {% trans "Your matrix" %}
               </a>
               <a class="item {{ nav_survey_active }}" href="{% url "survey.list" %}">
                 {% trans "Survey list" %}

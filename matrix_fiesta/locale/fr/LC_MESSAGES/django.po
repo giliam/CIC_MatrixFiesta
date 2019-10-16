@@ -449,7 +449,7 @@ msgid "Welcome"
 msgstr "Bienvenue"
 
 #: templates/index.html:42
-msgid "Your evaluation"
+msgid "Your matrix"
 msgstr "Votre matrice"
 
 #: templates/index.html:50
@@ -770,6 +770,10 @@ msgstr "Utilisateur inexistant ou mauvais de mot de passe."
 #: templates/users/login.html:18
 msgid "You are successfully logged in!"
 msgstr "Vous êtes bien connecté !"
+
+#: templates/matrix/teachers/status_student.html:59
+msgid "Your evaluation"
+msgstr "Votre évaluation"
 
 #~ msgid "Welcome !"
 #~ msgstr "Bienvenue !"

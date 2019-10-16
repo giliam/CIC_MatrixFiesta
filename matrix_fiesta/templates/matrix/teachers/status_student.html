@@ -5,6 +5,33 @@
 
 {% load common_extras %}
 
+{% block css_addon %}
+<style type="text/css">
+.student_row {
+    font-size: 0.75rem;
+    background-color: #f8f8f8;
+}
+.no_student_row {
+    font-size: 1rem;
+    background-color: white;
+}
+.faded {
+    color: #929292;
+}
+.ui.celled.table tr.student_row td:first-child, .ui.celled.table tr.student_row th:first-child {
+    border-left: 1px solid rgba(34,36,38,.1);
+}
+.orange_no_button {
+    color: #f2711c !important;
+    font-weight: 400;
+    font-size: 1rem;
+}
+.last_before_results {
+    border-right: 2px solid rgba(34,36,38,.1);
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <h1>{{student}}</h1>
 <h3>{% trans "Course:" %} {{small_class.course}}</h3>
@@ -17,19 +44,24 @@
     <thead>
         <tr>
             <th>{% trans "Achievement" %}</th>
+            <th class="center aligned last_before_results">{% trans "Evaluation" %}</th>
             {% for value in values %}
                 <th class="center aligned">{{value}}</th>
             {% endfor %}
-            <th class="center aligned">{% trans "Evaluation" %}</th>
         </tr>
     </thead>
     <tbody>
     {% for achievement in small_class.course.achievements.all %}
         <tr>
-            <td>{{achievement.name}}</td>
+            <td rowspan="2">{{achievement.name}}</td>
+            <td class="center aligned last_before_results">
+                <a href="{% url "teachers.evaluate_achievement_student" small_class.id student.id achievement.slug %}" class="ui button basic yellow">
+                {% trans "Your evaluation" %}
+                </a>
+            </td>
             {% for value in values %}
-                {% if value in existing_achiev_eval|get_item:achievement.id %}
-                    {% with current_eval=achievements_evaluations|get_item:achievement.id %}
+                {% if value in existing_eval|get_item:achievement.id %}
+                    {% with current_eval=achiev_eval|get_item:achievement.id %}
                     <td class="center aligned{% if value == current_eval|get_item:"last"|get_item:"value" %} positive{% endif %}">
                         <div class="ui list">
                         {% if value == current_eval|get_item:"last"|get_item:"value" %}
@@ -47,7 +79,31 @@
                 <td></td>
                 {% endif %}
             {% endfor %}
-            <td class="center aligned"><a href="{% url "teachers.evaluate_achievement_student" small_class.id student.id achievement.slug %}" class="ui button basic yellow">{% trans "Evaluate" %}</a></td>
+        </tr>
+        <tr class="student_row">
+            <td class="center aligned last_before_results no_student_row">
+                <span class="orange_no_button">{% trans "Student's evaluation" %}</span>
+            </td>
+            {% for value in values %}
+                {% if value in existing_eval_student|get_item:achievement.id %}
+                    {% with current_eval=achiev_eval_student|get_item:achievement.id %}
+                        <td class="center aligned">
+                            <div class="ui list">
+                            {% if value == current_eval|get_item:"last"|get_item:"value" %}
+                                <div class="item"><strong>{{current_eval|get_item:"last"|get_item:"date" }}</strong></div>
+                            {% endif %}
+                            {% for prec_eval in current_eval|get_item:"history" %}
+                                {% if value == prec_eval.value %}
+                                    <div class="item faded"><em>{{ prec_eval.date }}</em></div>
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                        </td>
+                    {% endwith %}
+                {% else %}
+                <td></td>
+                {% endif %}
+            {% endfor %}
         </tr>
     {% endfor %}
     </tbody>
