@@ -62,7 +62,7 @@ class Question(models.Model):
     order = models.IntegerField(null=False, default=0)
     survey = models.ForeignKey(Survey, null=False,
         on_delete=models.CASCADE, related_name="questions")
-    choices = models.ManyToManyField(QuestionChoice)
+    choices = models.ManyToManyField(QuestionChoice, blank=True)
 
     def __str__(self):
         return _("Question %s") % self.content
