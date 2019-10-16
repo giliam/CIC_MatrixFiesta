@@ -658,6 +658,84 @@ msgstr "Utilisateur inexistant ou mauvais de mot de passe."
 msgid "You are successfully logged in!"
 msgstr "Vous êtes bien connecté !"
 
+#: .\templates\index.html:44
+#: .\templates\survey\list.html:5
+msgid "Survey list"
+msgstr "Sondages"
+
+#: .\templates\survey\list.html:7
+#: .\survey\models.py:26
+msgid "Surveys"
+msgstr "Sondages"
+
+#: .\templates\survey\list.html:14
+msgid "Edit your answer to"
+msgstr "Modifier votre réponse à"
+
+#: .\templates\survey\list.html:16
+msgid "Display your answer to"
+msgstr "Afficher votre réponse à"
+
+#: .\templates\survey\list.html:24
+msgid "Answer to"
+msgstr "Répondre à"
+
+#: .\survey\models.py:25
+msgid "Survey"
+msgstr "Sondage"
+
+#: .\survey\models.py:22
+msgid "Survey %s"
+msgstr "Sondage %s"
+
+#: .\survey\models.py:73
+msgid "Questions"
+msgstr "Questions"
+
+#: .\survey\models.py:72
+msgid "Question"
+msgstr "Question"
+
+#: .\survey\models.py:61
+msgid "Question %s"
+msgstr "Question %s"
+
+#: .\survey\models.py:88
+msgid "Responses"
+msgstr "Résultats"
+
+#: .\survey\models.py:87
+msgid "Response"
+msgstr "Résultat"
+
+#: .\survey\models.py:84
+msgid "Response to %s by %s"
+msgstr "Résultat à %s par %s"
+
+#: .\survey\models.py:125
+msgid "Answers"
+msgstr "Réponses"
+
+#: .\survey\models.py:124
+msgid "Answer"
+msgstr "Réponse"
+
+#: .\survey\models.py:121
+msgid "Answer to %s (%s)"
+msgstr "Réponse à %s (%s)"
+
+#: .\survey\models.py:47
+msgid "Question choices"
+msgstr "Choix de réponses"
+
+#: .\survey\models.py:48
+msgid "Question choice"
+msgstr "Choix de réponses"
+
+#: .\templates\survey\list.html:28
+msgid "Your answers"
+msgstr "Vos réponses"
+
 #~ msgid "Welcome !"
 #~ msgstr "Bienvenue !"
 

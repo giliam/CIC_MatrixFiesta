@@ -15,11 +15,24 @@ class SurveyListView(ListView):
     template_name = "survey/list.html"
 
     def get_queryset(self):
-        qs1 = models.Survey.objects.filter(opened=True) #your first qs
-        qs2 = models.Response.objects.filter(user__user=self.request.user, survey__opened=False)  #your second qs
-        #you can add as many qs as you want
-        return {"surveys": qs1, "responses": qs2}
-        # return models.Survey.objects.filter(opened=True)
+        # cf. https://stackoverflow.com/a/48910072/8980220
+        surveys = models.Survey.objects.filter(opened=True)
+        responses = models.Response.objects.filter(
+            user__user=self.request.user,
+            survey__opened=False
+        ).prefetch_related('survey')
+        responses_live = models.Response.objects.filter(
+            user__user=self.request.user,
+            survey__opened=True
+        ).prefetch_related('survey')
+        responses_opened = {}
+        for response in responses_live.all():
+            responses_opened[response.survey.id] = response
+        return {
+            "surveys": surveys,
+            "responses": responses,
+            "responses_opened": responses_opened
+        }
     
 
 @login_required
@@ -46,6 +59,8 @@ def answer_survey(request, survey, response=None):
     if request.method == "POST":
         form = forms.ResponseForm(questions, request.POST)
         if form.is_valid():
+            
+            # reorganizes the choices by question
             choices_by_question = {}
             choices_id = set()
             for question in questions.all():
@@ -54,12 +69,16 @@ def answer_survey(request, survey, response=None):
                 choices_by_question[question.id] = (question_choices)
             choices = models.QuestionChoice.objects.filter(id__in=choices_id)
             choices_by_id = {c.id: c for c in choices.all()}
+            
+            # if this is not an edition, create a new response
             if response is None:
                 response = models.Response()
             response.survey = survey
             response.user = ProfileUser.objects.get(user=request.user)
-            response.sent = True
+            # checks whether it is a saving or submitting action
+            response.sent = "submit" in request.POST and not "save" in request.POST
             response.save()
+
             for question in questions.all():
                 raw_answer = form.cleaned_data.get("question_"+str(question.id), None)
                 if raw_answer:

@@ -7,7 +7,22 @@
     <h2>{% trans "Surveys" %}</h2>
     <ul>
         {% for survey in object_list.surveys %}
-            <li><a href="{% url "survey.detail" survey.id %}">{{ survey.name }}</a></li>
+            {% if survey.id in object_list.responses_opened.keys %}
+                {% with response=object_list.responses_opened|get_item:survey.id %}
+                    <li>
+                        {% if not response.sent %}
+                            {% trans "Edit your answer to" %}
+                        {% else %}
+                            {% trans "Display your answer to" %}
+                        {% endif %}
+                        <a href="{% url "survey.detail" survey.id %}">
+                            {{ survey.name }}
+                        </a>
+                    </li>
+                {% endwith %}
+            {% else %}
+                <li>{% trans "Answer to" %} <a href="{% url "survey.detail" survey.id %}">{{ survey.name }}</a></li>
+            {% endif %}
         {% endfor %}
     </ul>
     <h2>{% trans "Your answers" %}</h2>

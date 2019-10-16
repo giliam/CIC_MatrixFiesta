@@ -44,6 +44,8 @@ class QuestionChoice(models.Model):
 
     class Meta:
         ordering = ['value']
+        verbose_name = _("Question choice")
+        verbose_name_plural = _("Question choices")
 
 class Question(models.Model):
     question_type = models.PositiveIntegerField(
@@ -81,7 +83,7 @@ class Response(DatedModel):
     sent = models.BooleanField(default=True)
 
     def __str__(self):
-        return _("Reponse to %s by %s") % (self.survey, self.user)
+        return _("Response to %s by %s") % (self.survey, self.user)
     
     class Meta:
         verbose_name = _("Response")
