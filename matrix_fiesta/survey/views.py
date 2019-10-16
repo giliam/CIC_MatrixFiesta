@@ -85,7 +85,7 @@ def answer_survey(request, survey, response=None):
     survey = get_object_or_404(models.Survey.objects.prefetch_related('questions', 'questions__choices'), id=survey)
     questions = survey.questions.all()
     if request.method == "POST":
-        form = forms.ResponseForm(questions, request.POST)
+        form = forms.ResponseForm(questions, request.POST, anonymous=survey.allow_anonymous)
         if form.is_valid():
             
             # reorganizes the choices by question
@@ -102,6 +102,7 @@ def answer_survey(request, survey, response=None):
             if response is None:
                 response = models.Response()
             response.survey = survey
+            response.anonymous = survey.allow_anonymous and form.cleaned_data["anonymous"]
             response.user = ProfileUser.objects.get(user=request.user)
             # checks whether it is a saving or submitting action
             response.sent = "submit" in request.POST and not "save" in request.POST
@@ -130,10 +131,10 @@ def answer_survey(request, survey, response=None):
             return redirect(reverse('survey.list'))
     else:
         if response is None:
-            form = forms.ResponseForm(questions)
+            form = forms.ResponseForm(questions, anonymous=survey.allow_anonymous)
         else:
             response.prepare_answers_for_form(questions)
-            form = forms.ResponseForm(questions)
+            form = forms.ResponseForm(questions, anonymous=survey.allow_anonymous)
             form.set_initial(response)
     
     return render(request, 'survey/detail.html', {"survey": survey, "form": form})

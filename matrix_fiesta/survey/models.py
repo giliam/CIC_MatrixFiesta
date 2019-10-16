@@ -17,6 +17,7 @@ class Survey(DatedModel):
         PromotionYear, on_delete=models.SET_NULL, null=True, default=None,
         blank=True, related_name="+"
     )
+    allow_anonymous = models.BooleanField(default=True)
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)[:50]
@@ -85,6 +86,7 @@ class Response(DatedModel):
         on_delete=models.CASCADE, related_name="responses")
     user = models.ForeignKey(ProfileUser, null=True, on_delete=models.SET_NULL)
     sent = models.BooleanField(default=True)
+    anonymous = models.BooleanField(default=False)
 
     def __str__(self):
         return _("Response to %s by %s") % (self.survey, self.user)
