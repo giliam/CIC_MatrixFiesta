@@ -185,7 +185,7 @@ msgstr "Groupe #%d"
 
 #: survey/forms.py:22
 msgid "Do you want to stay anonymous?"
-msgstr ""
+msgstr "Voulez-vous rester anonyme ?"
 
 #: survey/models.py:27
 #, python-format
@@ -224,10 +224,8 @@ msgid "Questions"
 msgstr "Questions"
 
 #: survey/models.py:92
-#, fuzzy, python-format
-#| msgid "Response to %s by %s"
 msgid "Response to %(survey)s by %(user)s"
-msgstr "Résultat à %s par %s"
+msgstr "Résultat à %(survey)s par %(user)s"
 
 #: survey/models.py:95
 msgid "Response"
@@ -238,10 +236,8 @@ msgid "Responses"
 msgstr "Résultats"
 
 #: survey/models.py:129
-#, fuzzy, python-format
-#| msgid "Answer to %s (%s)"
 msgid "Answer to %(question)s (%(response)s)"
-msgstr "Réponse à %s (%s)"
+msgstr "Réponse à %(question)s (%(response)s)"
 
 #: survey/models.py:132
 msgid "Answer"
@@ -253,7 +249,7 @@ msgstr "Réponses"
 
 #: survey/views.py:87
 msgid "Anonymous"
-msgstr ""
+msgstr "Anonyme"
 
 #: templates/de/homepage.html:4 templates/de/start_new_year.html:4
 msgid "DE homepage"
@@ -272,10 +268,8 @@ msgid "Insert new users"
 msgstr "Insérer de nouveaux utilisateurs (csv)"
 
 #: templates/de/homepage.html:13
-#, fuzzy
-#| msgid "Student"
 msgid "Students"
-msgstr "Étudiant"
+msgstr "Étudiants"
 
 #: templates/de/homepage.html:14
 msgid "List students"
@@ -294,10 +288,8 @@ msgid "Create small classes"
 msgstr "Créer des petites classes"
 
 #: templates/de/homepage.html:23
-#, fuzzy
-#| msgid "List teachers"
 msgid "Teachers"
-msgstr "Liste des enseignants"
+msgstr "Enseignants"
 
 #: templates/de/homepage.html:24
 msgid "List teachers"
@@ -728,7 +720,7 @@ msgstr "Retour au statut de l'étudiant"
 
 #: templates/survey/detail.html:13
 msgid "Save"
-msgstr ""
+msgstr "Enregistrer"
 
 #: templates/survey/list.html:14
 msgid "Edit your answer to"
