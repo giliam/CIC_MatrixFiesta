@@ -45,6 +45,17 @@ class SurveyListView(ListView):
         }
 
 
+@method_decorator(login_required, name="dispatch")
+@method_decorator(user_passes_test(auths.check_is_de), name="dispatch")
+class SurveyListDeView(ListView):
+    model = models.Survey
+    template_name = "survey/list_de.html"
+
+    def get_queryset(self):
+        surveys = models.Survey.objects.all().prefetch_related('responses')
+        return {"surveys": surveys}
+
+
 @login_required
 @user_passes_test(auths.check_is_student)
 def detail_survey(request, survey):

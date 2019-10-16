@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% load common_extras %}
+
+{% block title %}{% trans "Survey list" %}{% endblock %}
+{% block content %}
+    <h2>{% trans "Surveys" %}</h2>
+    <ul>
+        {% for survey in object_list.surveys %}
+            <li>
+                <a href="{% url "survey.detail" survey.id %}">
+                {{ survey.name }}
+                </a>
+                ({% blocktrans count counter=survey.responses.all|length %}
+                1 answer
+                {% plural %}
+                {{ counter }} answers
+                {% endblocktrans %})
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

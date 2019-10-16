@@ -9,6 +9,7 @@
 <p><a href="{% url "de.start_new_year" %}">{% trans "Switch year" %}</a></p>
 <p><a href="{% url "de.list_students" %}">{% trans "List students" %}</a></p>
 <p><a href="{% url "de.list_teachers" %}">{% trans "List teachers" %}</a></p>
+<p><a href="{% url "survey.list_de" %}">{% trans "Survey list" %}</a></p>
 <p><a href="{% url "de.create_small_classes" %}">{% trans "Create small classes" %}</a></p>
 {% if request.user.is_superuser %}
 <p><a href="{% url "de.insert_new_users" %}">{% trans "Insert new users" %}</a></p>
