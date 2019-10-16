@@ -26,23 +26,21 @@ class SurveyListView(ListView):
 
         surveys = models.Survey.objects.filter(
             Q(opened=True),
-            Q(promotionyear=profile_user.year_entrance) | Q(promotionyear=None)
+            Q(promotionyear=profile_user.year_entrance) | Q(promotionyear=None),
         )
         responses = models.Response.objects.filter(
-            user__user=self.request.user,
-            survey__opened=False
-        ).prefetch_related('survey')
+            user__user=self.request.user, survey__opened=False
+        ).prefetch_related("survey")
         responses_live = models.Response.objects.filter(
-            user__user=self.request.user,
-            survey__opened=True
-        ).prefetch_related('survey')
+            user__user=self.request.user, survey__opened=True
+        ).prefetch_related("survey")
         responses_opened = {}
         for response in responses_live.all():
             responses_opened[response.survey.id] = response
         return {
             "surveys": surveys,
             "responses": responses,
-            "responses_opened": responses_opened
+            "responses_opened": responses_opened,
         }
 
 
@@ -53,7 +51,7 @@ class SurveyListDeView(ListView):
     template_name = "survey/list_de.html"
 
     def get_queryset(self):
-        surveys = models.Survey.objects.all().prefetch_related('responses')
+        surveys = models.Survey.objects.all().prefetch_related("responses")
         return {"surveys": surveys}
 
 
@@ -61,11 +59,10 @@ class SurveyListDeView(ListView):
 @user_passes_test(auths.check_is_de)
 def de_detail_survey(request, survey):
     survey = get_object_or_404(
-        models.Survey.objects.prefetch_related('questions'),
-        Q(id=survey)
+        models.Survey.objects.prefetch_related("questions"), Q(id=survey)
     )
     responses = models.Response.objects.filter(survey=survey).prefetch_related(
-        'user', 'answers', 'answers__question', 'answers__question__choices'
+        "user", "answers", "answers__question", "answers__question__choices"
     )
 
     # Needs to handle each question's results
@@ -75,26 +72,28 @@ def de_detail_survey(request, survey):
             "values": [],
             "choices": {c.id: [c, 0] for c in question.choices.all()},
             "authors": [],
-        } for question in survey.questions.all()
+        }
+        for question in survey.questions.all()
     }
     for response in responses.all():
         for answer in response.answers.all():
             if not answers_results[answer.question.id]["iterable"]:
-                answers_results[answer.question.id]["values"].append(
-                    answer.value
-                )
+                answers_results[answer.question.id]["values"].append(answer.value)
                 if response.anonymous:
-                    answers_results[answer.question.id]["authors"].append(_("Anonymous"))
+                    answers_results[answer.question.id]["authors"].append(
+                        _("Anonymous")
+                    )
                 else:
                     answers_results[answer.question.id]["authors"].append(response.user)
             else:
                 for choice in answer.choices.all():
                     answers_results[answer.question.id]["choices"][choice.id][1] += 1
 
-    return render(request, "survey/detail_de.html", {
-        "survey": survey,
-        "answers_results": answers_results,
-    })
+    return render(
+        request,
+        "survey/detail_de.html",
+        {"survey": survey, "answers_results": answers_results},
+    )
 
 
 @login_required
@@ -102,45 +101,58 @@ def de_detail_survey(request, survey):
 def detail_survey(request, survey):
     profile_user = ProfileUser.objects.get(user=request.user)
     survey = get_object_or_404(
-        models.Survey.objects.prefetch_related('questions'),
+        models.Survey.objects.prefetch_related("questions"),
         Q(id=survey),
-        Q(promotionyear=profile_user.year_entrance) | Q(promotionyear=None)
+        Q(promotionyear=profile_user.year_entrance) | Q(promotionyear=None),
     )
     response = models.Response.objects.filter(
         survey=survey, user__user=request.user
-    ).prefetch_related('answers', 'answers__question')
-    
+    ).prefetch_related("answers", "answers__question")
+
     # If already answered, show answer.
     if len(response) >= 1 and len(response.filter(sent=True).all()) >= 1:
         response = response[0]
         response.prepare_answers_for_template(survey.questions.all())
-        return render(request, "survey/answer.html", {"survey": survey, "response": response, "QuestionTypes": models.QuestionTypes})
+        return render(
+            request,
+            "survey/answer.html",
+            {
+                "survey": survey,
+                "response": response,
+                "QuestionTypes": models.QuestionTypes,
+            },
+        )
     elif len(response) >= 1:
         response = response[0]
         return answer_survey(request, survey.id, response)
     elif survey.opened:
         return answer_survey(request, survey.id)
     else:
-        return redirect(reverse('survey.list'))
+        return redirect(reverse("survey.list"))
 
 
 def answer_survey(request, survey, initial_response=None):
-    survey = get_object_or_404(models.Survey.objects.prefetch_related('questions', 'questions__choices'), id=survey)
+    survey = get_object_or_404(
+        models.Survey.objects.prefetch_related("questions", "questions__choices"),
+        id=survey,
+    )
     questions = survey.questions.all()
     if request.method == "POST":
-        form = forms.ResponseForm(questions, request.POST, anonymous=survey.allow_anonymous)
+        form = forms.ResponseForm(
+            questions, request.POST, anonymous=survey.allow_anonymous
+        )
         if form.is_valid():
-            
+
             # reorganizes the choices by question
             choices_by_question = {}
             choices_id = set()
             for question in questions.all():
                 question_choices = [c.id for c in question.choices.all()]
                 choices_id.update(question_choices)
-                choices_by_question[question.id] = (question_choices)
+                choices_by_question[question.id] = question_choices
             choices = models.QuestionChoice.objects.filter(id__in=choices_id)
             choices_by_id = {c.id: c for c in choices.all()}
-            
+
             # if this is not an edition, create a new response
             if initial_response is None:
                 response = models.Response()
@@ -151,14 +163,16 @@ def answer_survey(request, survey, initial_response=None):
                 }
 
             response.survey = survey
-            response.anonymous = survey.allow_anonymous and form.cleaned_data["anonymous"]
+            response.anonymous = (
+                survey.allow_anonymous and form.cleaned_data["anonymous"]
+            )
             response.user = ProfileUser.objects.get(user=request.user)
             # checks whether it is a saving or submitting action
             response.sent = "submit" in request.POST and not "save" in request.POST
             response.save()
 
             for question in questions.all():
-                raw_answer = form.cleaned_data.get("question_"+str(question.id), None)
+                raw_answer = form.cleaned_data.get("question_" + str(question.id), None)
                 if raw_answer:
                     if initial_response is None:
                         answer = models.Answer()
@@ -175,12 +189,17 @@ def answer_survey(request, survey, initial_response=None):
                                 answer.choices.add(choices_by_id[id_elt])
                                 json_raw_answer.append(choices_by_id[id_elt].value)
                             else:
-                                raise ValueError("Couldn't find elt", id_elt, "in choices available", choices_by_question[question.id])
+                                raise ValueError(
+                                    "Couldn't find elt",
+                                    id_elt,
+                                    "in choices available",
+                                    choices_by_question[question.id],
+                                )
                         answer.value = json.dumps(json_raw_answer)
                     else:
                         answer.value = json.dumps(raw_answer)
                     answer.save()
-            return redirect(reverse('survey.list'))
+            return redirect(reverse("survey.list"))
     else:
         if initial_response is None:
             form = forms.ResponseForm(questions, anonymous=survey.allow_anonymous)
@@ -188,5 +207,5 @@ def answer_survey(request, survey, initial_response=None):
             initial_response.prepare_answers_for_form(questions)
             form = forms.ResponseForm(questions, anonymous=survey.allow_anonymous)
             form.set_initial(initial_response)
-    
-    return render(request, 'survey/detail.html', {"survey": survey, "form": form})
+
+    return render(request, "survey/detail.html", {"survey": survey, "form": form})

@@ -17,19 +17,19 @@ class SurveyAdmin(admin.ModelAdmin):
 class QuestionAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super(QuestionAdmin, self).get_queryset(request)
-        return queryset.prefetch_related('survey')
+        return queryset.prefetch_related("survey")
 
 
 class ResponseAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super(ResponseAdmin, self).get_queryset(request)
-        return queryset.prefetch_related('survey', 'user')
+        return queryset.prefetch_related("survey", "user")
 
 
 class AnswerAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super(AnswerAdmin, self).get_queryset(request)
-        return queryset.prefetch_related('response', 'question')
+        return queryset.prefetch_related("response", "question")
 
 
 admin.site.register(models.Survey, SurveyAdmin)
