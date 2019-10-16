@@ -89,7 +89,7 @@ class Response(DatedModel):
     anonymous = models.BooleanField(default=False)
 
     def __str__(self):
-        return _("Response to %s by %s") % (self.survey, self.user)
+        return _("Response to %(survey)s by %(user)s") % (self.survey, self.user)
     
     class Meta:
         verbose_name = _("Response")
@@ -126,7 +126,7 @@ class Answer(DatedModel):
         return json.loads(self.value)
     
     def __str__(self):
-        return _("Answer to %s (%s)") % (self.question, self.response)
+        return _("Answer to %(question)s (%(response)s)") % (self.question, self.response)
     
     class Meta:
         verbose_name = _("Answer")
