@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-16 15:56+0200\n"
+"POT-Creation-Date: 2019-10-16 17:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,92 +162,94 @@ msgstr "Petite classe"
 msgid "Small classes"
 msgstr "Petites classes"
 
-#: matrix/views.py:492 matrix/views.py:560 matrix/views.py:795
+#: matrix/views.py:815 matrix/views.py:989 matrix/views.py:1079
 msgid "Only super users can perform this action"
 msgstr "Seuls les administrateurs peuvent faire cette action"
 
-#: matrix/views.py:810
+#: matrix/views.py:824
 msgid "formatted as 20XX"
 msgstr "renseigné au format 20XX"
 
-#: matrix/views.py:815
+#: matrix/views.py:829
 msgid "must be 0 or 1"
 msgstr "doit être 0 ou 1"
 
-#: matrix/views.py:837
+#: matrix/views.py:851
 msgid "DE shouldn't be in the groups selected"
 msgstr "La DE ne devrait pas être dans les groupes sélectionnés."
 
-#: matrix/views.py:949
+#: matrix/views.py:965
 #, python-format
 msgid "Groupe #%d"
 msgstr "Groupe #%d"
 
-#: survey/forms.py:22
+#: survey/forms.py:23
 msgid "Do you want to stay anonymous?"
 msgstr "Voulez-vous rester anonyme ?"
 
-#: survey/models.py:27
+#: survey/models.py:32
 #, python-format
 msgid "Survey %s"
 msgstr "Sondage %s"
 
-#: survey/models.py:30 templates/survey/answer.html:5
+#: survey/models.py:35 templates/survey/answer.html:5
 #: templates/survey/detail.html:5 templates/survey/detail_de.html:5
 msgid "Survey"
 msgstr "Sondage"
 
-#: survey/models.py:31 templates/de/homepage.html:25
+#: survey/models.py:36 templates/de/homepage.html:25
 #: templates/survey/list.html:7 templates/survey/list_de.html:7
 msgid "Surveys"
 msgstr "Sondages"
 
-#: survey/models.py:52
+#: survey/models.py:57
 msgid "Question choice"
 msgstr "Choix de réponses"
 
-#: survey/models.py:53
+#: survey/models.py:58
 msgid "Question choices"
 msgstr "Choix de réponses"
 
-#: survey/models.py:68
+#: survey/models.py:75
 #, python-format
 msgid "Question %s"
 msgstr "Question %s"
 
-#: survey/models.py:79
+#: survey/models.py:86
 msgid "Question"
 msgstr "Question"
 
-#: survey/models.py:80
+#: survey/models.py:87
 msgid "Questions"
 msgstr "Questions"
 
-#: survey/models.py:92
+#: survey/models.py:100
+#, python-format
 msgid "Response to %(survey)s by %(user)s"
 msgstr "Résultat à %(survey)s par %(user)s"
 
-#: survey/models.py:95
+#: survey/models.py:103
 msgid "Response"
 msgstr "Résultat"
 
-#: survey/models.py:96
+#: survey/models.py:104
 msgid "Responses"
 msgstr "Résultats"
 
-#: survey/models.py:129
+#: survey/models.py:138
+#, python-format
 msgid "Answer to %(question)s (%(response)s)"
 msgstr "Réponse à %(question)s (%(response)s)"
 
-#: survey/models.py:132
+#: survey/models.py:144
 msgid "Answer"
 msgstr "Réponse"
 
-#: survey/models.py:133
+#: survey/models.py:145
 msgid "Answers"
 msgstr "Réponses"
 
-#: survey/views.py:87
+#: survey/views.py:84
 msgid "Anonymous"
 msgstr "Anonyme"
 
@@ -530,7 +532,7 @@ msgid "Self evaluation"
 msgstr "Auto-évaluation"
 
 #: templates/matrix/students/matrix_course.html:18
-#: templates/matrix/teachers/status_student.html:19
+#: templates/matrix/teachers/status_student.html:46
 #: templates/matrix/teachers/student_overall_evaluation.html:23
 msgid "Achievement"
 msgstr "Acquis d'apprentissage"
@@ -622,7 +624,6 @@ msgid "Student name"
 msgstr "Nom de l'étudiant"
 
 #: templates/matrix/teachers/homepage.html:26
-#: templates/matrix/teachers/status_student.html:50
 msgid "Evaluate"
 msgstr "Évaluer"
 
@@ -632,6 +633,7 @@ msgid "Average"
 msgstr "Moyenne"
 
 #: templates/matrix/teachers/homepage.html:28
+#: templates/matrix/teachers/status_student.html:85
 msgid "Student's evaluation"
 msgstr "Évaluation de l'étudiant"
 
@@ -641,7 +643,7 @@ msgstr "Statut"
 
 #: templates/matrix/teachers/homepage.html:48
 #: templates/matrix/teachers/list_all_sc.html:29
-#: templates/matrix/teachers/status_student.html:12
+#: templates/matrix/teachers/status_student.html:39
 msgid "Overall evaluation"
 msgstr "Évaluation globale"
 
@@ -696,19 +698,23 @@ msgstr "notes"
 msgid "Student situation"
 msgstr "Situation de l'élève"
 
-#: templates/matrix/teachers/status_student.html:10
+#: templates/matrix/teachers/status_student.html:37
 #: templates/matrix/teachers/student_overall_evaluation.html:10
 msgid "Course:"
 msgstr "Cours :"
 
-#: templates/matrix/teachers/status_student.html:13
+#: templates/matrix/teachers/status_student.html:40
 #: templates/matrix/teachers/student_overall_evaluation.html:14
 msgid "Return to your students"
 msgstr "Retour à la liste de vos étudiants"
 
-#: templates/matrix/teachers/status_student.html:23
+#: templates/matrix/teachers/status_student.html:47
 msgid "Evaluation"
 msgstr "Évaluation"
+
+#: templates/matrix/teachers/status_student.html:59
+msgid "Your evaluation"
+msgstr "Votre évaluation"
 
 #: templates/matrix/teachers/student_overall_evaluation.html:4
 msgid "Student overall evaluation"
@@ -770,10 +776,6 @@ msgstr "Utilisateur inexistant ou mauvais de mot de passe."
 #: templates/users/login.html:18
 msgid "You are successfully logged in!"
 msgstr "Vous êtes bien connecté !"
-
-#: templates/matrix/teachers/status_student.html:59
-msgid "Your evaluation"
-msgstr "Votre évaluation"
 
 #~ msgid "Welcome !"
 #~ msgstr "Bienvenue !"
