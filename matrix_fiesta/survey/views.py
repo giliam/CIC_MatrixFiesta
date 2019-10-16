@@ -3,20 +3,30 @@ import json
 from operator import attrgetter
 
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 
 from common import auths
 from matrix.models import ProfileUser
 from survey import forms, models
 
+
+@method_decorator(login_required, name="dispatch")
+@method_decorator(user_passes_test(auths.check_is_student), name="dispatch")
 class SurveyListView(ListView):
     model = models.Survey
     template_name = "survey/list.html"
 
     def get_queryset(self):
         # cf. https://stackoverflow.com/a/48910072/8980220
-        surveys = models.Survey.objects.filter(opened=True)
+        profile_user = ProfileUser.objects.get(user=self.request.user)
+
+        surveys = models.Survey.objects.filter(
+            Q(opened=True),
+            Q(promotionyear=profile_user.year_entrance) | Q(promotionyear=None)
+        )
         responses = models.Response.objects.filter(
             user__user=self.request.user,
             survey__opened=False
@@ -33,12 +43,17 @@ class SurveyListView(ListView):
             "responses": responses,
             "responses_opened": responses_opened
         }
-    
+
 
 @login_required
 @user_passes_test(auths.check_is_student)
 def detail_survey(request, survey):
-    survey = get_object_or_404(models.Survey.objects.prefetch_related('questions'), id=survey)
+    profile_user = ProfileUser.objects.get(user=request.user)
+    survey = get_object_or_404(
+        models.Survey.objects.prefetch_related('questions'),
+        Q(id=survey),
+        Q(promotionyear=profile_user.year_entrance) | Q(promotionyear=None)
+    )
     response = models.Response.objects.filter(user__user=request.user).prefetch_related('answers', 'answers__question')
     
     # If already answered, show answer.
@@ -49,8 +64,10 @@ def detail_survey(request, survey):
     elif len(response) >= 1:
         response = response[0]
         return answer_survey(request, survey.id, response)
-    else:
+    elif survey.opened:
         return answer_survey(request, survey.id)
+    else:
+        return redirect(reverse('survey.list'))
 
 
 def answer_survey(request, survey, response=None):

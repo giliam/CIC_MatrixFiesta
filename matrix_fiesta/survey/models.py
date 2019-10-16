@@ -6,13 +6,17 @@ from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
-from matrix.models import ECUE, DatedModel, ProfileUser
+from matrix.models import ECUE, DatedModel, ProfileUser, PromotionYear, SchoolYear
 
 class Survey(DatedModel):
     name = models.CharField(max_length=150)
     opened = models.BooleanField(default=False)
     ecue = models.ForeignKey(ECUE, on_delete=models.SET_NULL, null=True)
     slug = models.SlugField(unique=True)
+    promotionyear = models.ForeignKey(
+        PromotionYear, on_delete=models.SET_NULL, null=True, default=None,
+        blank=True, related_name="+"
+    )
     
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)[:50]
