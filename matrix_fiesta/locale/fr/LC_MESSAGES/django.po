@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-04 11:55+0200\n"
+"POT-Creation-Date: 2019-10-16 15:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,205 +18,301 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\matrix\forms.py:10
+#: matrix/forms.py:10
 msgid "User name"
 msgstr "Nom d'utilisateur"
 
-#: .\matrix\forms.py:11
+#: matrix/forms.py:11
 msgid "Password"
 msgstr "Mot de passe"
 
-#: .\matrix\forms.py:54 .\matrix\forms.py:63 .\matrix\models.py:143
+#: matrix/forms.py:54 matrix/forms.py:63 matrix/models.py:144
 msgid "Evaluation value"
 msgstr "Valeur de l'évaluation"
 
-#: .\matrix\forms.py:64
+#: matrix/forms.py:64
 msgid "Student"
 msgstr "Étudiant"
 
-#: .\matrix\forms.py:76
+#: matrix/forms.py:76
 msgid "File has a header ?"
 msgstr "Le fichier a-t-il un entête ?"
 
-#: .\matrix\forms.py:77
+#: matrix/forms.py:77
 msgid "Select a file"
 msgstr "Sélectionner un fichier"
 
-#: .\matrix\forms.py:82
+#: matrix/forms.py:82
 msgid "File(s) has(ve) a header ?"
 msgstr "Le(s) fichier(s) a(ont)-t-il(s) un entête ?"
 
-#: .\matrix\forms.py:83
+#: matrix/forms.py:83
 msgid "Select a file for the students"
 msgstr "Sélectionner un fichier pour les élèves"
 
-#: .\matrix\forms.py:85
+#: matrix/forms.py:85
 msgid "Select a file for the teachers"
 msgstr "Sélectionner un fichier pour les enseignants"
 
-#: .\matrix\forms.py:92 .\matrix\models.py:129
+#: matrix/forms.py:92 matrix/models.py:130
 msgid "Course"
 msgstr "Cours"
 
-#: .\matrix\forms.py:93 .\matrix\models.py:42
+#: matrix/forms.py:93 matrix/models.py:42
 msgid "Promotion year"
 msgstr "Promotion"
 
-#: .\matrix\models.py:15
+#: matrix/models.py:15
 msgid "DatedModel"
 msgstr "Objet daté"
 
-#: .\matrix\models.py:16
+#: matrix/models.py:16
 msgid "DatedModels"
 msgstr "Objets datés"
 
-#: .\matrix\models.py:28
+#: matrix/models.py:28
 msgid "School year"
 msgstr "Année scolaire"
 
-#: .\matrix\models.py:29
+#: matrix/models.py:29
 msgid "School years"
 msgstr "Années scolaires"
 
-#: .\matrix\models.py:43
+#: matrix/models.py:43
 msgid "Promotion years"
 msgstr "Promotions"
 
-#: .\matrix\models.py:68
+#: matrix/models.py:68
 msgid "User"
 msgstr "Utilisateur"
 
-#: .\matrix\models.py:69
+#: matrix/models.py:69
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: .\matrix\models.py:85
+#: matrix/models.py:86
 msgid "Semestre"
 msgstr "Semestre"
 
-#: .\matrix\models.py:86
+#: matrix/models.py:87
 msgid "Semestres"
 msgstr "Semestres"
 
-#: .\matrix\models.py:98
+#: matrix/models.py:99
 msgid "UE"
 msgstr "UE"
 
-#: .\matrix\models.py:99 .\templates\matrix\students\matrix_ues.html:18
+#: matrix/models.py:100 templates/matrix/students/matrix_ues.html:18
 msgid "UEs"
 msgstr "UEs"
 
-#: .\matrix\models.py:108
+#: matrix/models.py:109
 #, python-format
 msgid "ECUE %(name)s - %(ue)s"
 msgstr "ECUE %(name)s - %(ue)s"
 
-#: .\matrix\models.py:111
-#: .\templates\matrix\students\overall_self_evaluation.html:27
+#: matrix/models.py:112
+#: templates/matrix/students/overall_self_evaluation.html:27
 msgid "ECUE"
 msgstr "ECUE"
 
-#: .\matrix\models.py:112
+#: matrix/models.py:113
 msgid "ECUEs"
 msgstr "ECUEs"
 
-#: .\matrix\models.py:130
+#: matrix/models.py:131
 msgid "Courses"
 msgstr "Cours"
 
-#: .\matrix\models.py:144
+#: matrix/models.py:145
 msgid "Evaluation values"
 msgstr "Valeurs de l'évaluation"
 
-#: .\matrix\models.py:164
+#: matrix/models.py:166
 msgid "Learning achievement"
 msgstr "Acquis d'apprentissage"
 
-#: .\matrix\models.py:165
+#: matrix/models.py:167
 msgid "Learning achievements"
 msgstr "Acquis d'apprentissage"
 
-#: .\matrix\models.py:177
+#: matrix/models.py:179
 #, python-format
 msgid "%(achiev)s, %(student)s : %(eval)s (teacher: %(teacher)s)"
 msgstr "%(achiev)s, %(student)s : %(eval)s (enseignant : %(teacher)s)"
 
-#: .\matrix\models.py:184
+#: matrix/models.py:186
 msgid "Student evaluation"
 msgstr "Évaluation de l'étudiant"
 
-#: .\matrix\models.py:185
+#: matrix/models.py:187
 msgid "Student evaluations"
 msgstr "Évaluations des étudiants"
 
-#: .\matrix\models.py:202
+#: matrix/models.py:204
 #, python-format
 msgid "SC %(name)s of %(course)s by %(teacher)s"
 msgstr "PC %(name)s %(course)s par %(teacher)s"
 
-#: .\matrix\models.py:209
+#: matrix/models.py:211
 msgid "Small class"
 msgstr "Petite classe"
 
-#: .\matrix\models.py:210
+#: matrix/models.py:212 templates/de/homepage.html:18
 msgid "Small classes"
 msgstr "Petites classes"
 
-#: .\matrix\views.py:494 .\matrix\views.py:562 .\matrix\views.py:799
+#: matrix/views.py:492 matrix/views.py:560 matrix/views.py:795
 msgid "Only super users can perform this action"
 msgstr "Seuls les administrateurs peuvent faire cette action"
 
-#: .\matrix\views.py:814
+#: matrix/views.py:810
 msgid "formatted as 20XX"
 msgstr "renseigné au format 20XX"
 
-#: .\matrix\views.py:819
+#: matrix/views.py:815
 msgid "must be 0 or 1"
 msgstr "doit être 0 ou 1"
 
-#: .\matrix\views.py:841
+#: matrix/views.py:837
 msgid "DE shouldn't be in the groups selected"
 msgstr "La DE ne devrait pas être dans les groupes sélectionnés."
 
-#: .\matrix\views.py:953
+#: matrix/views.py:949
 #, python-format
 msgid "Groupe #%d"
 msgstr "Groupe #%d"
 
-#: .\templates\de\homepage.html:4 .\templates\de\start_new_year.html:4
+#: survey/forms.py:22
+msgid "Do you want to stay anonymous?"
+msgstr ""
+
+#: survey/models.py:27
+#, python-format
+msgid "Survey %s"
+msgstr "Sondage %s"
+
+#: survey/models.py:30 templates/survey/answer.html:5
+#: templates/survey/detail.html:5 templates/survey/detail_de.html:5
+msgid "Survey"
+msgstr "Sondage"
+
+#: survey/models.py:31 templates/de/homepage.html:25
+#: templates/survey/list.html:7 templates/survey/list_de.html:7
+msgid "Surveys"
+msgstr "Sondages"
+
+#: survey/models.py:52
+msgid "Question choice"
+msgstr "Choix de réponses"
+
+#: survey/models.py:53
+msgid "Question choices"
+msgstr "Choix de réponses"
+
+#: survey/models.py:68
+#, python-format
+msgid "Question %s"
+msgstr "Question %s"
+
+#: survey/models.py:79
+msgid "Question"
+msgstr "Question"
+
+#: survey/models.py:80
+msgid "Questions"
+msgstr "Questions"
+
+#: survey/models.py:92
+#, fuzzy, python-format
+#| msgid "Response to %s by %s"
+msgid "Response to %(survey)s by %(user)s"
+msgstr "Résultat à %s par %s"
+
+#: survey/models.py:95
+msgid "Response"
+msgstr "Résultat"
+
+#: survey/models.py:96
+msgid "Responses"
+msgstr "Résultats"
+
+#: survey/models.py:129
+#, fuzzy, python-format
+#| msgid "Answer to %s (%s)"
+msgid "Answer to %(question)s (%(response)s)"
+msgstr "Réponse à %s (%s)"
+
+#: survey/models.py:132
+msgid "Answer"
+msgstr "Réponse"
+
+#: survey/models.py:133
+msgid "Answers"
+msgstr "Réponses"
+
+#: survey/views.py:87
+msgid "Anonymous"
+msgstr ""
+
+#: templates/de/homepage.html:4 templates/de/start_new_year.html:4
 msgid "DE homepage"
 msgstr "Page d'accueil de la DE"
 
-#: .\templates\de\homepage.html:7
+#: templates/de/homepage.html:7
 msgid "Administrative tools"
 msgstr "Outils d'administration"
 
-#: .\templates\de\homepage.html:9
+#: templates/de/homepage.html:9
 msgid "Switch year"
 msgstr "Changer d'année"
 
-#: .\templates\de\homepage.html:10
-msgid "List students"
-msgstr "Liste des étudiants"
-
-#: .\templates\de\homepage.html:11
-msgid "List teachers"
-msgstr "Liste des enseignants"
-
-#: .\templates\de\homepage.html:12
-msgid "Create small classes"
-msgstr "Créer des petites classes"
-
-#: .\templates\de\homepage.html:14
+#: templates/de/homepage.html:11
 msgid "Insert new users"
 msgstr "Insérer de nouveaux utilisateurs (csv)"
 
-#: .\templates\de\insert_new_users.html:4
-#: .\templates\de\insert_new_users.html:7
+#: templates/de/homepage.html:13
+#, fuzzy
+#| msgid "Student"
+msgid "Students"
+msgstr "Étudiant"
+
+#: templates/de/homepage.html:14
+msgid "List students"
+msgstr "Liste des étudiants"
+
+#: templates/de/homepage.html:16
+msgid "Show all students"
+msgstr "Tous les élèves"
+
+#: templates/de/homepage.html:20
+msgid "Show all SC"
+msgstr "Toutes les petites classes"
+
+#: templates/de/homepage.html:22
+msgid "Create small classes"
+msgstr "Créer des petites classes"
+
+#: templates/de/homepage.html:23
+#, fuzzy
+#| msgid "List teachers"
+msgid "Teachers"
+msgstr "Liste des enseignants"
+
+#: templates/de/homepage.html:24
+msgid "List teachers"
+msgstr "Liste des enseignants"
+
+#: templates/de/homepage.html:26 templates/index.html:45
+#: templates/survey/list.html:5 templates/survey/list_de.html:5
+msgid "Survey list"
+msgstr "Sondages"
+
+#: templates/de/insert_new_users.html:4 templates/de/insert_new_users.html:7
 msgid "Insert new students"
 msgstr "Insérer de nouveaux utilisateurs"
 
-#: .\templates\de\insert_new_users.html:9
+#: templates/de/insert_new_users.html:9
 msgid ""
 "To insert new students, you need to upload a <strong>csv file</strong> "
 "(delimited by <em>;</em>) with the following columns:"
@@ -225,17 +321,17 @@ msgstr ""
 "csv</strong> (délimité par <em>;</em>) avec les colonnes suivants (dans "
 "l'ordre):"
 
-#: .\templates\de\insert_new_users.html:21
-#: .\templates\de\insert_small_classes.html:22
+#: templates/de/insert_new_users.html:21
+#: templates/de/insert_small_classes.html:22
 msgid "Upload"
 msgstr "Upload"
 
-#: .\templates\de\insert_small_classes.html:4
-#: .\templates\de\insert_small_classes.html:7
+#: templates/de/insert_small_classes.html:4
+#: templates/de/insert_small_classes.html:7
 msgid "Insert small classes"
 msgstr "Insérer des petites classes"
 
-#: .\templates\de\insert_small_classes.html:9
+#: templates/de/insert_small_classes.html:9
 msgid ""
 "To insert small classes, you need to upload a <strong>csv file</strong> "
 "(delimited by <em>;</em>) with the following columns:"
@@ -244,7 +340,7 @@ msgstr ""
 "csv</strong> (délimité par <em>;</em>) avec les colonnes suivants (dans "
 "l'ordre):"
 
-#: .\templates\de\insert_small_classes.html:17
+#: templates/de/insert_small_classes.html:17
 msgid ""
 "Non student users will be ignored. You can also upload a second <strong>csv "
 "file</strong> (delimited by <em>;</em>) containing the name of the teachers "
@@ -255,92 +351,92 @@ msgstr ""
 "nom des enseignants avec les mêmes colonnes. Les utilisateurs non-"
 "enseignants seront ignorés."
 
-#: .\templates\de\list_users.html:4 .\templates\de\list_users.html:7
+#: templates/de/list_users.html:4 templates/de/list_users.html:7
 msgid "Students list"
 msgstr "Liste des étudiants"
 
-#: .\templates\de\list_users.html:12
+#: templates/de/list_users.html:12
 msgid "Student firstname"
 msgstr "Prénom de l'étudiant"
 
-#: .\templates\de\list_users.html:13
+#: templates/de/list_users.html:13
 msgid "Student lastname"
 msgstr "Nom de l'étudiant"
 
-#: .\templates\de\list_users.html:14
+#: templates/de/list_users.html:14
 msgid "Email"
 msgstr "Email"
 
-#: .\templates\de\list_users.html:15
+#: templates/de/list_users.html:15
 msgid "Entrance year"
 msgstr "Année d'entrée"
 
-#: .\templates\de\list_users.html:16
+#: templates/de/list_users.html:16
 msgid "Cesure?"
 msgstr "Césure ?"
 
-#: .\templates\de\list_users.html:17
+#: templates/de/list_users.html:17
 msgid "Groups"
 msgstr "Groupes"
 
-#: .\templates\de\list_users.html:27
+#: templates/de/list_users.html:27
 msgid "Yes"
 msgstr "Oui"
 
-#: .\templates\de\list_users.html:27
+#: templates/de/list_users.html:27
 msgid "No"
 msgstr "Non"
 
-#: .\templates\de\start_new_year.html:7
+#: templates/de/start_new_year.html:7
 msgid "Start new year"
 msgstr "Commencer une nouvelle année"
 
-#: .\templates\error\400.html:5
+#: templates/error/400.html:5
 msgid "Error 400"
 msgstr "Erreur 400"
 
-#: .\templates\error\400.html:9
+#: templates/error/400.html:9
 msgid "Bad request!"
 msgstr "Mauvaise requête !"
 
-#: .\templates\error\400.html:11 .\templates\error\403.html:11
-#: .\templates\error\404.html:11 .\templates\error\500.html:11
+#: templates/error/400.html:11 templates/error/403.html:11
+#: templates/error/404.html:11 templates/error/500.html:11
 msgid "Please contact the administrator!"
 msgstr "Merci de contacter l'administrateur !"
 
-#: .\templates\error\403.html:5
+#: templates/error/403.html:5
 msgid "Error 403"
 msgstr "Erreur 403"
 
-#: .\templates\error\403.html:9
+#: templates/error/403.html:9
 msgid "Forbidden!"
 msgstr "Accès interdit !"
 
-#: .\templates\error\404.html:5
+#: templates/error/404.html:5
 msgid "Error 404"
 msgstr "Erreur 404"
 
-#: .\templates\error\404.html:9
+#: templates/error/404.html:9
 msgid "Page not found!"
 msgstr "Page introuvable !"
 
-#: .\templates\error\500.html:5
+#: templates/error/500.html:5
 msgid "Error 500"
 msgstr "Erreur 500"
 
-#: .\templates\error\500.html:9
+#: templates/error/500.html:9
 msgid "Internal server error!"
 msgstr "Erreur interne au serveur !"
 
-#: .\templates\homepage.html:5 .\templates\index.html:38
+#: templates/homepage.html:5 templates/index.html:38
 msgid "Homepage"
 msgstr "Page d'accueil"
 
-#: .\templates\homepage.html:7
+#: templates/homepage.html:7
 msgid "Welcome on this achievement evaluation website!"
 msgstr "Bienvenue sur ce site d'évaluation des acquis d'apprentissage !"
 
-#: .\templates\homepage.html:9
+#: templates/homepage.html:9
 msgid ""
 "It was specifically designed so you can evaluate yourself on the different "
 "parts of the program."
@@ -348,393 +444,340 @@ msgstr ""
 "Il a été spécialement conçu pour que vous puissiez vous évaluer vous-même "
 "sur les différentes parties du programme."
 
-#: .\templates\homepage.html:12
+#: templates/homepage.html:12
 msgid "It allows you to evaluate your students."
 msgstr "Vous pouvez évaluer vos élèves."
 
-#: .\templates\homepage.html:15
+#: templates/homepage.html:15
 msgid "Here, you can manage the promotion."
 msgstr "Vous pouvez gérer la promotion."
 
-#: .\templates\index.html:10
+#: templates/index.html:10
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: .\templates\index.html:42
+#: templates/index.html:42
 msgid "Your evaluation"
 msgstr "Votre matrice"
 
-#: .\templates\index.html:47
+#: templates/index.html:50
 msgid "Evaluate your students"
 msgstr "Évaluer vos élèves"
 
-#: .\templates\index.html:52
-msgid "Show all SC"
-msgstr "Toutes les petites classes"
-
-#: .\templates\index.html:55
-msgid "Show all students"
-msgstr "Tous les élèves"
-
-#: .\templates\index.html:60
+#: templates/index.html:55
 msgid "DE"
 msgstr "DE"
 
-#: .\templates\index.html:73
+#: templates/index.html:68
 msgid "Admin"
 msgstr "Admin"
 
-#: .\templates\index.html:78
+#: templates/index.html:73
 msgid "Log out"
 msgstr "Déconnexion"
 
-#: .\templates\index.html:82 .\templates\users\login.html:5
+#: templates/index.html:77 templates/users/login.html:5
 msgid "Log in"
 msgstr "Connexion"
 
-#: .\templates\index.html:92
+#: templates/index.html:87
 msgid "Nothing to see here!"
 msgstr "Rien à voir ici !"
 
-#: .\templates\index.html:105
+#: templates/index.html:100
 msgid "Report an issue"
 msgstr "Signaler un problème"
 
-#: .\templates\matrix\students\course_self_evaluation.html:3
-#: .\templates\matrix\students\overall_self_evaluation.html:3
+#: templates/matrix/students/course_self_evaluation.html:3
+#: templates/matrix/students/overall_self_evaluation.html:3
 msgid "Self global evaluation"
 msgstr "Auto-évaluation globale"
 
-#: .\templates\matrix\students\course_self_evaluation.html:10
+#: templates/matrix/students/course_self_evaluation.html:10
 msgid "Return to course list"
 msgstr "Retour à la liste des acquis du cours"
 
-#: .\templates\matrix\students\course_self_evaluation.html:11
-#: .\templates\matrix\students\matrix_course.html:12
-#: .\templates\matrix\students\matrix_ues.html:33
-#: .\templates\matrix\students\overall_self_evaluation.html:9
-#: .\templates\matrix\teachers\homepage.html:12
+#: templates/matrix/students/course_self_evaluation.html:11
+#: templates/matrix/students/matrix_course.html:12
+#: templates/matrix/students/matrix_ues.html:33
+#: templates/matrix/students/overall_self_evaluation.html:9
+#: templates/matrix/teachers/homepage.html:12
 msgid "Return to main list"
 msgstr "Retour à la liste principale"
 
-#: .\templates\matrix\students\course_self_evaluation.html:22
-#: .\templates\matrix\students\overall_self_evaluation.html:18
-#: .\templates\matrix\teachers\student_overall_evaluation.html:24
+#: templates/matrix/students/course_self_evaluation.html:22
+#: templates/matrix/students/overall_self_evaluation.html:18
+#: templates/matrix/teachers/student_overall_evaluation.html:24
 msgid "Not evaluated yet"
 msgstr "Non évalué"
 
-#: .\templates\matrix\students\course_self_evaluation.html:44
-#: .\templates\matrix\students\matrix_ues.html:98
-#: .\templates\matrix\students\overall_self_evaluation.html:48
+#: templates/matrix/students/course_self_evaluation.html:44
+#: templates/matrix/students/matrix_ues.html:98
+#: templates/matrix/students/overall_self_evaluation.html:48
 msgid "No achievement here yet."
 msgstr "Pas encore d'acquis d'apprentissage ici."
 
-#: .\templates\matrix\students\evaluate_achievement.html:3
+#: templates/matrix/students/evaluate_achievement.html:3
 msgid "Achievement self evaluation"
 msgstr "Auto-évaluation des acquis"
 
-#: .\templates\matrix\students\evaluate_achievement.html:15
-#: .\templates\matrix\teachers\evaluate_achievement.html:16
-#: .\templates\matrix\teachers\student_overall_evaluation.html:47
-#: .\templates\users\login.html:23
+#: templates/matrix/students/evaluate_achievement.html:15
+#: templates/matrix/teachers/evaluate_achievement.html:16
+#: templates/matrix/teachers/student_overall_evaluation.html:47
+#: templates/survey/detail.html:14 templates/users/login.html:23
 msgid "Submit"
 msgstr "Envoyer"
 
-#: .\templates\matrix\students\matrix_course.html:3
+#: templates/matrix/students/matrix_course.html:3
 msgid "Course matrix"
 msgstr "Matrice du cours"
 
-#: .\templates\matrix\students\matrix_course.html:11
-#: .\templates\matrix\students\matrix_ues.html:35
+#: templates/matrix/students/matrix_course.html:11
+#: templates/matrix/students/matrix_ues.html:35
 msgid "Self evaluation"
 msgstr "Auto-évaluation"
 
-#: .\templates\matrix\students\matrix_course.html:18
-#: .\templates\matrix\teachers\status_student.html:19
-#: .\templates\matrix\teachers\student_overall_evaluation.html:23
+#: templates/matrix/students/matrix_course.html:18
+#: templates/matrix/teachers/status_student.html:19
+#: templates/matrix/teachers/student_overall_evaluation.html:23
 msgid "Achievement"
 msgstr "Acquis d'apprentissage"
 
-#: .\templates\matrix\students\matrix_course.html:19
+#: templates/matrix/students/matrix_course.html:19
 msgid "Current evaluation"
 msgstr "Évaluation actuelle"
 
-#: .\templates\matrix\students\matrix_course.html:20
+#: templates/matrix/students/matrix_course.html:20
 msgid "Older evaluation(s)"
 msgstr "Anciennes évaluations"
 
-#: .\templates\matrix\students\matrix_course.html:21
+#: templates/matrix/students/matrix_course.html:21
 msgid "Action"
 msgstr "Action"
 
-#: .\templates\matrix\students\matrix_course.html:35
+#: templates/matrix/students/matrix_course.html:35
 msgid "New evaluation?"
 msgstr "Nouvelle évaluation ?"
 
-#: .\templates\matrix\students\matrix_course.html:37
+#: templates/matrix/students/matrix_course.html:37
 msgid "Non evaluated"
 msgstr "Non évalué"
 
-#: .\templates\matrix\students\matrix_course.html:42
+#: templates/matrix/students/matrix_course.html:42
 msgid "No achievement to evaluate."
 msgstr "Pas d'acquis à évaluer."
 
-#: .\templates\matrix\students\matrix_ues.html:4
+#: templates/matrix/students/matrix_ues.html:4
 msgid "Matrix"
 msgstr "Matrice"
 
-#: .\templates\matrix\students\matrix_ues.html:10
+#: templates/matrix/students/matrix_ues.html:10
 msgid "Learning achievements matrix"
 msgstr "Matrice des acquis d'apprentissage"
 
-#: .\templates\matrix\students\matrix_ues.html:12
-#: .\templates\matrix\teachers\homepage.html:11
+#: templates/matrix/students/matrix_ues.html:12
+#: templates/matrix/teachers/homepage.html:11
 msgid "Archives for year:"
 msgstr "Archives de l'année "
 
-#: .\templates\matrix\students\matrix_ues.html:37
-#: .\templates\matrix\students\matrix_ues.html:156
+#: templates/matrix/students/matrix_ues.html:37
+#: templates/matrix/students/matrix_ues.html:156
 msgid "Display all"
 msgstr "Tout montrer"
 
-#: .\templates\matrix\students\matrix_ues.html:103
-#: .\templates\matrix\students\overall_self_evaluation.html:53
+#: templates/matrix/students/matrix_ues.html:103
+#: templates/matrix/students/overall_self_evaluation.html:53
 msgid "No course here yet."
 msgstr "Pas encore de cours ici."
 
-#: .\templates\matrix\students\matrix_ues.html:108
-#: .\templates\matrix\students\overall_self_evaluation.html:58
+#: templates/matrix/students/matrix_ues.html:108
+#: templates/matrix/students/overall_self_evaluation.html:58
 msgid "No ECUE here yet."
 msgstr "Pas encore d'ECUE ici."
 
-#: .\templates\matrix\students\matrix_ues.html:114
-#: .\templates\matrix\students\overall_self_evaluation.html:64
+#: templates/matrix/students/matrix_ues.html:114
+#: templates/matrix/students/overall_self_evaluation.html:64
 msgid "No UE here yet."
 msgstr "Pas encore d'UE ici."
 
-#: .\templates\matrix\students\matrix_ues.html:159
+#: templates/matrix/students/matrix_ues.html:159
 msgid "Hide all"
 msgstr "Tout cacher"
 
-#: .\templates\matrix\students\ues_list.html:3
+#: templates/matrix/students/ues_list.html:3
 msgid "UEs list"
 msgstr "Liste des UEs"
 
-#: .\templates\matrix\teachers\evaluate_achievement.html:4
+#: templates/matrix/teachers/evaluate_achievement.html:4
 msgid "Evaluate an achievement"
 msgstr "Évaluer un acquis"
 
-#: .\templates\matrix\teachers\evaluate_achievement.html:10
+#: templates/matrix/teachers/evaluate_achievement.html:10
 #, python-format
 msgid "%(achievement_name)s for <em>%(student)s</em>"
 msgstr "%(achievement_name)s pour <em>%(student)s</em>"
 
-#: .\templates\matrix\teachers\homepage.html:4
-#: .\templates\matrix\teachers\list_all_sc.html:4
-#: .\templates\matrix\teachers\list_all_students.html:5
+#: templates/matrix/teachers/homepage.html:4
+#: templates/matrix/teachers/list_all_sc.html:4
+#: templates/matrix/teachers/list_all_students.html:5
 msgid "Teacher homepage"
 msgstr "Page d'accueil des enseignants"
 
-#: .\templates\matrix\teachers\homepage.html:25
-#: .\templates\matrix\teachers\list_all_sc.html:20
-#: .\templates\matrix\teachers\list_all_students.html:26
+#: templates/matrix/teachers/homepage.html:25
+#: templates/matrix/teachers/list_all_sc.html:20
+#: templates/matrix/teachers/list_all_students.html:26
 msgid "Student name"
 msgstr "Nom de l'étudiant"
 
-#: .\templates\matrix\teachers\homepage.html:26
-#: .\templates\matrix\teachers\status_student.html:50
+#: templates/matrix/teachers/homepage.html:26
+#: templates/matrix/teachers/status_student.html:50
 msgid "Evaluate"
 msgstr "Évaluer"
 
-#: .\templates\matrix\teachers\homepage.html:27
-#: .\templates\matrix\teachers\list_all_sc.html:21
+#: templates/matrix/teachers/homepage.html:27
+#: templates/matrix/teachers/list_all_sc.html:21
 msgid "Average"
 msgstr "Moyenne"
 
-#: .\templates\matrix\teachers\homepage.html:28
+#: templates/matrix/teachers/homepage.html:28
 msgid "Student's evaluation"
 msgstr "Évaluation de l'étudiant"
 
-#: .\templates\matrix\teachers\homepage.html:29
+#: templates/matrix/teachers/homepage.html:29
 msgid "Status"
 msgstr "Statut"
 
-#: .\templates\matrix\teachers\homepage.html:48
-#: .\templates\matrix\teachers\list_all_sc.html:29
-#: .\templates\matrix\teachers\status_student.html:12
+#: templates/matrix/teachers/homepage.html:48
+#: templates/matrix/teachers/list_all_sc.html:29
+#: templates/matrix/teachers/status_student.html:12
 msgid "Overall evaluation"
 msgstr "Évaluation globale"
 
-#: .\templates\matrix\teachers\homepage.html:57
+#: templates/matrix/teachers/homepage.html:57
 msgid "Not fully evaluated yet!"
 msgstr "Non évalué"
 
-#: .\templates\matrix\teachers\homepage.html:61
+#: templates/matrix/teachers/homepage.html:61
 msgid "Different!"
 msgstr "Différent !"
 
-#: .\templates\matrix\teachers\homepage.html:65
+#: templates/matrix/teachers/homepage.html:65
 msgid "Same!"
 msgstr "Ok !"
 
-#: .\templates\matrix\teachers\homepage.html:70
-#: .\templates\matrix\teachers\list_all_sc.html:34
-#: .\templates\matrix\teachers\list_all_students.html:53
+#: templates/matrix/teachers/homepage.html:70
+#: templates/matrix/teachers/list_all_sc.html:34
+#: templates/matrix/teachers/list_all_students.html:53
 msgid "No student enrolled yet."
 msgstr "Pas encore d'élève inscrit."
 
-#: .\templates\matrix\teachers\homepage.html:75
-#: .\templates\matrix\teachers\list_all_sc.html:39
-#: .\templates\matrix\teachers\list_all_students.html:58
+#: templates/matrix/teachers/homepage.html:75
+#: templates/matrix/teachers/list_all_sc.html:39
+#: templates/matrix/teachers/list_all_students.html:58
 msgid "Average of the class"
 msgstr "Moyenne de la classe"
 
-#: .\templates\matrix\teachers\homepage.html:76
-#: .\templates\matrix\teachers\list_all_sc.html:41
+#: templates/matrix/teachers/homepage.html:76
+#: templates/matrix/teachers/list_all_sc.html:41
 msgid "student(s)"
 msgstr "élève(s)"
 
-#: .\templates\matrix\teachers\homepage.html:87
-#: .\templates\matrix\teachers\list_all_sc.html:49
+#: templates/matrix/teachers/homepage.html:87
+#: templates/matrix/teachers/list_all_sc.html:49
 msgid "No class assigned yet."
 msgstr "Pas encore de petite classe assignée."
 
-#: .\templates\matrix\teachers\list_all_sc.html:13
+#: templates/matrix/teachers/list_all_sc.html:13
 #, python-format
 msgid "By %(teacher)s"
 msgstr "Par %(teacher)s"
 
-#: .\templates\matrix\teachers\list_all_sc.html:22
+#: templates/matrix/teachers/list_all_sc.html:22
 msgid "Nb of evaluations"
 msgstr "Nombre d'acquis"
 
-#: .\templates\matrix\teachers\list_all_students.html:41
+#: templates/matrix/teachers/list_all_students.html:41
 msgid "grades"
 msgstr "notes"
 
-#: .\templates\matrix\teachers\status_student.html:4
+#: templates/matrix/teachers/status_student.html:4
 msgid "Student situation"
 msgstr "Situation de l'élève"
 
-#: .\templates\matrix\teachers\status_student.html:10
-#: .\templates\matrix\teachers\student_overall_evaluation.html:10
+#: templates/matrix/teachers/status_student.html:10
+#: templates/matrix/teachers/student_overall_evaluation.html:10
 msgid "Course:"
 msgstr "Cours :"
 
-#: .\templates\matrix\teachers\status_student.html:13
-#: .\templates\matrix\teachers\student_overall_evaluation.html:14
+#: templates/matrix/teachers/status_student.html:13
+#: templates/matrix/teachers/student_overall_evaluation.html:14
 msgid "Return to your students"
 msgstr "Retour à la liste de vos étudiants"
 
-#: .\templates\matrix\teachers\status_student.html:23
+#: templates/matrix/teachers/status_student.html:23
 msgid "Evaluation"
 msgstr "Évaluation"
 
-#: .\templates\matrix\teachers\student_overall_evaluation.html:4
+#: templates/matrix/teachers/student_overall_evaluation.html:4
 msgid "Student overall evaluation"
 msgstr "Évaluation globale de l'étudiant"
 
-#: .\templates\matrix\teachers\student_overall_evaluation.html:13
+#: templates/matrix/teachers/student_overall_evaluation.html:13
 msgid "Return to student status"
 msgstr "Retour au statut de l'étudiant"
 
-#: .\templates\users\login.html:9
-msgid "If you have a CAS access"
-msgstr "Si vous avez un accès par le CAS"
+#: templates/survey/detail.html:13
+msgid "Save"
+msgstr ""
 
-#: .\templates\users\login.html:10
-msgid "Connect through CAS authentication"
-msgstr "Se connecter à travers le CAS"
-
-#: .\templates\users\login.html:13
-msgid "If you don't"
-msgstr "Sinon"
-
-#: .\templates\users\login.html:15
-msgid "Unknown user or wrong password."
-msgstr "Utilisateur inexistant ou mauvais de mot de passe."
-
-#: .\templates\users\login.html:18
-msgid "You are successfully logged in!"
-msgstr "Vous êtes bien connecté !"
-
-#: .\templates\index.html:44
-#: .\templates\survey\list.html:5
-msgid "Survey list"
-msgstr "Sondages"
-
-#: .\templates\survey\list.html:7
-#: .\survey\models.py:26
-msgid "Surveys"
-msgstr "Sondages"
-
-#: .\templates\survey\list.html:14
+#: templates/survey/list.html:14
 msgid "Edit your answer to"
 msgstr "Modifier votre réponse à"
 
-#: .\templates\survey\list.html:16
+#: templates/survey/list.html:16
 msgid "Display your answer to"
 msgstr "Afficher votre réponse à"
 
-#: .\templates\survey\list.html:24
+#: templates/survey/list.html:24
 msgid "Answer to"
 msgstr "Répondre à"
 
-#: .\survey\models.py:25
-msgid "Survey"
-msgstr "Sondage"
-
-#: .\survey\models.py:22
-msgid "Survey %s"
-msgstr "Sondage %s"
-
-#: .\survey\models.py:73
-msgid "Questions"
-msgstr "Questions"
-
-#: .\survey\models.py:72
-msgid "Question"
-msgstr "Question"
-
-#: .\survey\models.py:61
-msgid "Question %s"
-msgstr "Question %s"
-
-#: .\survey\models.py:88
-msgid "Responses"
-msgstr "Résultats"
-
-#: .\survey\models.py:87
-msgid "Response"
-msgstr "Résultat"
-
-#: .\survey\models.py:84
-msgid "Response to %s by %s"
-msgstr "Résultat à %s par %s"
-
-#: .\survey\models.py:125
-msgid "Answers"
-msgstr "Réponses"
-
-#: .\survey\models.py:124
-msgid "Answer"
-msgstr "Réponse"
-
-#: .\survey\models.py:121
-msgid "Answer to %s (%s)"
-msgstr "Réponse à %s (%s)"
-
-#: .\survey\models.py:47
-msgid "Question choices"
-msgstr "Choix de réponses"
-
-#: .\survey\models.py:48
-msgid "Question choice"
-msgstr "Choix de réponses"
-
-#: .\templates\survey\list.html:28
+#: templates/survey/list.html:28
 msgid "Your answers"
 msgstr "Vos réponses"
+
+#: templates/survey/list_de.html:14
+#, python-format
+msgid ""
+"\n"
+"                1 answer\n"
+"                "
+msgid_plural ""
+"\n"
+"                %(counter)s answers\n"
+"                "
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/users/login.html:9
+msgid "If you have a CAS access"
+msgstr "Si vous avez un accès par le CAS"
+
+#: templates/users/login.html:10
+msgid "Connect through CAS authentication"
+msgstr "Se connecter à travers le CAS"
+
+#: templates/users/login.html:13
+msgid "If you don't"
+msgstr "Sinon"
+
+#: templates/users/login.html:15
+msgid "Unknown user or wrong password."
+msgstr "Utilisateur inexistant ou mauvais de mot de passe."
+
+#: templates/users/login.html:18
+msgid "You are successfully logged in!"
+msgstr "Vous êtes bien connecté !"
 
 #~ msgid "Welcome !"
 #~ msgstr "Bienvenue !"
