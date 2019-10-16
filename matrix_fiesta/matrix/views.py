@@ -454,7 +454,7 @@ def _compute_averages(evaluations, classes):
 
     for small_class in classes:
         averages[small_class.id] = {}
-        nb_achievements[small_class.id] = len(small_class.course.achievements.all())
+        nb_achievements[small_class.id] = small_class.course.achievements.count()
 
         students = small_class.students.all()
 
@@ -482,9 +482,10 @@ def _compute_averages(evaluations, classes):
 
         # If there is any student, computes the average
         if len(students) > 0:
-            averages[small_class.id]["average"] = sum(
-                map(lambda x: x[0], averages[small_class.id].values())
-            ) / len(small_class.students.all())
+            averages[small_class.id]["average"] = (
+                sum(map(lambda x: x[0], averages[small_class.id].values()))
+                / small_class.students.count()
+            )
 
     return averages, nb_achievements
 
@@ -1032,7 +1033,7 @@ def all_small_classes(request):
 
     for small_class in classes:
         averages[small_class.id] = {}
-        nb_achievements[small_class.id] = len(small_class.course.achievements.all())
+        nb_achievements[small_class.id] = small_class.course.achievements.count()
 
         students = small_class.students.all()
 
@@ -1059,9 +1060,10 @@ def all_small_classes(request):
                 averages[small_class.id][student.id] = (sum_, count_)
 
         if len(students) > 0:
-            averages[small_class.id]["average"] = sum(
-                map(lambda x: x[0], averages[small_class.id].values())
-            ) / len(small_class.students.all())
+            averages[small_class.id]["average"] = (
+                sum(map(lambda x: x[0], averages[small_class.id].values()))
+                / small_class.students.count()
+            )
 
     return render(
         request,

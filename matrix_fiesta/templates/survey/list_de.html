@@ -11,7 +11,7 @@
                 <a href="{% url "survey.detail_de" survey.id %}">
                 {{ survey.name }}
                 </a>
-                ({% blocktrans count counter=survey.responses.all|length %}
+                ({% blocktrans count counter=survey.responses.count %}
                 1 answer
                 {% plural %}
                 {{ counter }} answers

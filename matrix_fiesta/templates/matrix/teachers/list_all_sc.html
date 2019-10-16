@@ -38,7 +38,7 @@
                     <tr class="">
                         <td colspan="2"><em>{% trans "Average of the class" %}</em></td>
                         <td>{{ averages|get_item:small_class.id|get_item:"average"|floatformat:2 }}</td>
-                        <td>{{ small_class.students.all|length }} {% trans "student(s)" %}</td>
+                        <td>{{ small_class.students.count }} {% trans "student(s)" %}</td>
                     </tr>
                 </tfoot>
             </table>
