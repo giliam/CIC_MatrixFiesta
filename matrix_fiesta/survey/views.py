@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
 
 from common import auths
@@ -64,10 +65,36 @@ def de_detail_survey(request, survey):
         Q(id=survey)
     )
     responses = models.Response.objects.filter(survey=survey).prefetch_related(
-        'answers', 'answers__question'
+        'user', 'answers', 'answers__question', 'answers__question__choices'
     )
-    
-    return render(request, "survey/detail_de.html", {"survey": survey})
+
+    # Needs to handle each question's results
+    answers_results = {
+        question.id: {
+            "iterable": question.is_iterable(),
+            "values": [],
+            "choices": {c.id: [c, 0] for c in question.choices.all()},
+            "authors": [],
+        } for question in survey.questions.all()
+    }
+    for response in responses.all():
+        for answer in response.answers.all():
+            if not answers_results[answer.question.id]["iterable"]:
+                answers_results[answer.question.id]["values"].append(
+                    answer.value
+                )
+                if response.anonymous:
+                    answers_results[answer.question.id]["authors"].append(_("Anonymous"))
+                else:
+                    answers_results[answer.question.id]["authors"].append(response.user)
+            else:
+                for choice in answer.choices.all():
+                    answers_results[answer.question.id]["choices"][choice.id][1] += 1
+
+    return render(request, "survey/detail_de.html", {
+        "survey": survey,
+        "answers_results": answers_results,
+    })
 
 
 @login_required
@@ -134,7 +161,7 @@ def answer_survey(request, survey, initial_response=None):
                 raw_answer = form.cleaned_data.get("question_"+str(question.id), None)
                 if raw_answer:
                     if initial_response is None:
-                    answer = models.Answer()
+                        answer = models.Answer()
                     else:
                         answer = answers[question.id]
                     answer.response = response
