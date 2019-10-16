@@ -50,14 +50,6 @@
                 {% trans "Evaluate your students" %}
               </a>
               {% endif %}
-              {% if request.user.is_superuser %}
-                <a class="item {{ nav_all_small_classes_active }}" href="{% url "teachers.all_small_classes" %}">
-                  {% trans "Show all SC" %}
-                </a>
-                <a class="item {{ nav_all_students_active }}" href="{% url "teachers.all_students" %}">
-                  {% trans "Show all students" %}
-                </a>
-              {% endif %}
               {% if request.user|is_de %} 
               <a class="item {{ nav_homepage_de_active }}" href="{% url "de.homepage_de" %}">
                 {% trans "DE" %}
