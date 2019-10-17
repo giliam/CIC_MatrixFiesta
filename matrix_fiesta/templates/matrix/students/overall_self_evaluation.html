@@ -37,7 +37,7 @@
                             <td>{{achievement.name}}</td>
                             {% for value, text in form_field.choices %}
                                 <td class="center aligned {% if form_initial|get_item:0 == value %} active{% endif %}">
-                                    <input type="radio" name="{{achievement.get_field_name}}" value="{{ value }}"{% if form_initial|get_item:0 == value %} checked{% endif %} {% if value == 0 %}disabled{% endif %}/>
+                                    <input type="radio" name="{{achievement.get_field_name}}" value="{{ value }}"{% if form_initial|get_item:0 == value %} checked{% endif %} {% if form_initial|get_item:0 > 0 and value == 0 %} disabled{% endif %} />
                                 </td>
                             {% endfor %}
                         {% endwith %}
