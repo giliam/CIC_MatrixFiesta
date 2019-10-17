@@ -228,18 +228,17 @@ def evaluate_course(request, slug):
                 if new_value is None:
                     continue
 
+                # sets all previous evaluation to false
+                models.StudentEvaluation.objects.filter(
+                    achievement=achievement, student=student, teacher_evaluation=False
+                ).update(last_evaluation=False)
+
                 # Either updates an existing achievement
                 if achievement.id in achievements_evaluations.keys():
                     last_value = achievements_evaluations[achievement.id]["last"][
                         "value"
                     ]
                     if last_value == new_value:
-                        models.StudentEvaluation.objects.filter(
-                            achievement=achievement,
-                            student=student,
-                            teacher_evaluation=False,
-                        ).update(last_evaluation=False)
-
                         evaluation_same = evaluations.filter(
                             teacher_evaluation=False,
                             achievement=achievement,
@@ -257,11 +256,6 @@ def evaluate_course(request, slug):
                     evaluation.save()
                 # Or creates a new one
                 else:
-                    models.StudentEvaluation.objects.filter(
-                        achievement=achievement,
-                        student=student,
-                        teacher_evaluation=False,
-                    ).update(last_evaluation=False)
                     evaluation = models.StudentEvaluation()
                     evaluation.achievement = achievement
                     evaluation.student = student
@@ -309,6 +303,7 @@ def evaluate_achievement(request, slug):
     if request.method == "POST":
         form = forms.StudentEvaluationForm(request.POST)
         if form.is_valid():
+            # sets all previous evaluation to false
             models.StudentEvaluation.objects.filter(
                 achievement=achievement, student=student, teacher_evaluation=False
             ).update(last_evaluation=False)
@@ -379,17 +374,19 @@ def self_evaluate_all(request):
                             if new_value is None:
                                 continue
 
+                            # sets all previous evaluation to false
+                            models.StudentEvaluation.objects.filter(
+                                achievement=achievement,
+                                student=student,
+                                teacher_evaluation=False,
+                            ).update(last_evaluation=False)
+
                             # Either updates an existing achievement
                             if achievement.id in achievements_evaluations.keys():
                                 last_value = achievements_evaluations[achievement.id][
                                     "last"
                                 ]["value"]
                                 if last_value == new_value:
-                                    models.StudentEvaluation.objects.filter(
-                                        achievement=achievement,
-                                        student=student,
-                                        teacher_evaluation=False,
-                                    ).update(last_evaluation=False)
 
                                     evaluation_same = evaluations.filter(
                                         teacher_evaluation=False,
@@ -408,11 +405,6 @@ def self_evaluate_all(request):
                                 evaluation.save()
                             # Or creates a new one
                             else:
-                                models.StudentEvaluation.objects.filter(
-                                    achievement=achievement,
-                                    student=student,
-                                    teacher_evaluation=False,
-                                ).update(last_evaluation=False)
                                 evaluation = models.StudentEvaluation()
                                 evaluation.achievement = achievement
                                 evaluation.student = student
@@ -470,11 +462,15 @@ def _compute_averages(evaluations, classes):
                         if (
                             small_class
                             in evaluation.achievement.course.small_classes.all()
-                        ):
+                        ) and evaluation.evaluation_value.counts_for_average:
                             sum_ += evaluation.evaluation_value.integer_value
                             count_ += 1
 
-                sum_ /= nb_achievements[small_class.id]
+                # sum_ /= nb_achievements[small_class.id]
+                if count_ > 0:
+                    sum_ /= count_
+                else:
+                    sum_ = 0.0
 
                 # evaluations_this_sc_student = evaluations.filter(student=student, achievement__course__small_classes=small_class
                 #     ).aggregate(sum_values=Coalesce(Sum("evaluation_value__integer_value"), Value(0.0)), nb_evals=Count('achievement'))
@@ -651,6 +647,7 @@ def evaluate_achievement_student(request, small_class_id, student_id, slug):
     if request.method == "POST":
         form = forms.StudentEvaluationForm(request.POST)
         if form.is_valid():
+            # sets all previous evaluation to false
             models.StudentEvaluation.objects.filter(
                 achievement=achievement, student=student, teacher_evaluation=True
             ).update(last_evaluation=False)
@@ -722,24 +719,24 @@ def evaluate_student_all(request, small_class_id, student_id):
                 if new_value is None:
                     continue
 
+                # sets all previous evaluation to false
+                models.StudentEvaluation.objects.filter(
+                    achievement=achievement, student=student, teacher_evaluation=True
+                ).update(last_evaluation=False)
+
                 # Either updates an existing achievement
                 if achievement.id in achievements_evaluations.keys():
                     last_value = achievements_evaluations[achievement.id]["last"][
                         "value"
                     ]
                     if last_value == new_value:
-                        models.StudentEvaluation.objects.filter(
-                            achievement=achievement,
-                            student=student,
-                            teacher_evaluation=True,
-                        ).update(last_evaluation=False)
-
-                        evaluation = evaluations.get(
+                        evaluation_same = evaluations.filter(
                             teacher_evaluation=True,
                             achievement=achievement,
                             student=student,
                             evaluation_value=new_value,
                         )
+                        evaluation = evaluation_same.all()[0]
                     else:
                         evaluation = models.StudentEvaluation()
                         evaluation.achievement = achievement
@@ -750,11 +747,6 @@ def evaluate_student_all(request, small_class_id, student_id):
                     evaluation.save()
                 # Or creates a new one
                 else:
-                    models.StudentEvaluation.objects.filter(
-                        achievement=achievement,
-                        student=student,
-                        teacher_evaluation=True,
-                    ).update(last_evaluation=False)
                     evaluation = models.StudentEvaluation()
                     evaluation.achievement = achievement
                     evaluation.student = student
@@ -1049,11 +1041,15 @@ def all_small_classes(request):
                         if (
                             small_class
                             in evaluation.achievement.course.small_classes.all()
-                        ):
+                        ) and evaluation.evaluation_value.counts_for_average:
                             sum_ += evaluation.evaluation_value.integer_value
                             count_ += 1
 
-                sum_ /= nb_achievements[small_class.id]
+                # sum_ /= nb_achievements[small_class.id]
+                if count_ > 0:
+                    sum_ /= count_
+                else:
+                    sum_ = 0.0
 
                 # evaluations_this_sc_student = evaluations.filter(student=student, achievement__course__small_classes=small_class
                 #     ).aggregate(sum_values=Coalesce(Sum("evaluation_value__integer_value"), Value(0.0)), nb_evals=Count('achievement'))
@@ -1126,10 +1122,11 @@ def all_students(request, schoolyear=1):
         if not ue_id in evaluations_sorted[student_id].keys():
             evaluations_sorted[student_id][ue_id] = {"count": 0.0, "sum": 0.0}
 
-        evaluations_sorted[student_id][ue_id]["count"] += 1.0
-        evaluations_sorted[student_id][ue_id][
-            "sum"
-        ] += evaluation.evaluation_value.integer_value
+        if evaluation.evaluation_value.counts_for_average:
+            evaluations_sorted[student_id][ue_id]["count"] += 1.0
+            evaluations_sorted[student_id][ue_id][
+                "sum"
+            ] += evaluation.evaluation_value.integer_value
 
     school_years = models.SchoolYear.objects.filter()
 
