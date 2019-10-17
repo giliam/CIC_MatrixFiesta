@@ -432,19 +432,41 @@ msgstr "Bienvenue sur ce site d'évaluation des acquis d'apprentissage !"
 
 #: templates/homepage.html:9
 msgid ""
-"It was specifically designed so you can evaluate yourself on the different "
-"parts of the program."
+"It was specifically designed so students can evaluate themselves on the "
+"different parts of the program."
 msgstr ""
-"Il a été spécialement conçu pour que vous puissiez vous évaluer vous-même "
-"sur les différentes parties du programme."
+"Pour chaque enseignement constitutif des unités d’enseignement d’informatique "
+"UE12 et UE22 a été établie une « <strong>matrice de compétences</strong> » "
+"qui regroupe les "
+"notions et les connaissances à acquérir dans l’enseignement. "
+"<br />Elle propose plusieurs degrés d’acquisition pour chacune des notions : "
+"« <em>Non acquis</em> », « <em>En cours d'acquisition</em> », "
+"« <em>Acquis</em> », « <em>Très bien acquis</em> », "
+"et « <em>Expert</em> ». Elle contient aussi deux autres choix: "
+"« <em>Je ne comprends pas</em> » "
+"et « <em>Ne s'applique pas</em> ». Cette matrice permet aux élèves de situer "
+"(à un instant donné) leurs apprentissages dans les attendus et aux enseignants "
+"de surveiller le <strong>niveau ressenti</strong> par un élève, de pouvoir "
+"le comparer avec sa "
+"vision de l’élève en cours et lui proposer des approfondissements. <br />Le "
+"but de cette matrice est de renseigner sur toute difficulté pouvant survenir "
+"dans le cursus informatique d'un élève, afin de pouvoir remédier rapidement "
+"aux problèmes (comme l'inadéquation des élèves à leur groupe, une vitesse "
+"de déroulement de cours non satisfaisante, etc.). "
+"Cette matrice est complétée par chaque élève tout au long des "
+"enseignements, le niveau d’un élève sur les notions pouvant <em>évoluer</em>. "
 
-#: templates/homepage.html:12
-msgid "It allows you to evaluate your students."
-msgstr "Vous pouvez évaluer vos élèves."
+#: templates/homepage.html:11
+msgid "As a teacher, it allows you to evaluate your students."
+msgstr "En tant qu'enseignant, vous pouvez ici évaluer vos élèves."
 
-#: templates/homepage.html:15
-msgid "Here, you can manage the promotion."
-msgstr "Vous pouvez gérer la promotion."
+#: templates/homepage.html:8
+msgid "What is it?"
+msgstr "Qu'est-ce ?"
+
+#: templates/homepage.html:14
+msgid "As DE member, you can manage the promotion."
+msgstr "En tant que membre de la DE, vous pouvez gérer la promotion."
 
 #: templates/index.html:10
 msgid "Welcome"

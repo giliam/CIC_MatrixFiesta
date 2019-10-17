@@ -4,14 +4,13 @@
 
 {% block title %}{% trans "Homepage" %}{% endblock %}
 {% block content %}
-{% trans "Welcome on this achievement evaluation website!" %}
-{% if request.user|is_student %}
-    {% trans "It was specifically designed so you can evaluate yourself on the different parts of the program." %}
-{% endif %}
+<p>{% trans "Welcome on this achievement evaluation website!" %}</p>
+<h1>{% trans "What is it?" %}</h1>
+<p>{% trans "It was specifically designed so students can evaluate themselves on the different parts of the program." %}</p>
 {% if request.user|is_teacher %}
-    {% trans "It allows you to evaluate your students." %}
+    <p>{% trans "As a teacher, it allows you to evaluate your students." %}</p>
 {% endif %}
 {% if request.user|is_de %}
-    {% trans "Here, you can manage the promotion." %}
+    <p>{% trans "As DE member, you can manage the promotion." %}</p>
 {% endif %}
 {% endblock %}
