@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-16 17:21+0200\n"
+"POT-Creation-Date: 2019-10-18 14:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr "Nom d'utilisateur"
 msgid "Password"
 msgstr "Mot de passe"
 
-#: matrix/forms.py:54 matrix/forms.py:63 matrix/models.py:144
+#: matrix/forms.py:54 matrix/forms.py:63 matrix/models.py:152
 msgid "Evaluation value"
 msgstr "Valeur de l'évaluation"
 
@@ -54,131 +54,131 @@ msgstr "Sélectionner un fichier pour les élèves"
 msgid "Select a file for the teachers"
 msgstr "Sélectionner un fichier pour les enseignants"
 
-#: matrix/forms.py:92 matrix/models.py:130
+#: matrix/forms.py:92 matrix/models.py:137
 msgid "Course"
 msgstr "Cours"
 
-#: matrix/forms.py:93 matrix/models.py:42
+#: matrix/forms.py:93 matrix/models.py:43
 msgid "Promotion year"
 msgstr "Promotion"
 
-#: matrix/models.py:15
+#: matrix/models.py:16
 msgid "DatedModel"
 msgstr "Objet daté"
 
-#: matrix/models.py:16
+#: matrix/models.py:17
 msgid "DatedModels"
 msgstr "Objets datés"
 
-#: matrix/models.py:28
+#: matrix/models.py:29
 msgid "School year"
 msgstr "Année scolaire"
 
-#: matrix/models.py:29
+#: matrix/models.py:30
 msgid "School years"
 msgstr "Années scolaires"
 
-#: matrix/models.py:43
+#: matrix/models.py:44
 msgid "Promotion years"
 msgstr "Promotions"
 
-#: matrix/models.py:68
+#: matrix/models.py:71
 msgid "User"
 msgstr "Utilisateur"
 
-#: matrix/models.py:69
+#: matrix/models.py:72
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: matrix/models.py:86
+#: matrix/models.py:87
 msgid "Semestre"
 msgstr "Semestre"
 
-#: matrix/models.py:87
+#: matrix/models.py:88
 msgid "Semestres"
 msgstr "Semestres"
 
-#: matrix/models.py:99
+#: matrix/models.py:102
 msgid "UE"
 msgstr "UE"
 
-#: matrix/models.py:100 templates/matrix/students/matrix_ues.html:18
+#: matrix/models.py:103 templates/matrix/students/matrix_ues.html:18
 msgid "UEs"
 msgstr "UEs"
 
-#: matrix/models.py:109
+#: matrix/models.py:114
 #, python-format
 msgid "ECUE %(name)s - %(ue)s"
 msgstr "ECUE %(name)s - %(ue)s"
 
-#: matrix/models.py:112
+#: matrix/models.py:117
 #: templates/matrix/students/overall_self_evaluation.html:27
 msgid "ECUE"
 msgstr "ECUE"
 
-#: matrix/models.py:113
+#: matrix/models.py:118
 msgid "ECUEs"
 msgstr "ECUEs"
 
-#: matrix/models.py:131
+#: matrix/models.py:138
 msgid "Courses"
 msgstr "Cours"
 
-#: matrix/models.py:145
+#: matrix/models.py:153
 msgid "Evaluation values"
 msgstr "Valeurs de l'évaluation"
 
-#: matrix/models.py:166
+#: matrix/models.py:176
 msgid "Learning achievement"
 msgstr "Acquis d'apprentissage"
 
-#: matrix/models.py:167
+#: matrix/models.py:177
 msgid "Learning achievements"
 msgstr "Acquis d'apprentissage"
 
-#: matrix/models.py:179
+#: matrix/models.py:193
 #, python-format
 msgid "%(achiev)s, %(student)s : %(eval)s (teacher: %(teacher)s)"
 msgstr "%(achiev)s, %(student)s : %(eval)s (enseignant : %(teacher)s)"
 
-#: matrix/models.py:186
+#: matrix/models.py:201
 msgid "Student evaluation"
 msgstr "Évaluation de l'étudiant"
 
-#: matrix/models.py:187
+#: matrix/models.py:202
 msgid "Student evaluations"
 msgstr "Évaluations des étudiants"
 
-#: matrix/models.py:204
+#: matrix/models.py:231
 #, python-format
 msgid "SC %(name)s of %(course)s by %(teacher)s"
 msgstr "PC %(name)s %(course)s par %(teacher)s"
 
-#: matrix/models.py:211
+#: matrix/models.py:238
 msgid "Small class"
 msgstr "Petite classe"
 
-#: matrix/models.py:212 templates/de/homepage.html:18
+#: matrix/models.py:239 templates/de/homepage.html:18
 msgid "Small classes"
 msgstr "Petites classes"
 
-#: matrix/views.py:815 matrix/views.py:989 matrix/views.py:1079
+#: matrix/views.py:807 matrix/views.py:981 matrix/views.py:1075
 msgid "Only super users can perform this action"
 msgstr "Seuls les administrateurs peuvent faire cette action"
 
-#: matrix/views.py:824
+#: matrix/views.py:816
 msgid "formatted as 20XX"
 msgstr "renseigné au format 20XX"
 
-#: matrix/views.py:829
+#: matrix/views.py:821
 msgid "must be 0 or 1"
 msgstr "doit être 0 ou 1"
 
-#: matrix/views.py:851
+#: matrix/views.py:843
 msgid "DE shouldn't be in the groups selected"
 msgstr "La DE ne devrait pas être dans les groupes sélectionnés."
 
-#: matrix/views.py:965
+#: matrix/views.py:957
 #, python-format
 msgid "Groupe #%d"
 msgstr "Groupe #%d"
@@ -366,24 +366,24 @@ msgid "Entrance year"
 msgstr "Année d'entrée"
 
 #: templates/de/list_users.html:16
+msgid "Last connection"
+msgstr "Dernière connexion"
+
+#: templates/de/list_users.html:17
 msgid "Cesure?"
 msgstr "Césure ?"
 
-#: templates/de/list_users.html:17
+#: templates/de/list_users.html:18
 msgid "Groups"
 msgstr "Groupes"
 
-#: templates/de/list_users.html:27
+#: templates/de/list_users.html:29
 msgid "Yes"
 msgstr "Oui"
 
-#: templates/de/list_users.html:27
+#: templates/de/list_users.html:29
 msgid "No"
 msgstr "Non"
-
-#: templates/de/list_users.html:28
-msgid "Last connection"
-msgstr "Dernière connexion"
 
 #: templates/de/start_new_year.html:7
 msgid "Start new year"
@@ -434,39 +434,37 @@ msgstr "Page d'accueil"
 msgid "Welcome on this achievement evaluation website!"
 msgstr "Bienvenue sur ce site d'évaluation des acquis d'apprentissage !"
 
+#: templates/homepage.html:8
+msgid "What is it?"
+msgstr "Qu'est-ce ?"
+
 #: templates/homepage.html:9
 msgid ""
 "It was specifically designed so students can evaluate themselves on the "
 "different parts of the program."
 msgstr ""
-"Pour chaque enseignement constitutif des unités d’enseignement d’informatique "
-"UE12 et UE22 a été établie une « <strong>matrice de compétences</strong> » "
-"qui regroupe les "
-"notions et les connaissances à acquérir dans l’enseignement. "
-"<br />Elle propose plusieurs degrés d’acquisition pour chacune des notions : "
-"« <em>Non acquis</em> », « <em>En cours d'acquisition</em> », "
-"« <em>Acquis</em> », « <em>Très bien acquis</em> », "
-"et « <em>Expert</em> ». Elle contient aussi deux autres choix: "
-"« <em>Je ne comprends pas</em> » "
-"et « <em>Ne s'applique pas</em> ». Cette matrice permet aux élèves de situer "
-"(à un instant donné) leurs apprentissages dans les attendus et aux enseignants "
-"de surveiller le <strong>niveau ressenti</strong> par un élève, de pouvoir "
-"le comparer avec sa "
-"vision de l’élève en cours et lui proposer des approfondissements. <br />Le "
-"but de cette matrice est de renseigner sur toute difficulté pouvant survenir "
-"dans le cursus informatique d'un élève, afin de pouvoir remédier rapidement "
-"aux problèmes (comme l'inadéquation des élèves à leur groupe, une vitesse "
-"de déroulement de cours non satisfaisante, etc.). "
-"Cette matrice est complétée par chaque élève tout au long des "
-"enseignements, le niveau d’un élève sur les notions pouvant <em>évoluer</em>. "
+"Pour chaque enseignement constitutif des unités d’enseignement "
+"d’informatique UE12 et UE22 a été établie une « <strong>matrice de "
+"compétences</strong> » qui regroupe les notions et les connaissances à "
+"acquérir dans l’enseignement. <br />Elle propose plusieurs degrés "
+"d’acquisition pour chacune des notions : « <em>Non acquis</em> », « <em>En "
+"cours d'acquisition</em> », « <em>Acquis</em> », « <em>Très bien acquis</em> "
+"», et « <em>Expert</em> ». Elle contient aussi deux autres choix: « <em>Je "
+"ne comprends pas</em> » et « <em>Ne s'applique pas</em> ». Cette matrice "
+"permet aux élèves de situer (à un instant donné) leurs apprentissages dans "
+"les attendus et aux enseignants de surveiller le <strong>niveau ressenti</"
+"strong> par un élève, de pouvoir le comparer avec sa vision de l’élève en "
+"cours et lui proposer des approfondissements. <br />Le but de cette matrice "
+"est de renseigner sur toute difficulté pouvant survenir dans le cursus "
+"informatique d'un élève, afin de pouvoir remédier rapidement aux problèmes "
+"(comme l'inadéquation des élèves à leur groupe, une vitesse de déroulement "
+"de cours non satisfaisante, etc.). Cette matrice est complétée par chaque "
+"élève tout au long des enseignements, le niveau d’un élève sur les notions "
+"pouvant <em>évoluer</em>. "
 
 #: templates/homepage.html:11
 msgid "As a teacher, it allows you to evaluate your students."
 msgstr "En tant qu'enseignant, vous pouvez ici évaluer vos élèves."
-
-#: templates/homepage.html:8
-msgid "What is it?"
-msgstr "Qu'est-ce ?"
 
 #: templates/homepage.html:14
 msgid "As DE member, you can manage the promotion."
@@ -532,7 +530,7 @@ msgid "Not evaluated yet"
 msgstr "Non évalué"
 
 #: templates/matrix/students/course_self_evaluation.html:44
-#: templates/matrix/students/matrix_ues.html:98
+#: templates/matrix/students/matrix_ues.html:99
 #: templates/matrix/students/overall_self_evaluation.html:48
 msgid "No achievement here yet."
 msgstr "Pas encore d'acquis d'apprentissage ici."
@@ -601,26 +599,26 @@ msgid "Archives for year:"
 msgstr "Archives de l'année "
 
 #: templates/matrix/students/matrix_ues.html:37
-#: templates/matrix/students/matrix_ues.html:156
+#: templates/matrix/students/matrix_ues.html:169
 msgid "Display all"
 msgstr "Tout montrer"
 
-#: templates/matrix/students/matrix_ues.html:103
+#: templates/matrix/students/matrix_ues.html:104
 #: templates/matrix/students/overall_self_evaluation.html:53
 msgid "No course here yet."
 msgstr "Pas encore de cours ici."
 
-#: templates/matrix/students/matrix_ues.html:108
+#: templates/matrix/students/matrix_ues.html:109
 #: templates/matrix/students/overall_self_evaluation.html:58
 msgid "No ECUE here yet."
 msgstr "Pas encore d'ECUE ici."
 
-#: templates/matrix/students/matrix_ues.html:114
+#: templates/matrix/students/matrix_ues.html:115
 #: templates/matrix/students/overall_self_evaluation.html:64
 msgid "No UE here yet."
 msgstr "Pas encore d'UE ici."
 
-#: templates/matrix/students/matrix_ues.html:159
+#: templates/matrix/students/matrix_ues.html:176
 msgid "Hide all"
 msgstr "Tout cacher"
 
