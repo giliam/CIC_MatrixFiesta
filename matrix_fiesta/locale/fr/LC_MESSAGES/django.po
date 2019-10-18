@@ -381,6 +381,10 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
+#: templates/de/list_users.html:28
+msgid "Last connection"
+msgstr "Dernière connexion"
+
 #: templates/de/start_new_year.html:7
 msgid "Start new year"
 msgstr "Commencer une nouvelle année"

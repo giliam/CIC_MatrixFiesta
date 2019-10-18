@@ -13,6 +13,7 @@
         <th>{% trans "Student lastname" %}</th>
         <th>{% trans "Email" %}</th>
         <th>{% trans "Entrance year" %}</th>
+        <th>{% trans "Last connection" %}</th>
         <th>{% trans "Cesure?" %}</th>
         <th>{% trans "Groups" %}</th>
     </tr>
@@ -24,6 +25,7 @@
     <td>{{student.user.last_name}}</td>
     <td>{{student.user.email}}</td>
     <td>{{student.year_entrance}}</td>
+    <td>{{student.user.last_login|default_if_none:"-" }}</td>
     <td>{% if student.cesure %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
     <td>{{student.user.groups.all|join:", "}}</td>
 </tr>
