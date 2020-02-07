@@ -6,13 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 from survey.models import QuestionTypes
 
 
-def _is_non_field_question(question):
-    return question.question_type in [
-        QuestionTypes.TITLE.value,
-        QuestionTypes.DESCRIPTION.value,
-    ]
-
-
 class ResponseForm(forms.Form):
     # Based on https://www.caktusgroup.com/blog/2018/05/07/creating-dynamic-forms-django/
     def __init__(self, questions, *args, **kwargs):
@@ -76,7 +69,7 @@ class ResponseForm(forms.Form):
                 widget=forms.CheckboxSelectMultiple,
                 choices=[(c.id, c) for c in question.choices.all()],
             )
-        elif _is_non_field_question(question):
+        elif question.is_non_field():
             field = {
                 "type": str(QuestionTypes(question_type).name),
                 "content": question.content,
@@ -85,7 +78,7 @@ class ResponseForm(forms.Form):
         else:
             field = forms.CharField(label=question.content, required=question.required)
 
-        if not _is_non_field_question(question):
+        if not question.is_non_field():
             self.fields[field_id] = field
         else:
             self.other_fields[field_id] = field
@@ -106,18 +99,23 @@ class ResponseForm(forms.Form):
 
         for question in self.questions.all():
             field_id = "question_" + str(question.id)
-            if not _is_non_field_question(question):
-                initial = response.answers_questions[question.id].value
-                # We test the case where initial contains ",", ie. a list.
-                if question.is_iterable() and "," in initial:
-                    self.fields[field_id].initial = [
-                        c.id for c in answer_by_question[question.id].choices.all()
-                    ]
+            if not question.is_non_field():
+                # If the question has ever been answered.
+                if question.id in response.answers_questions:
+                    if question.is_iterable():
+                        initial = response.answers_questions[question.id].choices.all()
+                    else:
+                        initial = response.answers_questions[question.id].value
+                    # We test the case where initial contains ",", ie. a list.
+                    if question.is_iterable():
+                        self.fields[field_id].initial = [
+                            c.id for c in answer_by_question[question.id].choices.all()
+                        ]
 
-                else:
-                    self.fields[field_id].initial = answer_by_question[
-                        question.id
-                    ].print()
+                    else:
+                        self.fields[field_id].initial = answer_by_question[
+                            question.id
+                        ].print()
 
         if response.anonymous and self.allow_anonymous:
             self.fields["anonymous"].initial = response.anonymous

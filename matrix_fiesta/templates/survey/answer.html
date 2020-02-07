@@ -1,17 +1,26 @@
 {% extends "index.html" %}
 {% load i18n %}
 {% load common_extras %}
+{% load questionstypes_extras %}
 
 {% block title %}{% trans "Survey" %}{% endblock %}
 {% block content %}
     <h2>{{survey}}</h2>
 
     {% for question in survey.questions.all %}
-        <p><strong>{{question.content}}</strong></p>
-        {% if response %}
-            {% with answer=response.answers_questions|get_item:question.id %}
-                {% include "survey/answer_question_type.html" with answer=answer %}
-            {% endwith %}
+        {% if not question.is_non_field %}
+            <p><strong>{{question.content}}</strong></p>
+            {% if response %}
+                {% with answer=response.answers_questions|get_item:question.id %}
+                    {% include "survey/answer_question_type.html" with answer=answer %}
+                {% endwith %}
+            {% endif %}
+        {% else %}
+            {% if question|is_of_type:"TITLE" %}
+                <h3>{{ question.content }}</h3>
+            {% elif question|is_of_type:"DESCRIPTION" %}
+                <p><em>{{ question.content }}</em></p>
+            {% endif %}
         {% endif %}
     {% endfor %}
 {% endblock %}

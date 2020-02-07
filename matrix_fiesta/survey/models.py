@@ -9,6 +9,13 @@ from django.utils.translation import ugettext_lazy as _
 from matrix.models import ECUE, DatedModel, ProfileUser, PromotionYear, SchoolYear
 
 
+def _is_non_field_question(question):
+    return question.question_type in [
+        QuestionTypes.TITLE.value,
+        QuestionTypes.DESCRIPTION.value,
+    ]
+
+
 class Survey(DatedModel):
     name = models.CharField(max_length=150)
     opened = models.BooleanField(default=False)
@@ -83,6 +90,9 @@ class Question(models.Model):
             QuestionTypes.RADIO.value,
             QuestionTypes.CHECKBOX.value,
         ]
+
+    def is_non_field(self):
+        return _is_non_field_question(self)
 
     class Meta:
         verbose_name = _("Question")

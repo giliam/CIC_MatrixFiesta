@@ -174,16 +174,18 @@ def answer_survey(request, survey, initial_response=None):
             for question in questions.all():
                 raw_answer = form.cleaned_data.get("question_" + str(question.id), None)
                 if raw_answer:
-                    if initial_response is None:
+                    if initial_response is None or question.id not in answers.keys():
                         answer = models.Answer()
                     else:
                         answer = answers[question.id]
                     answer.response = response
                     answer.question = question
                     answer.save()
-                    if question.is_iterable() and isinstance(raw_answer, list):
+                    if question.is_iterable():
                         json_raw_answer = []
                         answer.choices.clear()
+                        if not isinstance(raw_answer, list):
+                            raw_answer = [int(raw_answer)]
                         for elt in raw_answer:
                             id_elt = int(elt)
                             if id_elt in choices_by_question[question.id]:
