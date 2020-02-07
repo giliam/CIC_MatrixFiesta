@@ -17,7 +17,7 @@ def get_item(dictionary, key):
 def divide(a, b):
     if b == 0:
         raise ValueError("b should not be null.")
-    return a/b
+    return a / b
 
 
 @register.filter()
@@ -40,7 +40,7 @@ def compute_opacity(max_value, current_value):
     if max_value == 0:
         return str(1.0)
     else:
-        return str(1.0-0.85*(current_value/max_value))
+        return str(1.0 - 0.85 * (current_value / max_value))
 
 
 @register.filter

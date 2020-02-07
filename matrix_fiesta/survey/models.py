@@ -44,6 +44,8 @@ class QuestionTypes(Enum):
     MULTIPLESELECT = 3
     RADIO = 4
     CHECKBOX = 5
+    TITLE = 6
+    DESCRIPTION = 7
 
 
 class QuestionChoice(models.Model):
@@ -97,7 +99,10 @@ class Response(DatedModel):
     anonymous = models.BooleanField(default=False)
 
     def __str__(self):
-        return _("Response to %(survey)s by %(user)s") % (self.survey, self.user)
+        return _("Response to %(survey)s by %(user)s") % {
+            "survey": self.survey,
+            "user": self.user,
+        }
 
     class Meta:
         verbose_name = _("Response")
@@ -135,10 +140,11 @@ class Answer(DatedModel):
         return json.loads(self.value)
 
     def __str__(self):
-        return _("Answer to %(question)s (%(response)s)") % (
-            self.question,
-            self.response,
-        )
+        return _("Answer %(value)s to %(question)s (%(response)s)") % {
+            "value": self.value,
+            "question": self.question,
+            "response": self.response,
+        }
 
     class Meta:
         verbose_name = _("Answer")

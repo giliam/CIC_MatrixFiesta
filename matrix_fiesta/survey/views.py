@@ -181,8 +181,9 @@ def answer_survey(request, survey, initial_response=None):
                     answer.response = response
                     answer.question = question
                     answer.save()
-                    if question.is_iterable():
+                    if question.is_iterable() and isinstance(raw_answer, list):
                         json_raw_answer = []
+                        answer.choices.clear()
                         for elt in raw_answer:
                             id_elt = int(elt)
                             if id_elt in choices_by_question[question.id]:
