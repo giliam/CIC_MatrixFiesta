@@ -1,4 +1,5 @@
 import datetime
+import time
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -124,13 +125,13 @@ class Course(DatedModel):
     ecue = models.ForeignKey(
         ECUE, on_delete=models.SET_NULL, related_name="courses", null=True
     )
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, max_length=250)
 
     def __str__(self):
         return "%(name)s - %(ecue)s" % {"name": self.name, "ecue": self.ecue}
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)[:50]
+        self.slug = slugify(self.name)[:240] + str(int(time.time()))
         super(Course, self).save(*args, **kwargs)
 
     class Meta:

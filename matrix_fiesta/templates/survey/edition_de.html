@@ -37,6 +37,10 @@
                 {% endif %}
                 <br>
                 {% trans "Question" %}: {{question.content}} (<code>{{question.question_type|print_question_type}}</code>)
+                {% if question.is_iterable %}
+                <br>
+                <em>{{question.get_inline_choices}}</em>
+                {% endif %}
             </li>
             {% endfor %}
         </ul>

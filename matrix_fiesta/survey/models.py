@@ -1,5 +1,6 @@
 from enum import Enum
 import json
+import time
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -21,7 +22,7 @@ class Survey(DatedModel):
     opened = models.BooleanField(default=False)
     archived = models.BooleanField(default=False)
     ecue = models.ForeignKey(ECUE, on_delete=models.SET_NULL, null=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, max_length=250)
     promotionyear = models.ForeignKey(
         PromotionYear,
         on_delete=models.SET_NULL,
@@ -33,7 +34,7 @@ class Survey(DatedModel):
     allow_anonymous = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)[:40] + str(self.pk)
+        self.slug = slugify(self.name)[:240] + str(int(time.time()))
         super(Survey, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -94,6 +95,9 @@ class Question(models.Model):
 
     def is_non_field(self):
         return _is_non_field_question(self)
+
+    def get_inline_choices(self):
+        return ", ".join([c.value for c in self.choices.all()])
 
     class Meta:
         verbose_name = _("Question")

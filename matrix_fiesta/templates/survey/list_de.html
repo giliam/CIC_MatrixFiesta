@@ -11,13 +11,30 @@
             <li>
                 {% if not survey.archived %}
                 <a href="{% url "survey.edit_de" survey.id %}">
-                    <i class="edit icon"></i>
+                    <i title="{% trans "Edit the survey" %}" class="edit icon"></i>
                 </a>
                 <a href="{% url "survey.clear_de" survey.id %}">
-                    <i class="undo icon"></i>
+                    <i title="{% trans "Clear the survey" %}" class="undo icon"></i>
+                </a>
+                <a href="{% url "survey.copy_de" survey.id %}">
+                    <i title="{% trans "Copy the survey" %}" class="copy icon blue"></i>
+                </a>
+                <a href="{% url "survey.reorder_questions_de" survey.id %}">
+                    <i title="{% trans "Reorder the questions" %}" class="sort amount down icon yellow"></i>
+                </a>
+                {% if survey.opened %}
+                <a href="{% url "survey.close_de" survey.id %}">
+                    <i title="{% trans "Close the survey" %}" class="unlock icon green"></i>
+                </a>
+                {% else %}
+                <a href="{% url "survey.close_de" survey.id %}">
+                    <i title="{% trans "Open the survey" %}" class="lock icon red"></i>
                 </a>
                 {% endif %}
-                {{ survey.name }}
+                {% else %}
+                <i class="folder icon yellow"></i>
+                {% endif %}
+                {{ survey.name }} ({% trans "Promotion" %} {{survey.promotionyear}})
                 <a href="{% url "survey.results_de" survey.id %}">
                     ({% blocktrans count counter=survey.responses.count %}
                     1 answer

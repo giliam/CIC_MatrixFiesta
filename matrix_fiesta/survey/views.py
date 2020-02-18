@@ -72,7 +72,9 @@ def create_survey_de(request):
 @user_passes_test(auths.check_is_de)
 def de_edit_survey(request, survey):
     survey = get_object_or_404(
-        models.Survey.objects.prefetch_related("questions", "responses"),
+        models.Survey.objects.prefetch_related(
+            "questions", "responses", "questions__choices"
+        ),
         Q(id=survey, archived=False),
     )
     if request.method == "POST":
@@ -85,6 +87,23 @@ def de_edit_survey(request, survey):
     return render(
         request, "survey/edition_de.html", {"form_edition": form, "survey": survey}
     )
+
+
+def _copy_depth_survey(original_questions, new_survey):
+    new_questions = {
+        q.id: models.Question(
+            question_type=q.question_type,
+            survey=new_survey,
+            content=q.content,
+            required=q.required,
+            order=q.order,
+        )
+        for q in original_questions
+    }
+    models.Question.objects.bulk_create(new_questions.values())
+    new_questions = models.Question.objects.filter(survey=new_survey)
+    for i, question in enumerate(new_questions):
+        question.choices.set(original_questions[i].choices.all())
 
 
 @login_required
@@ -100,18 +119,58 @@ def de_clear_survey(request, survey):
             survey_clone = models.Survey.objects.prefetch_related("responses").get(
                 id=survey.id
             )
+            questions = list(survey.questions.all())
             survey.opened = False
             survey.archived = True
+            survey.name += f" ({_('archived')})"
             survey.save()
+
             survey_clone.pk = None
             survey_clone.save()
-            print("Clone", survey_clone.responses.all())
-            print("Real", survey.responses.all())
-            # return redirect(reverse("survey.list_de"))
+            _copy_depth_survey(questions, survey_clone)
+            return redirect(reverse("survey.list_de"))
     else:
         form = forms.ConfirmationForm()
 
     return render(request, "survey/confirm_de.html", {"form": form, "survey": survey})
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_reorder_survey(request, survey):
+    survey = get_object_or_404(
+        models.Survey.objects.prefetch_related("questions"),
+        Q(id=survey, archived=False),
+    )
+    i = 0
+    for question in survey.questions.all():
+        question.order = i
+        question.save()
+        i += 1
+    return redirect(reverse("survey.list_de"))
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_close_survey(request, survey):
+    survey = get_object_or_404(models.Survey, Q(id=survey, archived=False))
+    survey.opened = not survey.opened
+    survey.save()
+    return redirect(reverse("survey.list_de"))
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_copy_survey(request, survey):
+    survey = get_object_or_404(
+        models.Survey.objects.prefetch_related("questions"), Q(id=survey)
+    )
+    questions = list(survey.questions.all())
+    survey.name += f" ({_('copy')})"
+    survey.pk = None
+    survey.save()
+    _copy_depth_survey(questions, survey)
+    return redirect(reverse("survey.edit_de", args=[survey.id]))
 
 
 @login_required
