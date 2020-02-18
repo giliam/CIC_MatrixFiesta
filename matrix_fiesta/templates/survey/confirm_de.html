@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% load questionstypes_extras %}
+
+{% block title %}{% trans "Create a survey" %}{% endblock %}
+{% block content %}
+    <h2>{% trans "Confirm" %}</h2>
+    {% if question %}
+    <h3>{% trans "Question" %} {{ question.content }} (<code>{{question.question_type|print_question_type}}</code>)</h3>
+    <p>{% trans "Do you confirm deletion?" %}</p>
+    {% elif survey %}
+    <h3>{% trans "Survey" %} {{ survey.name }}</h3>
+    <p>{% blocktrans %}Clearing a survey will result in creating a copy of the survey with the same characteristics but without any answer. 
+        The old survey will be kept and renamed to <em>Previous title (ARCHIVED)</em> and will be closed.{% endblocktrans %}</p>
+    {% endif %}
+    
+    <form method="post" class="ui form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="ui button green" value="{% trans "Submit" %}" />
+    </form>
+{% endblock %}

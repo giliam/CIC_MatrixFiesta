@@ -1,0 +1,50 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% load common_extras %}
+{% load questionstypes_extras %}
+
+{% block title %}{% trans "Create a survey" %}{% endblock %}
+{% block content %}
+    <h2>{% trans "Survey edition" %}</h2>
+    <p><a href="{% url "survey.list_de" %}">{% trans "Return to the list" %}</a></p>
+
+    {% if survey.responses.all|length > 0 %}
+    <div class="ui error message">
+        <div class="header">
+            {% trans "The survey already has answers" %}
+        </div>
+        {% trans "Warning, the survey already has answers and changing anything here could lead to major failures." %}
+    </div>
+    {% else %}
+        <form method="post" class="ui form">
+            {% csrf_token %}
+            {{ form_edition.as_p }}
+            <input type="submit" class="ui button green" value="{% trans "Submit" %}" />
+        </form>
+        <h3>{% trans "Questions" %}</h3>
+        
+        {% if survey.questions.all|length > 0 %}
+        <ul>
+            {% for question in survey.questions.all %}
+            <li>
+                <a href="{% url "survey.edit_question_de" question.id %}"><i class="edit icon"></i></a>
+                <a href="{% url "survey.remove_question_de" question.id %}"><i class="delete icon"></i></a>
+                {% if not forloop.last %}
+                <a href="{% url "survey.move_question_de" question.id "down" %}"><i class="angle down icon"></i></a>
+                {% endif %}
+                {% if not forloop.first %}
+                <a href="{% url "survey.move_question_de" question.id "up" %}"><i class="angle up icon"></i></a>
+                {% endif %}
+                <br>
+                {% trans "Question" %}: {{question.content}} (<code>{{question.question_type|print_question_type}}</code>)
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="no_answer">
+            {% trans "No question yet." %}
+        </p>
+        {% endif %}
+        <p><a href="{% url "survey.add_question_de" survey.id %}">{% trans "Add a question" %}</a></p>
+    {% endif %}
+    {% endblock %}

@@ -5,17 +5,26 @@
 {% block title %}{% trans "Survey list" %}{% endblock %}
 {% block content %}
     <h2>{% trans "Surveys" %}</h2>
+    <p><a href="{% url "survey.create_survey_de" %}">{% trans "Create a survey" %}</a></p>
     <ul>
         {% for survey in object_list.surveys %}
             <li>
-                <a href="{% url "survey.detail_de" survey.id %}">
-                {{ survey.name }}
+                {% if not survey.archived %}
+                <a href="{% url "survey.edit_de" survey.id %}">
+                    <i class="edit icon"></i>
                 </a>
-                ({% blocktrans count counter=survey.responses.count %}
-                1 answer
-                {% plural %}
-                {{ counter }} answers
-                {% endblocktrans %})
+                <a href="{% url "survey.clear_de" survey.id %}">
+                    <i class="undo icon"></i>
+                </a>
+                {% endif %}
+                {{ survey.name }}
+                <a href="{% url "survey.results_de" survey.id %}">
+                    ({% blocktrans count counter=survey.responses.count %}
+                    1 answer
+                    {% plural %}
+                    {{ counter }} answers
+                    {% endblocktrans %})
+                </a>
             </li>
         {% endfor %}
     </ul>

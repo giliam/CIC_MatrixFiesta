@@ -2,3 +2,11 @@
     font-style: italic;
     color: rgb(0, 0, 0, 0.4);
 }
+
+body {
+    color: black;
+}
+
+a .icon {
+    color: black;  
+}

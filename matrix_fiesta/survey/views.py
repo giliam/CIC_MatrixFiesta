@@ -3,7 +3,7 @@ import json
 from operator import attrgetter
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Q
+from django.db.models import F, Q
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -57,7 +57,220 @@ class SurveyListDeView(ListView):
 
 @login_required
 @user_passes_test(auths.check_is_de)
-def de_detail_survey(request, survey):
+def create_survey_de(request):
+    if request.method == "POST":
+        form = forms.SurveyCreationForm(request.POST)
+        if form.is_valid():
+            survey = form.save()
+            return redirect(reverse("survey.list_de"))
+    else:
+        form = forms.SurveyCreationForm()
+    return render(request, "survey/creation_de.html", {"form": form})
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_edit_survey(request, survey):
+    survey = get_object_or_404(
+        models.Survey.objects.prefetch_related("questions", "responses"),
+        Q(id=survey, archived=False),
+    )
+    if request.method == "POST":
+        form = forms.SurveyCreationForm(request.POST, instance=survey)
+        if form.is_valid():
+            survey = form.save()
+            return redirect(reverse("survey.list_de"))
+    else:
+        form = forms.SurveyCreationForm(instance=survey)
+    return render(
+        request, "survey/edition_de.html", {"form_edition": form, "survey": survey}
+    )
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_clear_survey(request, survey):
+    survey = get_object_or_404(
+        models.Survey.objects.prefetch_related("responses"),
+        Q(id=survey, archived=False),
+    )
+    if request.method == "POST":
+        form = forms.ConfirmationForm(request.POST)
+        if form.is_valid():
+            survey_clone = models.Survey.objects.prefetch_related("responses").get(
+                id=survey.id
+            )
+            survey.opened = False
+            survey.archived = True
+            survey.save()
+            survey_clone.pk = None
+            survey_clone.save()
+            print("Clone", survey_clone.responses.all())
+            print("Real", survey.responses.all())
+            # return redirect(reverse("survey.list_de"))
+    else:
+        form = forms.ConfirmationForm()
+
+    return render(request, "survey/confirm_de.html", {"form": form, "survey": survey})
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_add_question(request, survey):
+    survey = get_object_or_404(
+        models.Survey.objects.prefetch_related("questions"),
+        Q(id=survey, archived=False),
+    )
+    if request.method == "POST":
+        form = forms.QuestionCreationForm(
+            request.POST, initial={"order": len(survey.questions.all())}
+        )
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.survey = survey
+            if question.is_iterable():
+                question.save()
+                choices = form.cleaned_data["choices"].strip().split("\n")
+                choices = [c.strip() for c in choices]
+                existing_choices = models.QuestionChoice.objects.filter(
+                    value__in=choices
+                )
+
+                # We run over the existing choices found to append them to choices
+                for choice_found in existing_choices.all():
+                    # To avoid adding twice (or more!) some choices
+                    if choice_found.value in choices:
+                        choices.remove(choice_found.value)
+                        question.choices.add(choice_found)
+
+                # Adds the choices not found to the database
+                for choice_remaining in choices:
+                    choice = models.QuestionChoice()
+                    choice.value = choice_remaining
+                    choice.save()
+                    question.choices.add(choice)
+
+            question.save()
+            return redirect(reverse("survey.edit_de", kwargs={"survey": survey.id}))
+    else:
+        form = forms.QuestionCreationForm(
+            initial={"order": len(survey.questions.all())}
+        )
+    return render(
+        request, "survey/question_form_de.html", {"form": form, "survey": survey}
+    )
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_edit_question(request, question):
+    question = get_object_or_404(
+        models.Question.objects.prefetch_related("survey"),
+        Q(id=question, survey__archived=False),
+    )
+    if request.method == "POST":
+        form = forms.QuestionCreationForm(request.POST, instance=question)
+        if form.is_valid():
+            question = form.save(commit=False)
+            if question.is_iterable():
+                question.save()
+                choices = form.cleaned_data["choices"].strip().split("\n")
+                choices = [c.strip() for c in choices]
+
+                # Removes the choices not in it anymore and keep the choices not changed
+                for already_choice in question.choices.all():
+                    if already_choice.value in choices:
+                        choices.remove(already_choice.value)
+                    else:
+                        question.choices.remove(already_choice)
+
+                existing_choices = models.QuestionChoice.objects.filter(
+                    value__in=choices
+                )
+
+                # We run over the existing choices found to append them to choices
+                for choice_found in existing_choices.all():
+                    # To avoid adding twice (or more!) some choices
+                    if choice_found.value in choices:
+                        choices.remove(choice_found.value)
+                        question.choices.add(choice_found)
+
+                # Adds the choices not found to the database
+                for choice_remaining in choices:
+                    choice = models.QuestionChoice()
+                    choice.value = choice_remaining
+                    choice.save()
+                    question.choices.add(choice)
+
+            question.save()
+            return redirect(
+                reverse("survey.edit_de", kwargs={"survey": question.survey.id})
+            )
+    else:
+        form = forms.QuestionCreationForm(
+            instance=question,
+            initial={"choices": "\n".join([c.value for c in question.choices.all()])},
+        )
+    return render(
+        request,
+        "survey/question_form_de.html",
+        {"form": form, "survey": question.survey},
+    )
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_move_question(request, question, direction):
+    question = get_object_or_404(
+        models.Question.objects.prefetch_related("survey"),
+        Q(id=question, survey__archived=False),
+    )
+    if direction == "up":
+        offset = -1
+    elif direction == "down":
+        offset = 1
+    else:
+        return redirect(
+            reverse("survey.edit_de", kwargs={"survey": question.survey.id})
+        )
+
+    question_concerned = models.Question.objects.get(
+        survey__id=question.survey.id, order=question.order + offset
+    )
+    question.order, question_concerned.order = question_concerned.order, question.order
+    question_concerned.save()
+    question.save()
+    return redirect(reverse("survey.edit_de", kwargs={"survey": question.survey.id}))
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_remove_question(request, question):
+    question = get_object_or_404(
+        models.Question.objects.prefetch_related("survey"),
+        Q(id=question, survey__archived=False),
+    )
+    if request.method == "POST":
+        form = forms.ConfirmationForm(request.POST)
+        if form.is_valid():
+            models.Question.objects.filter(
+                survey=question.survey, order__gte=question.order
+            ).update(order=F("order") - 1)
+            question.delete()
+            return redirect(
+                reverse("survey.edit_de", kwargs={"survey": question.survey.id})
+            )
+    else:
+        form = forms.ConfirmationForm()
+
+    return render(
+        request, "survey/confirm_de.html", {"form": form, "question": question}
+    )
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_results_survey(request, survey):
     survey = get_object_or_404(
         models.Survey.objects.prefetch_related("questions"), Q(id=survey)
     )

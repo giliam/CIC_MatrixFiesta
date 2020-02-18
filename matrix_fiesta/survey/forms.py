@@ -3,7 +3,7 @@ import json
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from survey.models import QuestionTypes
+from survey import models
 
 
 class ResponseForm(forms.Form):
@@ -35,34 +35,34 @@ class ResponseForm(forms.Form):
         self.questions_fields.append(field_id)
         question_type = question.question_type
 
-        if question_type == QuestionTypes.TEXTINPUT.value:
+        if question_type == models.QuestionTypes.TEXTINPUT.value:
             field = forms.CharField(label=question.content, required=question.required)
-        elif question_type == QuestionTypes.TEXTAREA.value:
+        elif question_type == models.QuestionTypes.TEXTAREA.value:
             field = forms.CharField(
                 label=question.content,
                 required=question.required,
                 widget=forms.Textarea,
             )
-        elif question_type == QuestionTypes.SELECT.value:
+        elif question_type == models.QuestionTypes.SELECT.value:
             field = forms.ChoiceField(
                 label=question.content,
                 required=question.required,
                 choices=[(c.id, c) for c in question.choices.all()],
             )
-        elif question_type == QuestionTypes.MULTIPLESELECT.value:
+        elif question_type == models.QuestionTypes.MULTIPLESELECT.value:
             field = forms.MultipleChoiceField(
                 label=question.content,
                 required=question.required,
                 choices=[(c.id, c) for c in question.choices.all()],
             )
-        elif question_type == QuestionTypes.RADIO.value:
+        elif question_type == models.QuestionTypes.RADIO.value:
             field = forms.ChoiceField(
                 label=question.content,
                 required=question.required,
                 widget=forms.RadioSelect,
                 choices=[(c.id, c) for c in question.choices.all()],
             )
-        elif question_type == QuestionTypes.CHECKBOX.value:
+        elif question_type == models.QuestionTypes.CHECKBOX.value:
             field = forms.MultipleChoiceField(
                 label=question.content,
                 required=question.required,
@@ -71,7 +71,7 @@ class ResponseForm(forms.Form):
             )
         elif question.is_non_field():
             field = {
-                "type": str(QuestionTypes(question_type).name),
+                "type": str(models.QuestionTypes(question_type).name),
                 "content": question.content,
                 "non_field": True,
             }
@@ -120,3 +120,24 @@ class ResponseForm(forms.Form):
         if response.anonymous and self.allow_anonymous:
             self.fields["anonymous"].initial = response.anonymous
         return True
+
+
+class SurveyCreationForm(forms.ModelForm):
+    class Meta:
+        model = models.Survey
+        exclude = ("slug",)
+
+
+class QuestionCreationForm(forms.ModelForm):
+    choices = forms.CharField(
+        label=_("Choices (separate by new line) for multiple choices questions"),
+        widget=forms.Textarea,
+    )
+
+    class Meta:
+        model = models.Question
+        exclude = ("survey", "choices")
+
+
+class ConfirmationForm(forms.Form):
+    pass

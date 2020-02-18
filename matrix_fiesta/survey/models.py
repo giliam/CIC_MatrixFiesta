@@ -19,6 +19,7 @@ def _is_non_field_question(question):
 class Survey(DatedModel):
     name = models.CharField(max_length=150)
     opened = models.BooleanField(default=False)
+    archived = models.BooleanField(default=False)
     ecue = models.ForeignKey(ECUE, on_delete=models.SET_NULL, null=True)
     slug = models.SlugField(unique=True)
     promotionyear = models.ForeignKey(
@@ -32,7 +33,7 @@ class Survey(DatedModel):
     allow_anonymous = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)[:50]
+        self.slug = slugify(self.name)[:40] + str(self.pk)
         super(Survey, self).save(*args, **kwargs)
 
     def __str__(self):
