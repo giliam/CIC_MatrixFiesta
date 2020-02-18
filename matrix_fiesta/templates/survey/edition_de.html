@@ -24,9 +24,9 @@
         <h3>{% trans "Questions" %}</h3>
         
         {% if survey.questions.all|length > 0 %}
-        <ul>
+        <div class="gridcontainer">
             {% for question in survey.questions.all %}
-            <li>
+            <div>
                 <a href="{% url "survey.edit_question_de" question.id %}"><i class="edit icon"></i></a>
                 <a href="{% url "survey.remove_question_de" question.id %}"><i class="delete icon"></i></a>
                 {% if not forloop.last %}
@@ -35,15 +35,26 @@
                 {% if not forloop.first %}
                 <a href="{% url "survey.move_question_de" question.id "up" %}"><i class="angle up icon"></i></a>
                 {% endif %}
-                <br>
-                {% trans "Question" %}: {{question.content}} (<code>{{question.question_type|print_question_type}}</code>)
+            </div>
+            <div>
+                {% if question.is_non_field %}
+                {% if question.question_type|print_question_type == "TITLE" %}
+                <p class="larger"><strong>{{ question.content }}</strong></p>
+                {% elif question.question_type|print_question_type == "DESCRIPTION" %}
+                <p class="larger"><em>{{ question.content }}</em></p>
+                {% endif %}
+                <!-- {{question.content}} (<code>{{question.question_type|print_question_type}}</code>) -->
+                {% else %}
+                    {% trans "Question" %}: 
+                    {{question.content}} (<code>{{question.question_type|print_question_type}}</code>)
+                {% endif %}
                 {% if question.is_iterable %}
                 <br>
                 <em>{{question.get_inline_choices}}</em>
                 {% endif %}
-            </li>
+            </div>
             {% endfor %}
-        </ul>
+        </div>
         {% else %}
         <p class="no_answer">
             {% trans "No question yet." %}

@@ -10,3 +10,13 @@ body {
 a .icon {
     color: black;  
 }
+
+.larger {
+    font-size: 1.5em;
+}
+
+.gridcontainer {
+    display:grid;
+    grid-template-columns: 125px 1fr;
+    grid-gap: 20px;
+}
