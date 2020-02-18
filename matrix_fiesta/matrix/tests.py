@@ -10,10 +10,18 @@ class ProfileUserTestCase(TestCase):
     def setUp(self):
         current_year = datetime.datetime.now().year
 
-        p_y_2019 = models.PromotionYear.objects.create(name="2019/2020", value=current_year, current=True)
-        p_y_2018 = models.PromotionYear.objects.create(name="2018/2019", value=current_year-1, current=True)
-        p_y_2017 = models.PromotionYear.objects.create(name="2017/2018", value=current_year-2, current=True)
-        p_y_2016 = models.PromotionYear.objects.create(name="2016/2017", value=current_year-3, current=True)
+        p_y_2019 = models.PromotionYear.objects.create(
+            name="2019/2020", value=current_year, current=True
+        )
+        p_y_2018 = models.PromotionYear.objects.create(
+            name="2018/2019", value=current_year - 1, current=True
+        )
+        p_y_2017 = models.PromotionYear.objects.create(
+            name="2017/2018", value=current_year - 2, current=True
+        )
+        p_y_2016 = models.PromotionYear.objects.create(
+            name="2016/2017", value=current_year - 3, current=True
+        )
 
         data = [
             {
@@ -22,73 +30,76 @@ class ProfileUserTestCase(TestCase):
                 "lastname": "Bar_noces",
                 "year_entrance": p_y_2019,
                 "cesure": False,
-                "user": None
-            }, {
+                "user": None,
+            },
+            {
                 "id": 2,
                 "firstname": "Foo_ces",
                 "lastname": "Bar_ces",
                 "year_entrance": p_y_2019,
                 "cesure": True,
-                "user": None
-            }, {
+                "user": None,
+            },
+            {
                 "id": 3,
                 "firstname": "2AFoo_noces",
                 "lastname": "2ABar_noces",
                 "year_entrance": p_y_2018,
                 "cesure": False,
-                "user": None
-            }, {
+                "user": None,
+            },
+            {
                 "id": 4,
                 "firstname": "2AFoo_ces",
                 "lastname": "2ABar_ces",
                 "year_entrance": p_y_2018,
                 "cesure": True,
-                "user": None
-            }, {
+                "user": None,
+            },
+            {
                 "id": 5,
                 "firstname": "3AFoo_noces",
                 "lastname": "3ABar_noces",
                 "year_entrance": p_y_2017,
                 "cesure": False,
-                "user": None
-            }, {
+                "user": None,
+            },
+            {
                 "id": 6,
                 "firstname": "3AFoo_ces",
                 "lastname": "3ABar_ces",
                 "year_entrance": p_y_2017,
                 "cesure": True,
-                "user": None
-            }, {
+                "user": None,
+            },
+            {
                 "id": 7,
                 "firstname": "4AFoo_noces",
                 "lastname": "4ABar_noces",
                 "year_entrance": p_y_2016,
                 "cesure": False,
-                "user": None
-            }, {
+                "user": None,
+            },
+            {
                 "id": 8,
                 "firstname": "4AFoo_ces",
                 "lastname": "4ABar_ces",
                 "year_entrance": p_y_2016,
                 "cesure": True,
-                "user": None
+                "user": None,
             },
         ]
 
         for e in data:
             user = User.objects.create(
-                username=e["id"],
-                first_name=e["firstname"],
-                last_name=e["lastname"],
+                username=e["id"], first_name=e["firstname"], last_name=e["lastname"]
             )
 
             e["user"] = user
             del e["firstname"]
             del e["lastname"]
 
-            models.ProfileUser.objects.create(
-                **e
-            )
+            models.ProfileUser.objects.create(**e)
 
     def test_get_schoolyear(self):
         current_year = datetime.datetime.now().year
@@ -111,12 +122,12 @@ class ProfileUserTestCase(TestCase):
         self.assertEqual(noces_4A.get_schoolyear(), 4)
         self.assertEqual(ces_4A.get_schoolyear(), 3)
 
-        self.assertEqual(noces_2A.get_schoolyear(current_year-1), 1)
-        self.assertEqual(ces_2A.get_schoolyear(current_year-1), 1)
-        self.assertEqual(noces_3A.get_schoolyear(current_year-1), 2)
-        self.assertEqual(ces_3A.get_schoolyear(current_year-1), 2)
-        self.assertEqual(noces_4A.get_schoolyear(current_year-1), 3)
-        self.assertEqual(ces_4A.get_schoolyear(current_year-1), 2)
+        self.assertEqual(noces_2A.get_schoolyear(current_year - 1), 1)
+        self.assertEqual(ces_2A.get_schoolyear(current_year - 1), 1)
+        self.assertEqual(noces_3A.get_schoolyear(current_year - 1), 2)
+        self.assertEqual(ces_3A.get_schoolyear(current_year - 1), 2)
+        self.assertEqual(noces_4A.get_schoolyear(current_year - 1), 3)
+        self.assertEqual(ces_4A.get_schoolyear(current_year - 1), 2)
 
 
 class SlugTestCase:
@@ -125,7 +136,11 @@ class SlugTestCase:
         example.save()
         self.assertEqual(example.slug, "blaee-coucou")
 
-        example = self.model(name="_à&é\"uàzfjwsdvwxùv;ùaze")
+        example = self.model(name="Blaéé coucou")
+        example.save()
+        self.assertEqual(example.slug, "blaee-coucou1")
+
+        example = self.model(name='_à&é"uàzfjwsdvwxùv;ùaze')
         example.save()
         self.assertEqual(example.slug, "_aeuazfjwsdvwxuvuaze")
 

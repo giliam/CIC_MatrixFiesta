@@ -9,6 +9,25 @@ from django.utils.translation import ugettext_lazy as _
 from common.auths import GroupsNames
 
 
+class SluggedModel(models.Model):
+    slug = models.SlugField(unique=True, max_length=250)
+    slug_field_name = "name"
+
+    def save(self, *args, **kwargs):
+        unique_slug = slugify(self.__dict__[self.slug_field_name])[:240]
+        slug = unique_slug
+        unique_num = 1
+
+        while self.__class__.objects.filter(slug=slug).exists():
+            slug = unique_slug + str(unique_num)
+            unique_num += 1
+        self.slug = slug
+        models.Model.save(self, *args, **kwargs)
+
+    class Meta:
+        abstract = True
+
+
 class DatedModel(models.Model):
     added_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True, blank=True, null=True)
@@ -120,19 +139,15 @@ class ECUE(DatedModel):
         ordering = ["ue", "name"]
 
 
-class Course(DatedModel):
+class Course(DatedModel, SluggedModel):
     name = models.CharField(max_length=150)
     ecue = models.ForeignKey(
         ECUE, on_delete=models.SET_NULL, related_name="courses", null=True
     )
-    slug = models.SlugField(unique=True, max_length=250)
+    slug_field_name = "name"
 
     def __str__(self):
         return "%(name)s - %(ecue)s" % {"name": self.name, "ecue": self.ecue}
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)[:240] + str(int(time.time()))
-        super(Course, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("Course")
@@ -155,20 +170,16 @@ class EvaluationValue(DatedModel):
         ordering = ["order"]
 
 
-class LearningAchievement(DatedModel):
+class LearningAchievement(DatedModel, SluggedModel):
     name = models.CharField(max_length=150)
     course = models.ForeignKey(
         Course, on_delete=models.SET_NULL, related_name="achievements", null=True
     )
     activated = models.BooleanField(default=True)
-    slug = models.SlugField(unique=True)
+    slug_field_name = "name"
 
     def __str__(self):
         return "%s : %s" % (self.course, self.name)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)[:50]
-        super(LearningAchievement, self).save(*args, **kwargs)
 
     def get_field_name(self):
         return "achievement_" + str(self.id)

@@ -4,10 +4,16 @@ import time
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
-from matrix.models import ECUE, DatedModel, ProfileUser, PromotionYear, SchoolYear
+from matrix.models import (
+    ECUE,
+    SluggedModel,
+    DatedModel,
+    ProfileUser,
+    PromotionYear,
+    SchoolYear,
+)
 
 
 def _is_non_field_question(question):
@@ -17,12 +23,11 @@ def _is_non_field_question(question):
     ]
 
 
-class Survey(DatedModel):
+class Survey(DatedModel, SluggedModel):
     name = models.CharField(max_length=150)
     opened = models.BooleanField(default=False)
     archived = models.BooleanField(default=False)
     ecue = models.ForeignKey(ECUE, on_delete=models.SET_NULL, null=True)
-    slug = models.SlugField(unique=True, max_length=250)
     promotionyear = models.ForeignKey(
         PromotionYear,
         on_delete=models.SET_NULL,
@@ -32,10 +37,6 @@ class Survey(DatedModel):
         related_name="+",
     )
     allow_anonymous = models.BooleanField(default=True)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)[:240] + str(int(time.time()))
-        super(Survey, self).save(*args, **kwargs)
 
     def __str__(self):
         return _("Survey %s") % self.name
