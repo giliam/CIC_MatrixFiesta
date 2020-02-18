@@ -1,19 +1,10 @@
 from enum import Enum
 import json
-import time
 
-from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from matrix.models import (
-    ECUE,
-    SluggedModel,
-    DatedModel,
-    ProfileUser,
-    PromotionYear,
-    SchoolYear,
-)
+from matrix.models import ECUE, SluggedModel, DatedModel, ProfileUser, PromotionYear
 
 
 def _is_non_field_question(question):

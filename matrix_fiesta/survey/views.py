@@ -1,6 +1,4 @@
-from itertools import chain
 import json
-from operator import attrgetter
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import F, Q

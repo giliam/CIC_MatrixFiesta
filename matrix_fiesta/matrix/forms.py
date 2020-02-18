@@ -14,7 +14,7 @@ class ConnexionForm(forms.Form):
 class StudentEvaluationAllForm(forms.Form):
     # Based on https://www.caktusgroup.com/blog/2018/05/07/creating-dynamic-forms-django/
     def __init__(self, *args, **kwargs):
-        super(forms.Form, self).__init__(*args, **kwargs)
+        super(StudentEvaluationAllForm, self).__init__(*args, **kwargs)
 
         self.achievements_fields = []
         self.values = models.EvaluationValue.objects.all()
@@ -23,22 +23,26 @@ class StudentEvaluationAllForm(forms.Form):
 
     def add_achievement_evaluation(self, achievement, default_value=None):
         # Adds the field to the list of existing achievements related fields
-        self.achievements_fields.append("achievement_"+str(achievement.id))
+        self.achievements_fields.append("achievement_" + str(achievement.id))
 
-        self.fields["achievement_"+str(achievement.id)] = forms.ChoiceField(
+        self.fields["achievement_" + str(achievement.id)] = forms.ChoiceField(
             label=achievement.name,
-            widget=forms.RadioSelect, choices=self.choices,
-            required=False
+            widget=forms.RadioSelect,
+            choices=self.choices,
+            required=False,
         )
         if not default_value is None:
-            self.initial["achievement_"+str(achievement.id)] = (default_value.id, default_value.value)
+            self.initial["achievement_" + str(achievement.id)] = (
+                default_value.id,
+                default_value.value,
+            )
         else:
-            self.initial["achievement_"+str(achievement.id)] = self.worst_value
+            self.initial["achievement_" + str(achievement.id)] = self.worst_value
 
     def get_cleaned_data(self, achievement):
-        if "achievement_"+str(achievement.id) in self.cleaned_data.keys():
-            id_value = self.cleaned_data["achievement_"+str(achievement.id)]
-            if id_value == '0' or id_value == '':
+        if "achievement_" + str(achievement.id) in self.cleaned_data.keys():
+            id_value = self.cleaned_data["achievement_" + str(achievement.id)]
+            if id_value == "0" or id_value == "":
                 return None
             else:
                 return self.values.get(id=id_value)
@@ -49,46 +53,44 @@ class StudentEvaluationAllForm(forms.Form):
 class StudentEvaluationForm(forms.ModelForm):
     class Meta:
         model = models.StudentEvaluation
-        fields = ('evaluation_value',)
-        labels = {
-            "evaluation_value": _("Evaluation value"),
-        }
+        fields = ("evaluation_value",)
+        labels = {"evaluation_value": _("Evaluation value")}
 
 
 class TeacherEvaluationForm(forms.ModelForm):
     class Meta:
         model = models.StudentEvaluation
-        fields = ('evaluation_value','student',)
-        labels = {
-            "evaluation_value": _("Evaluation value"),
-            "student": _("Student")
-        }
+        fields = ("evaluation_value", "student")
+        labels = {"evaluation_value": _("Evaluation value"), "student": _("Student")}
 
 
 def get_groups():
     try:
-        return [(g.id, g) for g in auth_models.Group.objects.all() if g.name != GroupsNames.DIRECTOR_LEVEL.value]
+        return [
+            (g.id, g)
+            for g in auth_models.Group.objects.all()
+            if g.name != GroupsNames.DIRECTOR_LEVEL.value
+        ]
     except BaseException:
         return []
 
 
 class UploadNewStudentsForm(forms.Form):
     has_header = forms.BooleanField(label=_("File has a header ?"), required=False)
-    file = forms.FileField(label=_('Select a file'))
+    file = forms.FileField(label=_("Select a file"))
     group = forms.MultipleChoiceField(choices=get_groups)
 
 
 class UploadSmallClassesForm(forms.ModelForm):
-    has_header = forms.BooleanField(label=_("File(s) has(ve) a header ?"), required=False)
-    file_students = forms.FileField(label=_('Select a file for the students'))
+    has_header = forms.BooleanField(
+        label=_("File(s) has(ve) a header ?"), required=False
+    )
+    file_students = forms.FileField(label=_("Select a file for the students"))
     file_teachers = forms.FileField(
-        label=_('Select a file for the teachers'), required=False
+        label=_("Select a file for the teachers"), required=False
     )
 
     class Meta:
         model = models.SmallClass
-        fields = ('course', 'promotion_year',)
-        labels = {
-            "course": _("Course"),
-            "promotion_year": _("Promotion year"),
-        }
+        fields = ("course", "promotion_year")
+        labels = {"course": _("Course"), "promotion_year": _("Promotion year")}

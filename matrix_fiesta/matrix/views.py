@@ -980,8 +980,6 @@ def all_small_classes(request):
     if not request.user.is_superuser:
         raise HttpResponseForbidden(_("Only super users can perform this action"))
 
-    teacher = models.ProfileUser.objects.get(user=request.user)
-
     classes = models.SmallClass.objects.filter(
         promotion_year__current=True
     ).prefetch_related(

@@ -16,7 +16,7 @@ a .icon {
 }
 
 .gridcontainer {
-    display:grid;
-    grid-template-columns: 125px 1fr;
+    display: grid;
     grid-gap: 20px;
+    grid-template-columns: 125px 1fr;
 }
