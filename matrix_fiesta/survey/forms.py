@@ -130,7 +130,7 @@ class SurveyCreationForm(forms.ModelForm):
             "name": _("Name"),
             "opened": _("Opened"),
             "archived": _("Archived"),
-            "ecue": _("Ecue"),
+            "ecue": _("ECUE"),
             "promotionyear": _("Promotion"),
             "allow_anonymous": _("Allow anonymous"),
         }

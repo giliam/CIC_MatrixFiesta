@@ -189,29 +189,23 @@ msgstr "Voulez-vous rester anonyme ?"
 
 #: survey/forms.py:130
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: survey/forms.py:131
 msgid "Opened"
-msgstr ""
+msgstr "Ouvert"
 
 #: survey/forms.py:132
 msgid "Archived"
-msgstr ""
-
-#: survey/forms.py:133
-msgid "Ecue"
-msgstr ""
+msgstr "Archivé"
 
 #: survey/forms.py:134 templates/survey/list_de.html:37
 msgid "Promotion"
 msgstr "Promotion"
 
 #: survey/forms.py:135
-#, fuzzy
-#| msgid "Anonymous"
 msgid "Allow anonymous"
-msgstr "Anonyme"
+msgstr "Permettre l'anonymat"
 
 #: survey/forms.py:141
 msgid "Choices (separate by new line) for multiple choices questions"
@@ -219,22 +213,20 @@ msgstr ""
 "Choix (séparés par une nouvelle ligne) pour des questions à choix multiples"
 
 #: survey/forms.py:149
-#, fuzzy
-#| msgid "Question"
 msgid "Question type"
-msgstr "Question"
+msgstr "Type de question"
 
 #: survey/forms.py:150
 msgid "Content"
-msgstr ""
+msgstr "Contenu"
 
 #: survey/forms.py:151
 msgid "Required"
-msgstr ""
+msgstr "Champs requis"
 
 #: survey/forms.py:152
 msgid "Order"
-msgstr ""
+msgstr "Ordre"
 
 #: survey/models.py:33
 #, python-format
