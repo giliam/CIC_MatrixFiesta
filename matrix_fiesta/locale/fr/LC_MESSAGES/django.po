@@ -875,7 +875,13 @@ msgid_plural ""
 "                    %(counter)s answers\n"
 "                    "
 msgstr[0] ""
+"\n"
+"1 réponse \n"
+"                    "
 msgstr[1] ""
+"\n"
+"%(counter)s réponses \n"
+"                    "
 
 #: templates/survey/question_form_de.html:7
 msgid "Question edition"

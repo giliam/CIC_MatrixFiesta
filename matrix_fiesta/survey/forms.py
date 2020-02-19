@@ -126,6 +126,14 @@ class SurveyCreationForm(forms.ModelForm):
     class Meta:
         model = models.Survey
         exclude = ("slug",)
+        labels = {
+            "name": _("Name"),
+            "opened": _("Opened"),
+            "archived": _("Archived"),
+            "ecue": _("Ecue"),
+            "promotionyear": _("Promotion"),
+            "allow_anonymous": _("Allow anonymous"),
+        }
 
 
 class QuestionCreationForm(forms.ModelForm):
@@ -137,6 +145,12 @@ class QuestionCreationForm(forms.ModelForm):
     class Meta:
         model = models.Question
         exclude = ("survey", "choices")
+        labels = {
+            "question_type": _("Question type"),
+            "content": _("Content"),
+            "required": _("Required"),
+            "order": _("Order"),
+        }
 
 
 class ConfirmationForm(forms.Form):
