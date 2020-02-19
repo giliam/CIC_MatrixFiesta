@@ -171,6 +171,28 @@ def de_copy_survey(request, survey):
     return redirect(reverse("survey.edit_de", args=[survey.id]))
 
 
+def _save_choices_iterable_question(form, question):
+    # Makes sure the question has already been saved
+    question.save()
+    choices = form.cleaned_data["choices"].strip().split("\n")
+    choices = [c.strip() for c in choices]
+    existing_choices = models.QuestionChoice.objects.filter(value__in=choices)
+
+    # We run over the existing choices found to append them to choices
+    for choice_found in existing_choices.all():
+        # To avoid adding twice (or more!) some choices
+        if choice_found.value in choices:
+            choices.remove(choice_found.value)
+            question.choices.add(choice_found)
+
+    # Adds the choices not found to the database
+    for choice_remaining in choices:
+        choice = models.QuestionChoice()
+        choice.value = choice_remaining
+        choice.save()
+        question.choices.add(choice)
+
+
 @login_required
 @user_passes_test(auths.check_is_de)
 def de_add_question(request, survey):
@@ -186,26 +208,7 @@ def de_add_question(request, survey):
             question = form.save(commit=False)
             question.survey = survey
             if question.is_iterable():
-                question.save()
-                choices = form.cleaned_data["choices"].strip().split("\n")
-                choices = [c.strip() for c in choices]
-                existing_choices = models.QuestionChoice.objects.filter(
-                    value__in=choices
-                )
-
-                # We run over the existing choices found to append them to choices
-                for choice_found in existing_choices.all():
-                    # To avoid adding twice (or more!) some choices
-                    if choice_found.value in choices:
-                        choices.remove(choice_found.value)
-                        question.choices.add(choice_found)
-
-                # Adds the choices not found to the database
-                for choice_remaining in choices:
-                    choice = models.QuestionChoice()
-                    choice.value = choice_remaining
-                    choice.save()
-                    question.choices.add(choice)
+                _save_choices_iterable_question(form, question)
 
             question.save()
             return redirect(reverse("survey.edit_de", kwargs={"survey": survey.id}))
@@ -213,6 +216,43 @@ def de_add_question(request, survey):
         form = forms.QuestionCreationForm(
             initial={"order": len(survey.questions.all())}
         )
+    return render(
+        request, "survey/question_form_de.html", {"form": form, "survey": survey}
+    )
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_insert_question(request, question, direction):
+    relative_question = get_object_or_404(
+        models.Question.objects.prefetch_related("survey"),
+        Q(id=question, survey__archived=False),
+    )
+    survey = relative_question.survey
+    assert direction in ["above", "below"]
+    if direction == "above":
+        offset = -1
+    elif direction == "below":
+        offset = 1
+
+    if request.method == "POST":
+        form = forms.QuestionInsertionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.survey = survey
+            question.order = max(relative_question.order + offset, 0)
+
+            models.Question.objects.filter(
+                survey=survey, order__gte=question.order
+            ).update(order=F("order") + 1)
+
+            if question.is_iterable():
+                _save_choices_iterable_question(form, question)
+
+            question.save()
+            return redirect(reverse("survey.edit_de", kwargs={"survey": survey.id}))
+    else:
+        form = forms.QuestionInsertionForm()
     return render(
         request, "survey/question_form_de.html", {"form": form, "survey": survey}
     )

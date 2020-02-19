@@ -17,6 +17,13 @@ a .icon {
 
 .gridcontainer {
     display: grid;
+    row-gap: 30px;
+    column-gap: 5px;
+    grid-template-columns: repeat(2, 15px) 29px 29px repeat(2, 15px) 5px 1fr;
+}
+
+.gridcontainer i.icon {
+    margin-right: 0px;
     grid-gap: 20px;
     grid-template-columns: 125px 1fr;
 }

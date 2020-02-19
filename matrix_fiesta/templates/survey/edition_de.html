@@ -27,15 +27,28 @@
         <div class="gridcontainer">
             {% for question in survey.questions.all %}
             <div>
-                <a href="{% url "survey.edit_question_de" question.id %}"><i class="edit icon"></i></a>
-                <a href="{% url "survey.remove_question_de" question.id %}"><i class="delete icon"></i></a>
+                <a title="{% trans "Edit" %}" href="{% url "survey.edit_question_de" question.id %}"><i class="edit icon"></i></a>
+            </div>
+            <div>
+                <a title="{% trans "Remove" %}" href="{% url "survey.remove_question_de" question.id %}"><i class="delete red icon"></i></a>
+            </div>
+            <div>
+                <a title="{% trans "Insert above" %}" href="{% url "survey.insert_question_de" question.id "above" %}"><i class="plus green circle icon"></i><i class="level up alternate icon small"></i></a>
+            </div>
+            <div>
+                <a title="{% trans "Insert below" %}" href="{% url "survey.insert_question_de" question.id "below" %}"><i class="plus green circle icon"></i><i class="level down alternate icon small"></i></a>
+            </div>
+            <div>
                 {% if not forloop.last %}
-                <a href="{% url "survey.move_question_de" question.id "down" %}"><i class="angle down icon"></i></a>
-                {% endif %}
-                {% if not forloop.first %}
-                <a href="{% url "survey.move_question_de" question.id "up" %}"><i class="angle up icon"></i></a>
+                <a title="{% trans "Move down" %}" href="{% url "survey.move_question_de" question.id "down" %}"><i class="angle orange down icon"></i></a>
                 {% endif %}
             </div>
+            <div>
+                {% if not forloop.first %}
+                <a title="{% trans "Move up" %}" href="{% url "survey.move_question_de" question.id "up" %}"><i class="angle orange up icon"></i></a>
+                {% endif %}
+            </div>
+            <div></div>
             <div>
                 {% if question.is_non_field %}
                 {% if question.question_type|print_question_type == "TITLE" %}

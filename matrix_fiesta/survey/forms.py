@@ -140,6 +140,7 @@ class QuestionCreationForm(forms.ModelForm):
     choices = forms.CharField(
         label=_("Choices (separate by new line) for multiple choices questions"),
         widget=forms.Textarea,
+        required=False,
     )
 
     class Meta:
@@ -151,6 +152,11 @@ class QuestionCreationForm(forms.ModelForm):
             "required": _("Required"),
             "order": _("Order"),
         }
+
+
+class QuestionInsertionForm(QuestionCreationForm):
+    class Meta(QuestionCreationForm.Meta):
+        exclude = ("survey", "choices", "order")
 
 
 class ConfirmationForm(forms.Form):
