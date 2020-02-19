@@ -6,7 +6,7 @@
 {% block content %}
 <h2>{{survey}}</h2>
 
-<form action="" method="post">
+<form action="" method="post" class="answer">
     {% csrf_token %}
 
     {% for field in form %}
@@ -19,7 +19,11 @@
     {% else %}
         <div>
             {{ field.errors }}
-            {{ field.label_tag }} {{ field }}
+            {{ field.label_tag }}
+            {% if field.field.required %}
+            <i class="icon red">*</i>
+            {% endif %}
+            {{ field }}
         </div>
     {% endif %}
     {% endfor %}

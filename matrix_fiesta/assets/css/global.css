@@ -24,6 +24,8 @@ a .icon {
 
 .gridcontainer i.icon {
     margin-right: 0px;
-    grid-gap: 20px;
-    grid-template-columns: 125px 1fr;
+}
+
+form.answer textarea {
+    display:block;
 }
