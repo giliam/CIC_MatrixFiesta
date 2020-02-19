@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-19 14:18+0100\n"
+"POT-Creation-Date: 2020-02-19 14:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -187,9 +187,54 @@ msgstr "Groupe #%d"
 msgid "Do you want to stay anonymous?"
 msgstr "Voulez-vous rester anonyme ?"
 
+#: survey/forms.py:130
+msgid "Name"
+msgstr ""
+
+#: survey/forms.py:131
+msgid "Opened"
+msgstr ""
+
+#: survey/forms.py:132
+msgid "Archived"
+msgstr ""
+
 #: survey/forms.py:133
+msgid "Ecue"
+msgstr ""
+
+#: survey/forms.py:134 templates/survey/list_de.html:37
+msgid "Promotion"
+msgstr "Promotion"
+
+#: survey/forms.py:135
+#, fuzzy
+#| msgid "Anonymous"
+msgid "Allow anonymous"
+msgstr "Anonyme"
+
+#: survey/forms.py:141
 msgid "Choices (separate by new line) for multiple choices questions"
-msgstr "Choix (séparés par une nouvelle ligne) pour des questions à choix multiples"
+msgstr ""
+"Choix (séparés par une nouvelle ligne) pour des questions à choix multiples"
+
+#: survey/forms.py:149
+#, fuzzy
+#| msgid "Question"
+msgid "Question type"
+msgstr "Question"
+
+#: survey/forms.py:150
+msgid "Content"
+msgstr ""
+
+#: survey/forms.py:151
+msgid "Required"
+msgstr ""
+
+#: survey/forms.py:152
+msgid "Order"
+msgstr ""
 
 #: survey/models.py:33
 #, python-format
@@ -243,6 +288,7 @@ msgid "Responses"
 msgstr "Résultats"
 
 #: survey/models.py:150
+#, python-format
 msgid "Answer %(value)s to %(question)s (%(response)s)"
 msgstr "Réponse %(value)s à %(question)s (%(response)s)"
 
@@ -785,8 +831,9 @@ msgid ""
 "(ARCHIVED)</em> and will be closed."
 msgstr ""
 "Nettoyer un sondage va créer une copie du sondage avec les mêmes "
-"caractéristiques mais sans les réponses. \n L'ancien sondage sera conservé, "
-"renommé à <em>Titre précédent (ARCHIVE)</em> et sera fermé."
+"caractéristiques mais sans les réponses. \n"
+" L'ancien sondage sera conservé, renommé à <em>Titre précédent (ARCHIVE)</"
+"em> et sera fermé."
 
 #: templates/survey/creation_de.html:8 templates/survey/edition_de.html:9
 msgid "Return to the list"
@@ -809,8 +856,8 @@ msgid ""
 "Warning, the survey already has answers and changing anything here could "
 "lead to major failures."
 msgstr ""
-"Attention, modifier un sondage qui a déjà eu des réponses peut conduire à "
-"de sérieux problèmes."
+"Attention, modifier un sondage qui a déjà eu des réponses peut conduire à de "
+"sérieux problèmes."
 
 #: templates/survey/edition_de.html:60
 msgid "No question yet."
@@ -860,10 +907,6 @@ msgstr "Fermer le sondage"
 msgid "Open the survey"
 msgstr "Ouvrir le sondage"
 
-#: templates/survey/list_de.html:37
-msgid "Promotion"
-msgstr "Promotion"
-
 #: templates/survey/list_de.html:39
 #, python-format
 msgid ""
@@ -900,8 +943,8 @@ msgid ""
 "Warning, the survey has been opened and adding a question can lead to "
 "missing values for existing answers."
 msgstr ""
-"Attention, le sondage a déjà été ouvert et ajouter une question peut conduire "
-"à des données manquantes pour les réponses existantes."
+"Attention, le sondage a déjà été ouvert et ajouter une question peut "
+"conduire à des données manquantes pour les réponses existantes."
 
 #: templates/users/login.html:9
 msgid "If you have a CAS access"
