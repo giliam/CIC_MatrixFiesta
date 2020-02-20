@@ -25,6 +25,11 @@ urlpatterns = [
         r"de/close/(?P<survey>[0-9]+)/", views.de_close_survey, name="survey.close_de"
     ),
     re_path(
+        r"de/preview/(?P<survey>[0-9]+)/",
+        views.de_preview_survey,
+        name="survey.preview_de",
+    ),
+    re_path(
         r"de/reorder/(?P<survey>[0-9]+)/",
         views.de_reorder_survey,
         name="survey.reorder_questions_de",

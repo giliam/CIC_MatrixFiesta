@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% load common_extras %}
+
+{% block title %}{% trans "Survey preview" %}{% endblock %}
+{% block content %}
+<h2>{% trans "Survey preview" %} - {{survey}}</h2>
+
+<form action="" method="post" class="answer">
+    {% csrf_token %}
+
+    {% for field in form %}
+    {% if field.non_field %}
+        {% if field|get_item:"type" == "TITLE" %}
+            <h2>{{ field|get_item:"content" }}</h2>
+        {% elif field|get_item:"type" == "DESCRIPTION" %}
+            <p>{{ field|get_item:"content" }}</p>
+        {% endif %}
+    {% else %}
+        <div>
+            {{ field.errors }}
+            {{ field.label_tag }}
+            {% if field.field.required %}
+            <i class="icon red">*</i>
+            {% endif %}
+            {{ field }}
+        </div>
+    {% endif %}
+    {% endfor %}
+</form>
+{% endblock %}

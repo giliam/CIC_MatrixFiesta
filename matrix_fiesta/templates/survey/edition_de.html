@@ -6,7 +6,7 @@
 {% block title %}{% trans "Create a survey" %}{% endblock %}
 {% block content %}
     <h2>{% trans "Survey edition" %}</h2>
-    <p><a href="{% url "survey.list_de" %}">{% trans "Return to the list" %}</a></p>
+    <p><a class="ui button" href="{% url "survey.list_de" %}">{% trans "Return to the list" %}</a></p>
 
     {% if survey.responses.all|length > 0 %}
     <div class="ui error message">
@@ -21,10 +21,22 @@
             {{ form_edition.as_p }}
             <input type="submit" class="ui button green" value="{% trans "Submit" %}" />
         </form>
-        <h3>{% trans "Questions" %}</h3>
+        <h2>{% trans "Questions" %}</h2>
+        
+        <p>
+            <a class="ui button blue" href="{% url "survey.add_question_de" survey.id %}">{% trans "Add a question" %}</a>
+            <a class="ui button teal" href="{% url "survey.clear_de" survey.id %}">{% trans "Clear the survey" %}</a>
+            <a class="ui button purple" href="{% url "survey.preview_de" survey.id %}">{% trans "Preview the survey" %}</a>
+            <a class="ui button yellow" href="{% url "survey.reorder_questions_de" survey.id %}">{% trans "Reorder the questions" %}</a>
+            {% if survey.opened %}
+                <a class="ui button red" href="{% url "survey.close_de" survey.id %}">{% trans "Close the survey" %}</a>
+            {% else %}
+                <a class="ui button green" href="{% url "survey.close_de" survey.id %}">{% trans "Open the survey" %}</a>
+            {% endif %}
+        </p>
         
         {% if survey.questions.all|length > 0 %}
-        <div class="gridcontainer">
+        <div class="grid_container_survey">
             {% for question in survey.questions.all %}
             <div>
             </div>
@@ -54,7 +66,7 @@
                 {% endif %}
             </div>
             <div></div>
-            <div>
+            <div id="question_{{question.id}}">
                 {% if question.is_non_field %}
                 {% if question.question_type|print_question_type == "TITLE" %}
                 <p class="larger"><strong>{{ question.content }}</strong></p>
@@ -78,6 +90,5 @@
             {% trans "No question yet." %}
         </p>
         {% endif %}
-        <p><a href="{% url "survey.add_question_de" survey.id %}">{% trans "Add a question" %}</a></p>
     {% endif %}
     {% endblock %}

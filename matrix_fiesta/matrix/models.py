@@ -84,7 +84,10 @@ class ProfileUser(DatedModel):
         return current_schoolyear
 
     def __str__(self):
-        return "%s %s" % (self.user.first_name, self.user.last_name.upper())
+        if len(self.user.first_name) + len(self.user.last_name) == 0:
+            return str(self.user)
+        else:
+            return "%s %s" % (self.user.first_name, self.user.last_name.upper())
 
     class Meta:
         verbose_name = _("User")

@@ -145,7 +145,7 @@ def de_reorder_survey(request, survey):
         question.order = i
         question.save()
         i += 1
-    return redirect(reverse("survey.list_de"))
+    return redirect(reverse("survey.edit_de", args=[survey.id]))
 
 
 @login_required
@@ -211,7 +211,10 @@ def de_add_question(request, survey):
                 _save_choices_iterable_question(form, question)
 
             question.save()
-            return redirect(reverse("survey.edit_de", kwargs={"survey": survey.id}))
+            return redirect(
+                reverse("survey.edit_de", kwargs={"survey": survey.id})
+                + f"#question_{question.id}"
+            )
     else:
         form = forms.QuestionCreationForm(
             initial={"order": len(survey.questions.all())}
@@ -250,7 +253,10 @@ def de_insert_question(request, question, direction):
                 _save_choices_iterable_question(form, question)
 
             question.save()
-            return redirect(reverse("survey.edit_de", kwargs={"survey": survey.id}))
+            return redirect(
+                reverse("survey.edit_de", kwargs={"survey": survey.id})
+                + f"#question_{question.id}"
+            )
     else:
         form = forms.QuestionInsertionForm()
     return render(
@@ -302,6 +308,7 @@ def de_edit_question(request, question):
             question.save()
             return redirect(
                 reverse("survey.edit_de", kwargs={"survey": question.survey.id})
+                + f"#question_{question.id}"
             )
     else:
         form = forms.QuestionCreationForm(
@@ -337,7 +344,10 @@ def de_move_question(request, question, direction):
     question.order, question_concerned.order = question_concerned.order, question.order
     question_concerned.save()
     question.save()
-    return redirect(reverse("survey.edit_de", kwargs={"survey": question.survey.id}))
+    return redirect(
+        reverse("survey.edit_de", kwargs={"survey": question.survey.id})
+        + f"#question_{question.id}"
+    )
 
 
 @login_required
@@ -384,7 +394,23 @@ def de_duplicate_question(request, question):
     for choice_found in choices:
         question.choices.add(choice_found)
 
-    return redirect(reverse("survey.edit_de", kwargs={"survey": question.survey.id}))
+    return redirect(
+        reverse("survey.edit_de", kwargs={"survey": question.survey.id})
+        + f"#question_{question.id}"
+    )
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_preview_survey(request, survey):
+    survey = get_object_or_404(
+        models.Survey.objects.prefetch_related("questions", "questions__choices"),
+        id=survey,
+    )
+    questions = survey.questions.all()
+    form = forms.ResponseForm(questions, anonymous=survey.allow_anonymous)
+
+    return render(request, "survey/preview_de.html", {"survey": survey, "form": form})
 
 
 @login_required
@@ -463,6 +489,7 @@ def detail_survey(request, survey):
         return redirect(reverse("survey.list"))
 
 
+@login_required
 def answer_survey(request, survey, initial_response=None):
     survey = get_object_or_404(
         models.Survey.objects.prefetch_related("questions", "questions__choices"),

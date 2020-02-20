@@ -61,8 +61,8 @@
         </tbody>
     </table>
     {% empty %}
-        <td class="center aligned disabled" colspan="{{values|length|add:2}}"><em>{% trans "No UE here yet." %}</em></td>
+        <p><em>{% trans "No UE here yet." %}</em></p>
     {% endfor %}
-    <input type="submit" class="ui button green"/>
+    <p><input type="submit" class="ui button green" value="{% trans "Submit" %}"/></p>
 </form>
 {% endblock %}

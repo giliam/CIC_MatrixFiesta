@@ -15,17 +15,40 @@ a .icon {
     font-size: 1.5em;
 }
 
-.gridcontainer {
+.grid_container_survey {
     display: grid;
     row-gap: 30px;
     column-gap: 5px;
     grid-template-columns: repeat(3, 15px) 29px 29px repeat(3, 15px) 5px 1fr;
+    margin-bottom: 15px;
+    margin-top: 25px;
 }
 
-.gridcontainer i.icon {
+.grid_container_survey i.icon {
     margin-right: 0px;
 }
 
 form.answer textarea {
     display:block;
+}
+
+.grid_container_survey_list {
+    display: grid;
+    row-gap: 10px;
+    column-gap: 5px;
+    grid-template-columns: repeat(6, 18px) 5px 1fr 150px 150px;
+}
+
+a.nolink {
+    color: black;
+}
+
+.grid_container_survey_list i.icon {
+    margin-right: 0px;
+}
+
+.grid_container_survey_list .large_cell {
+    grid-column: 1 / span 5;
+    color: rgb(0, 0, 0, 0.2);
+    text-align: center;
 }

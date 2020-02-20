@@ -6,22 +6,36 @@
 {% block content %}
     <h2>{% trans "Surveys" %}</h2>
     <p><a href="{% url "survey.create_survey_de" %}">{% trans "Create a survey" %}</a></p>
-    <ul>
+    <div class="grid_container_survey_list">
         {% for survey in object_list.surveys %}
-            <li>
-                {% if not survey.archived %}
+        
+            {% if not survey.archived %}
+            <div>
                 <a href="{% url "survey.edit_de" survey.id %}">
                     <i title="{% trans "Edit the survey" %}" class="edit icon"></i>
                 </a>
+            </div>
+            <div>
                 <a href="{% url "survey.clear_de" survey.id %}">
-                    <i title="{% trans "Clear the survey" %}" class="undo icon"></i>
+                    <i title="{% trans "Clear the survey" %}" class="undo icon teal"></i>
                 </a>
+            </div>
+            <div>
                 <a href="{% url "survey.copy_de" survey.id %}">
                     <i title="{% trans "Copy the survey" %}" class="copy icon blue"></i>
                 </a>
+            </div>
+            <div>
+                <a href="{% url "survey.preview_de" survey.id %}">
+                    <i title="{% trans "Preview the survey" %}" class="eye icon purple"></i>
+                </a>
+            </div>
+            <div>
                 <a href="{% url "survey.reorder_questions_de" survey.id %}">
                     <i title="{% trans "Reorder the questions" %}" class="sort amount down icon yellow"></i>
                 </a>
+            </div>
+            <div>
                 {% if survey.opened %}
                 <a href="{% url "survey.close_de" survey.id %}">
                     <i title="{% trans "Close the survey" %}" class="unlock icon green"></i>
@@ -31,18 +45,29 @@
                     <i title="{% trans "Open the survey" %}" class="lock icon red"></i>
                 </a>
                 {% endif %}
+            </div>
+            {% else %}
+            <div class="large_cell"><em>{% trans "Archived" %}</em></div>
+            <div><i class="folder icon yellow"></i></div>
+            {% endif %}
+            <div></div>
+            <div>
+                {% if not survey.archived %}
+                    <a href="{% url "survey.edit_de" survey.id %}" class="nolink">
+                        {{ survey.name }}
+                    </a>
                 {% else %}
-                <i class="folder icon yellow"></i>
+                    {{ survey.name }}
                 {% endif %}
-                {{ survey.name }} ({% trans "Promotion" %} {{survey.promotionyear}})
+            </div>
+            <div>
+                {% trans "Promotion" %} {{survey.promotionyear}}
+            </div>
+            <div>
                 <a href="{% url "survey.results_de" survey.id %}">
-                    ({% blocktrans count counter=survey.responses.count %}
-                    1 answer
-                    {% plural %}
-                    {{ counter }} answers
-                    {% endblocktrans %})
+                    ({% blocktrans count counter=survey.responses.count %}1 answer{% plural %}{{ counter }} answers{% endblocktrans %})
                 </a>
-            </li>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}
