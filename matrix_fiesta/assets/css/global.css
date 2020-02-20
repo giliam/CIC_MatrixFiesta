@@ -19,7 +19,7 @@ a .icon {
     display: grid;
     row-gap: 30px;
     column-gap: 5px;
-    grid-template-columns: repeat(2, 15px) 29px 29px repeat(2, 15px) 5px 1fr;
+    grid-template-columns: repeat(3, 15px) 29px 29px repeat(3, 15px) 5px 1fr;
 }
 
 .gridcontainer i.icon {

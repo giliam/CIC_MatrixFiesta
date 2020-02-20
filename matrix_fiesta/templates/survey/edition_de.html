@@ -27,6 +27,9 @@
         <div class="gridcontainer">
             {% for question in survey.questions.all %}
             <div>
+                {{question.order}}
+            </div>
+            <div>
                 <a title="{% trans "Edit" %}" href="{% url "survey.edit_question_de" question.id %}"><i class="edit icon"></i></a>
             </div>
             <div>
@@ -37,6 +40,9 @@
             </div>
             <div>
                 <a title="{% trans "Insert below" %}" href="{% url "survey.insert_question_de" question.id "below" %}"><i class="plus green circle icon"></i><i class="level down alternate icon small"></i></a>
+            </div>
+            <div>
+                <a title="{% trans "Duplicate question" %}" href="{% url "survey.duplicate_question_de" question.id %}"><i class="copy icon blue"></i></a>
             </div>
             <div>
                 {% if not forloop.last %}

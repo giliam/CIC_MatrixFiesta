@@ -367,6 +367,28 @@ def de_remove_question(request, question):
 
 @login_required
 @user_passes_test(auths.check_is_de)
+def de_duplicate_question(request, question):
+    question = get_object_or_404(
+        models.Question.objects.prefetch_related("survey"),
+        Q(id=question, survey__archived=False),
+    )
+    choices = question.choices.all()
+    question.pk = None
+    question.order += 1
+    models.Question.objects.filter(
+        survey=question.survey, order__gte=question.order
+    ).update(order=F("order") + 1)
+    question.save()
+
+    # We run over the choices found to append them to choices
+    for choice_found in choices:
+        question.choices.add(choice_found)
+
+    return redirect(reverse("survey.edit_de", kwargs={"survey": question.survey.id}))
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
 def de_results_survey(request, survey):
     survey = get_object_or_404(
         models.Survey.objects.prefetch_related("questions"), Q(id=survey)

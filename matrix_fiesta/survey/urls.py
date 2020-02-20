@@ -40,6 +40,11 @@ urlpatterns = [
         name="survey.move_question_de",
     ),
     re_path(
+        r"de/duplicate/question/(?P<question>[0-9]+)/",
+        views.de_duplicate_question,
+        name="survey.duplicate_question_de",
+    ),
+    re_path(
         r"de/insert/question/(?P<question>[0-9]+)/(?P<direction>above|below)",
         views.de_insert_question,
         name="survey.insert_question_de",
