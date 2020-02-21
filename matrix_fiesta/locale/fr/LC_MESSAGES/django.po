@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-19 14:37+0100\n"
+"POT-Creation-Date: 2020-02-21 20:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr "Nom d'utilisateur"
 msgid "Password"
 msgstr "Mot de passe"
 
-#: matrix/forms.py:57 matrix/forms.py:64 matrix/models.py:167
+#: matrix/forms.py:57 matrix/forms.py:64 matrix/models.py:170
 msgid "Evaluation value"
 msgstr "Valeur de l'évaluation"
 
@@ -54,7 +54,7 @@ msgstr "Sélectionner un fichier pour les élèves"
 msgid "Select a file for the teachers"
 msgstr "Sélectionner un fichier pour les enseignants"
 
-#: matrix/forms.py:96 matrix/models.py:152
+#: matrix/forms.py:96 matrix/models.py:155
 msgid "Course"
 msgstr "Cours"
 
@@ -82,83 +82,83 @@ msgstr "Années scolaires"
 msgid "Promotion years"
 msgstr "Promotions"
 
-#: matrix/models.py:90
+#: matrix/models.py:93
 msgid "User"
 msgstr "Utilisateur"
 
-#: matrix/models.py:91
+#: matrix/models.py:94
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: matrix/models.py:106
+#: matrix/models.py:109
 msgid "Semestre"
 msgstr "Semestre"
 
-#: matrix/models.py:107
+#: matrix/models.py:110
 msgid "Semestres"
 msgstr "Semestres"
 
-#: matrix/models.py:121
+#: matrix/models.py:124
 msgid "UE"
 msgstr "UE"
 
-#: matrix/models.py:122 templates/matrix/students/matrix_ues.html:18
+#: matrix/models.py:125 templates/matrix/students/matrix_ues.html:18
 msgid "UEs"
 msgstr "UEs"
 
-#: matrix/models.py:133
+#: matrix/models.py:136
 #, python-format
 msgid "ECUE %(name)s - %(ue)s"
 msgstr "ECUE %(name)s - %(ue)s"
 
-#: matrix/models.py:136 survey/forms.py:133
+#: matrix/models.py:139 survey/forms.py:134
 #: templates/matrix/students/overall_self_evaluation.html:27
 msgid "ECUE"
 msgstr "ECUE"
 
-#: matrix/models.py:137
+#: matrix/models.py:140
 msgid "ECUEs"
 msgstr "ECUEs"
 
-#: matrix/models.py:153
+#: matrix/models.py:156
 msgid "Courses"
 msgstr "Cours"
 
-#: matrix/models.py:168
+#: matrix/models.py:171
 msgid "Evaluation values"
 msgstr "Valeurs de l'évaluation"
 
-#: matrix/models.py:187
+#: matrix/models.py:190
 msgid "Learning achievement"
 msgstr "Acquis d'apprentissage"
 
-#: matrix/models.py:188
+#: matrix/models.py:191
 msgid "Learning achievements"
 msgstr "Acquis d'apprentissage"
 
-#: matrix/models.py:204
+#: matrix/models.py:207
 #, python-format
 msgid "%(achiev)s, %(student)s : %(eval)s (teacher: %(teacher)s)"
 msgstr "%(achiev)s, %(student)s : %(eval)s (enseignant : %(teacher)s)"
 
-#: matrix/models.py:212
+#: matrix/models.py:215
 msgid "Student evaluation"
 msgstr "Évaluation de l'étudiant"
 
-#: matrix/models.py:213
+#: matrix/models.py:216
 msgid "Student evaluations"
 msgstr "Évaluations des étudiants"
 
-#: matrix/models.py:242
+#: matrix/models.py:245
 #, python-format
 msgid "SC %(name)s of %(course)s by %(teacher)s"
 msgstr "PC %(name)s %(course)s par %(teacher)s"
 
-#: matrix/models.py:249
+#: matrix/models.py:252
 msgid "Small class"
 msgstr "Petite classe"
 
-#: matrix/models.py:250 templates/de/homepage.html:18
+#: matrix/models.py:253 templates/de/homepage.html:18
 msgid "Small classes"
 msgstr "Petites classes"
 
@@ -183,50 +183,66 @@ msgstr "La DE ne devrait pas être dans les groupes sélectionnés."
 msgid "Groupe #%d"
 msgstr "Groupe #%d"
 
-#: survey/forms.py:24
+#: survey/forms.py:25
 msgid "Do you want to stay anonymous?"
 msgstr "Voulez-vous rester anonyme ?"
 
-#: survey/forms.py:130
+#: survey/forms.py:131
 msgid "Name"
 msgstr "Nom"
 
-#: survey/forms.py:131
+#: survey/forms.py:132
 msgid "Opened"
 msgstr "Ouvert"
 
-#: survey/forms.py:132
+#: survey/forms.py:133 templates/survey/list_de.html:50
 msgid "Archived"
 msgstr "Archivé"
 
-#: survey/forms.py:134 templates/survey/list_de.html:37
+#: survey/forms.py:135 templates/survey/list_de.html:64
 msgid "Promotion"
 msgstr "Promotion"
 
-#: survey/forms.py:135
+#: survey/forms.py:136
 msgid "Allow anonymous"
 msgstr "Permettre l'anonymat"
 
-#: survey/forms.py:141
+#: survey/forms.py:142
 msgid "Choices (separate by new line) for multiple choices questions"
 msgstr ""
 "Choix (séparés par une nouvelle ligne) pour des questions à choix multiples"
 
-#: survey/forms.py:149
+#: survey/forms.py:151
 msgid "Question type"
 msgstr "Type de question"
 
-#: survey/forms.py:150
+#: survey/forms.py:152
 msgid "Content"
 msgstr "Contenu"
 
-#: survey/forms.py:151
+#: survey/forms.py:153
 msgid "Required"
 msgstr "Champs requis"
 
-#: survey/forms.py:152
+#: survey/forms.py:154
 msgid "Order"
 msgstr "Ordre"
+
+#: survey/forms.py:177
+msgid "Which action?"
+msgstr ""
+
+#: survey/forms.py:215
+msgid "Do you really confirm the deletion of all following elements?"
+msgstr ""
+
+#: survey/forms.py:247
+msgid "Which question should be above your duplicates?"
+msgstr ""
+
+#: survey/forms.py:248
+msgid "........top......."
+msgstr ""
 
 #: survey/models.py:33
 #, python-format
@@ -234,8 +250,8 @@ msgid "Survey %s"
 msgstr "Sondage %s"
 
 #: survey/models.py:36 templates/survey/answer.html:6
-#: templates/survey/confirm_de.html:12 templates/survey/detail.html:5
-#: templates/survey/detail_de.html:5
+#: templates/survey/confirm_batch_de.html:9 templates/survey/confirm_de.html:12
+#: templates/survey/detail.html:5 templates/survey/detail_de.html:5
 msgid "Survey"
 msgstr "Sondage"
 
@@ -258,11 +274,11 @@ msgid "Question %s"
 msgstr "Question %s"
 
 #: survey/models.py:95 templates/survey/confirm_de.html:9
-#: templates/survey/edition_de.html:48
+#: templates/survey/edition_de.html:89
 msgid "Question"
 msgstr "Question"
 
-#: survey/models.py:96 templates/survey/edition_de.html:24
+#: survey/models.py:96 templates/survey/edition_de.html:25
 msgid "Questions"
 msgstr "Questions"
 
@@ -292,7 +308,17 @@ msgstr "Réponse"
 msgid "Answers"
 msgstr "Réponses"
 
-#: survey/views.py:354
+#: survey/views.py:150
+msgid "Do you confirm the duplication of the following questions?"
+msgstr ""
+
+#: survey/views.py:178
+#, fuzzy
+#| msgid "Do you confirm deletion?"
+msgid "Do you confirm the deletion of the following questions?"
+msgstr "Confirmez-vous la suppression ?"
+
+#: survey/views.py:551
 msgid "Anonymous"
 msgstr "Anonyme"
 
@@ -582,18 +608,22 @@ msgstr "Non évalué"
 msgid "No achievement here yet."
 msgstr "Pas encore d'acquis d'apprentissage ici."
 
+#: templates/matrix/students/course_self_evaluation.html:49
+#: templates/matrix/students/evaluate_achievement.html:15
+#: templates/matrix/students/overall_self_evaluation.html:66
+#: templates/matrix/teachers/evaluate_achievement.html:16
+#: templates/matrix/teachers/student_overall_evaluation.html:47
+#: templates/survey/confirm_batch_de.html:25
+#: templates/survey/confirm_de.html:20 templates/survey/creation_de.html:13
+#: templates/survey/detail.html:32 templates/survey/edition_de.html:23
+#: templates/survey/edition_de.html:45
+#: templates/survey/question_form_de.html:24 templates/users/login.html:23
+msgid "Submit"
+msgstr "Envoyer"
+
 #: templates/matrix/students/evaluate_achievement.html:3
 msgid "Achievement self evaluation"
 msgstr "Auto-évaluation des acquis"
-
-#: templates/matrix/students/evaluate_achievement.html:15
-#: templates/matrix/teachers/evaluate_achievement.html:16
-#: templates/matrix/teachers/student_overall_evaluation.html:47
-#: templates/survey/confirm_de.html:20 templates/survey/creation_de.html:13
-#: templates/survey/detail.html:28 templates/survey/edition_de.html:22
-#: templates/survey/question_form_de.html:22 templates/users/login.html:23
-msgid "Submit"
-msgstr "Envoyer"
 
 #: templates/matrix/students/matrix_course.html:3
 msgid "Course matrix"
@@ -801,11 +831,25 @@ msgstr "Retour au statut de l'étudiant"
 msgid "No answer given"
 msgstr "Pas de réponse donnée"
 
-#: templates/survey/confirm_de.html:5 templates/survey/creation_de.html:5
-#: templates/survey/edition_de.html:6 templates/survey/list_de.html:8
-#: templates/survey/question_form_de.html:5
+#: templates/survey/confirm_batch_de.html:5 templates/survey/confirm_de.html:5
+#: templates/survey/creation_de.html:5 templates/survey/edition_de.html:7
+#: templates/survey/list_de.html:8 templates/survey/question_form_de.html:5
 msgid "Create a survey"
 msgstr "Créer un sondage"
+
+#: templates/survey/confirm_batch_de.html:7
+#: templates/survey/question_form_de.html:7
+#: templates/survey/question_form_de.html:27
+#, fuzzy
+#| msgid "Return to the list"
+msgid "Return to the survey"
+msgstr "Retour à la liste"
+
+#: templates/survey/confirm_batch_de.html:20
+#, fuzzy
+#| msgid "Question"
+msgid "Question:"
+msgstr "Question"
 
 #: templates/survey/confirm_de.html:7
 msgid "Confirm"
@@ -827,23 +871,23 @@ msgstr ""
 " L'ancien sondage sera conservé, renommé à <em>Titre précédent (ARCHIVE)</"
 "em> et sera fermé."
 
-#: templates/survey/creation_de.html:8 templates/survey/edition_de.html:9
+#: templates/survey/creation_de.html:8 templates/survey/edition_de.html:10
 msgid "Return to the list"
 msgstr "Retour à la liste"
 
-#: templates/survey/detail.html:27
+#: templates/survey/detail.html:31
 msgid "Save"
 msgstr "Enregistrer"
 
-#: templates/survey/edition_de.html:8
+#: templates/survey/edition_de.html:9
 msgid "Survey edition"
 msgstr "Modification d'un sondage"
 
-#: templates/survey/edition_de.html:14
+#: templates/survey/edition_de.html:15
 msgid "The survey already has answers"
 msgstr "Le sondage a déjà des réponses"
 
-#: templates/survey/edition_de.html:16
+#: templates/survey/edition_de.html:17
 msgid ""
 "Warning, the survey already has answers and changing anything here could "
 "lead to major failures."
@@ -851,13 +895,61 @@ msgstr ""
 "Attention, modifier un sondage qui a déjà eu des réponses peut conduire à de "
 "sérieux problèmes."
 
-#: templates/survey/edition_de.html:60
-msgid "No question yet."
-msgstr "Pas encore de question."
-
-#: templates/survey/edition_de.html:63
+#: templates/survey/edition_de.html:28
 msgid "Add a question"
 msgstr "Ajouter une question"
+
+#: templates/survey/edition_de.html:29 templates/survey/list_de.html:20
+msgid "Clear the survey"
+msgstr "Nettoyer le sondage"
+
+#: templates/survey/edition_de.html:30 templates/survey/list_de.html:30
+msgid "Preview the survey"
+msgstr "Prévisualiser le sondage"
+
+#: templates/survey/edition_de.html:31 templates/survey/list_de.html:35
+msgid "Reorder the questions"
+msgstr "Réordonner les questions"
+
+#: templates/survey/edition_de.html:33 templates/survey/list_de.html:41
+msgid "Close the survey"
+msgstr "Fermer le sondage"
+
+#: templates/survey/edition_de.html:35 templates/survey/list_de.html:45
+msgid "Open the survey"
+msgstr "Ouvrir le sondage"
+
+#: templates/survey/edition_de.html:55
+msgid "Edit"
+msgstr "Modifier"
+
+#: templates/survey/edition_de.html:58
+msgid "Remove"
+msgstr "Retirer"
+
+#: templates/survey/edition_de.html:61
+msgid "Insert above"
+msgstr "Insérer au-dessus"
+
+#: templates/survey/edition_de.html:64
+msgid "Insert below"
+msgstr "Insérer en-dessous"
+
+#: templates/survey/edition_de.html:67
+msgid "Duplicate question"
+msgstr "Dupliquer une question"
+
+#: templates/survey/edition_de.html:71
+msgid "Move down"
+msgstr "Déplacer vers le bas"
+
+#: templates/survey/edition_de.html:76
+msgid "Move up"
+msgstr "Déplacer vers le haut"
+
+#: templates/survey/edition_de.html:102
+msgid "No question yet."
+msgstr "Pas encore de question."
 
 #: templates/survey/list.html:14
 msgid "Edit your answer to"
@@ -875,62 +967,38 @@ msgstr "Répondre à"
 msgid "Your answers"
 msgstr "Vos réponses"
 
-#: templates/survey/list_de.html:14
+#: templates/survey/list_de.html:15
 msgid "Edit the survey"
 msgstr "Modifier le sondage"
 
-#: templates/survey/list_de.html:17
-msgid "Clear the survey"
-msgstr "Nettoyer le sondage"
-
-#: templates/survey/list_de.html:20
+#: templates/survey/list_de.html:25
 msgid "Copy the survey"
 msgstr "Copier le sondage"
 
-#: templates/survey/list_de.html:23
-msgid "Reorder the questions"
-msgstr "Réordonner les questions"
-
-#: templates/survey/list_de.html:27
-msgid "Close the survey"
-msgstr "Fermer le sondage"
-
-#: templates/survey/list_de.html:31
-msgid "Open the survey"
-msgstr "Ouvrir le sondage"
-
-#: templates/survey/list_de.html:39
+#: templates/survey/list_de.html:68
 #, python-format
-msgid ""
-"\n"
-"                    1 answer\n"
-"                    "
-msgid_plural ""
-"\n"
-"                    %(counter)s answers\n"
-"                    "
-msgstr[0] ""
-"\n"
-"%(counter)s réponse \n"
-"                    "
-msgstr[1] ""
-"\n"
-"%(counter)s réponses \n"
-"                    "
+msgid "1 answer"
+msgid_plural "%(counter)s answers"
+msgstr[0] "%(counter)s réponse"
+msgstr[1] "%(counter)s réponses"
 
-#: templates/survey/question_form_de.html:7
+#: templates/survey/preview_de.html:5 templates/survey/preview_de.html:7
+msgid "Survey preview"
+msgstr "Prévisualisation d'un sondage"
+
+#: templates/survey/question_form_de.html:9
 msgid "Question edition"
 msgstr "Modification d'une question"
 
-#: templates/survey/question_form_de.html:8
+#: templates/survey/question_form_de.html:10
 msgid "For:"
 msgstr "Pour :"
 
-#: templates/survey/question_form_de.html:13
+#: templates/survey/question_form_de.html:15
 msgid "The survey is opened"
 msgstr "Le sondage est ouvert"
 
-#: templates/survey/question_form_de.html:15
+#: templates/survey/question_form_de.html:17
 msgid ""
 "Warning, the survey has been opened and adding a question can lead to "
 "missing values for existing answers."
@@ -957,6 +1025,23 @@ msgstr "Utilisateur inexistant ou mauvais de mot de passe."
 #: templates/users/login.html:18
 msgid "You are successfully logged in!"
 msgstr "Vous êtes bien connecté !"
+
+#~ msgid ""
+#~ "\n"
+#~ "                    1 answer\n"
+#~ "                    "
+#~ msgid_plural ""
+#~ "\n"
+#~ "                    %(counter)s answers\n"
+#~ "                    "
+#~ msgstr[0] ""
+#~ "\n"
+#~ "%(counter)s réponse \n"
+#~ "                    "
+#~ msgstr[1] ""
+#~ "\n"
+#~ "%(counter)s réponses \n"
+#~ "                    "
 
 #~ msgid "Welcome !"
 #~ msgstr "Bienvenue !"
