@@ -4,6 +4,8 @@
 
 {% block title %}{% trans "Create a survey" %}{% endblock %}
 {% block content %}
+    <p><a class="ui button primary" href="{% url "survey.edit_de" survey.id %}">{% trans "Return to the survey" %}</a></p>
+    
     <h2>{% trans "Question edition" %}</h2>
     <p>{% trans "For:" %} <strong>{{ survey.name }}</strong></p>
     
@@ -15,10 +17,12 @@
         {% trans "Warning, the survey has been opened and adding a question can lead to missing values for existing answers." %}
     </div>
     {% endif %}
-
+    
     <form method="post" class="ui form">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" class="ui button green" value="{% trans "Submit" %}" />
     </form>
+    
+    <p><a class="ui button primary" href="{% url "survey.edit_de" survey.id %}">{% trans "Return to the survey" %}</a></p>
 {% endblock %}
