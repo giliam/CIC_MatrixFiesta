@@ -230,19 +230,19 @@ msgstr "Ordre"
 
 #: survey/forms.py:177
 msgid "Which action?"
-msgstr ""
+msgstr "Quelle action ?"
 
 #: survey/forms.py:215
 msgid "Do you really confirm the deletion of all following elements?"
-msgstr ""
+msgstr "Confirmez-vous réellement la suppression des éléments suivants ?"
 
 #: survey/forms.py:247
 msgid "Which question should be above your duplicates?"
-msgstr ""
+msgstr "Quelle question doit être placée avant les copies ?"
 
 #: survey/forms.py:248
 msgid "........top......."
-msgstr ""
+msgstr "..Tout en haut des questions.."
 
 #: survey/models.py:33
 #, python-format
@@ -310,13 +310,11 @@ msgstr "Réponses"
 
 #: survey/views.py:150
 msgid "Do you confirm the duplication of the following questions?"
-msgstr ""
+msgstr "Confirmez-vous la duplication des questions suivantes ?"
 
 #: survey/views.py:178
-#, fuzzy
-#| msgid "Do you confirm deletion?"
 msgid "Do you confirm the deletion of the following questions?"
-msgstr "Confirmez-vous la suppression ?"
+msgstr "Confirmez-vous la suppression des questions suivantes ?"
 
 #: survey/views.py:551
 msgid "Anonymous"
@@ -840,16 +838,12 @@ msgstr "Créer un sondage"
 #: templates/survey/confirm_batch_de.html:7
 #: templates/survey/question_form_de.html:7
 #: templates/survey/question_form_de.html:27
-#, fuzzy
-#| msgid "Return to the list"
 msgid "Return to the survey"
-msgstr "Retour à la liste"
+msgstr "Retour au sondage"
 
 #: templates/survey/confirm_batch_de.html:20
-#, fuzzy
-#| msgid "Question"
 msgid "Question:"
-msgstr "Question"
+msgstr "Question :"
 
 #: templates/survey/confirm_de.html:7
 msgid "Confirm"
@@ -1060,3 +1054,9 @@ msgstr "Vous êtes bien connecté !"
 
 #~ msgid "PetiteClasse"
 #~ msgstr "PetiteClasse"
+
+msgid "duplicate"
+msgstr "Dupliquer"
+
+msgid "remove"
+msgstr "Supprimer"
