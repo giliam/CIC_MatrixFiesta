@@ -7,6 +7,10 @@ body {
     color: black;
 }
 
+p {
+    margin-top: 5px;
+}
+
 a .icon {
     color: black;
 }
@@ -19,7 +23,7 @@ a .icon {
     display: grid;
     row-gap: 30px;
     column-gap: 5px;
-    grid-template-columns: repeat(3, 15px) 29px 29px repeat(3, 15px) 5px 1fr;
+    grid-template-columns: 30px repeat(2, 15px) 29px 29px repeat(3, 15px) 5px 1fr;
     margin-bottom: 15px;
     margin-top: 25px;
 }
@@ -30,6 +34,18 @@ a .icon {
 
 form.answer textarea {
     display: block;
+    width: 500px;
+    margin-left: 25px;
+    margin-bottom: 15px;
+}
+
+form.answer input[type=text] {
+    margin-left: 15px;
+    margin-bottom: 15px;
+}
+
+form.answer li {
+    list-style: none;
 }
 
 .grid_container_survey_list {
