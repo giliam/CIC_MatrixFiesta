@@ -71,7 +71,7 @@
                 {% if question.question_type|print_question_type == "TITLE" %}
                 <p class="larger"><strong>{{ question.content }}</strong></p>
                 {% elif question.question_type|print_question_type == "DESCRIPTION" %}
-                <p class="larger"><em>{{ question.content }}</em></p>
+                <p><em>{{ question.content }}</em></p>
                 {% endif %}
                 <!-- {{question.content}} (<code>{{question.question_type|print_question_type}}</code>) -->
                 {% else %}

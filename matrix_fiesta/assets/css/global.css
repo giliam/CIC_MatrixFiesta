@@ -8,11 +8,11 @@ body {
 }
 
 a .icon {
-    color: black;  
+    color: black;
 }
 
 .larger {
-    font-size: 1.5em;
+    font-size: 1.2em;
 }
 
 .grid_container_survey {
@@ -29,7 +29,7 @@ a .icon {
 }
 
 form.answer textarea {
-    display:block;
+    display: block;
 }
 
 .grid_container_survey_list {
@@ -51,4 +51,12 @@ a.nolink {
     grid-column: 1 / span 5;
     color: rgb(0, 0, 0, 0.2);
     text-align: center;
+}
+
+form.answer p.description {
+    margin-top: 15px;
+}
+
+form.answer div {
+    margin-left: 20px;
 }

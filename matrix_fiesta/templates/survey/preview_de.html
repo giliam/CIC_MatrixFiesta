@@ -14,8 +14,8 @@
         {% if field|get_item:"type" == "TITLE" %}
             <h2>{{ field|get_item:"content" }}</h2>
         {% elif field|get_item:"type" == "DESCRIPTION" %}
-            <p>{{ field|get_item:"content" }}</p>
-        {% endif %}
+            <p class="description">{{ field|get_item:"content" }}</p>
+        {% endif %} 
     {% else %}
         <div>
             {{ field.errors }}
