@@ -82,9 +82,104 @@ def de_edit_survey(request, survey):
             return redirect(reverse("survey.list_de"))
     else:
         form = forms.SurveyCreationForm(instance=survey)
+        form_batch = forms.BatchSelectionForm(survey.questions.all())
+
     return render(
-        request, "survey/edition_de.html", {"form_edition": form, "survey": survey}
+        request,
+        "survey/edition_de.html",
+        {"form_edition": form, "survey": survey, "form_batch": form_batch},
     )
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_batch_edition_survey(request, survey):
+    survey = get_object_or_404(
+        models.Survey.objects.prefetch_related("questions", "questions__choices"),
+        Q(id=survey, archived=False),
+    )
+    if request.method == "POST":
+        form_batch = forms.BatchSelectionForm(survey.questions.all(), request.POST)
+        if form_batch.is_valid():
+            action = form_batch.cleaned_data["action"]
+            if action == forms.BatchActions.DUPLICATE.value:
+                form = forms.BatchDuplicateForm(survey.questions.all(), request.POST)
+
+                if form.is_valid():
+                    question_above_id = form.cleaned_data["question_above"]
+
+                    # Case where we choose to put duplicates in front of all questions
+                    if int(question_above_id) == 0:
+                        question_above_order = -1
+                    else:
+                        question_above = get_object_or_404(
+                            models.Question, Q(id=question_above_id, survey=survey)
+                        )
+                        question_above_order = question_above.order
+
+                    nb_questions_duplicated = 0
+                    for question in survey.questions.all():
+                        if form.cleaned_data.get(f"question_{question.id}", False):
+                            nb_questions_duplicated += 1
+
+                    models.Question.objects.filter(
+                        survey=survey, order__gt=question_above_order
+                    ).update(order=F("order") + nb_questions_duplicated)
+
+                    i = 0
+                    for question in survey.questions.all():
+                        if form.cleaned_data.get(f"question_{question.id}", False):
+                            _duplicate_question(question, question_above_order + i + 1)
+                            i += 1
+
+                    # Reorders the survey (retrieves it again to fix the survey.questions remanence)
+                    survey = get_object_or_404(
+                        models.Survey.objects.prefetch_related("questions"),
+                        Q(id=survey.id, archived=False),
+                    )
+                    _reorder_questions(survey)
+                    return redirect(reverse("survey.edit_de", args=[survey.id]))
+
+                return render(
+                    request,
+                    "survey/confirm_batch_de.html",
+                    {
+                        "survey": survey,
+                        "form": form,
+                        "message": _(
+                            "Do you confirm the duplication of the following questions?"
+                        ),
+                    },
+                )
+            elif action == forms.BatchActions.REMOVE.value:
+                form = forms.BatchRemoveForm(survey.questions.all(), request.POST)
+
+                if form.is_valid():
+                    if form.cleaned_data["confirm"]:
+                        for question in survey.questions.all():
+                            if form.cleaned_data.get(f"question_{question.id}", False):
+                                question.delete()
+
+                        # Reorders the survey (retrieves it again to fix the survey.questions remanence)
+                        survey = get_object_or_404(
+                            models.Survey.objects.prefetch_related("questions"),
+                            Q(id=survey.id, archived=False),
+                        )
+                        _reorder_questions(survey)
+                        return redirect(reverse("survey.edit_de", args=[survey.id]))
+
+                return render(
+                    request,
+                    "survey/confirm_batch_de.html",
+                    {
+                        "survey": survey,
+                        "form": form,
+                        "message": _(
+                            "Do you confirm the deletion of the following questions?"
+                        ),
+                    },
+                )
+    return redirect(reverse("survey.edit_de", args=[survey.id]))
 
 
 def _copy_depth_survey(original_questions, new_survey):
@@ -133,6 +228,14 @@ def de_clear_survey(request, survey):
     return render(request, "survey/confirm_de.html", {"form": form, "survey": survey})
 
 
+def _reorder_questions(survey):
+    i = 0
+    for question in survey.questions.all():
+        question.order = i
+        question.save()
+        i += 1
+
+
 @login_required
 @user_passes_test(auths.check_is_de)
 def de_reorder_survey(request, survey):
@@ -140,11 +243,9 @@ def de_reorder_survey(request, survey):
         models.Survey.objects.prefetch_related("questions"),
         Q(id=survey, archived=False),
     )
-    i = 0
-    for question in survey.questions.all():
-        question.order = i
-        question.save()
-        i += 1
+
+    _reorder_questions(survey)
+
     return redirect(reverse("survey.edit_de", args=[survey.id]))
 
 
@@ -375,16 +476,13 @@ def de_remove_question(request, question):
     )
 
 
-@login_required
-@user_passes_test(auths.check_is_de)
-def de_duplicate_question(request, question):
-    question = get_object_or_404(
-        models.Question.objects.prefetch_related("survey"),
-        Q(id=question, survey__archived=False),
-    )
+def _duplicate_question(question, new_order=None):
     choices = question.choices.all()
     question.pk = None
-    question.order += 1
+    if new_order is None:
+        question.order += 1
+    else:
+        question.order = new_order
     models.Question.objects.filter(
         survey=question.survey, order__gte=question.order
     ).update(order=F("order") + 1)
@@ -393,6 +491,17 @@ def de_duplicate_question(request, question):
     # We run over the choices found to append them to choices
     for choice_found in choices:
         question.choices.add(choice_found)
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_duplicate_question(request, question):
+    question = get_object_or_404(
+        models.Question.objects.prefetch_related("survey"),
+        Q(id=question, survey__archived=False),
+    )
+
+    _duplicate_question(question)
 
     return redirect(
         reverse("survey.edit_de", kwargs={"survey": question.survey.id})

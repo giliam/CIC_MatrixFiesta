@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load common_extras %}
 {% load questionstypes_extras %}
+{% load surveyforms_extras %}
 
 {% block title %}{% trans "Create a survey" %}{% endblock %}
 {% block content %}
@@ -36,55 +37,66 @@
         </p>
         
         {% if survey.questions.all|length > 0 %}
-        <div class="grid_container_survey">
-            {% for question in survey.questions.all %}
-            <div>
+        <form method="post" action="{% url "survey.batch_de" survey.id %}">
+            {% csrf_token %}
+            {% with field=form_batch.action %}
+                {{field}}
+            {% endwith %}
+            <input type="submit" class="ui button mini compact" value="{% trans "Submit" %}" />
+
+            <div class="grid_container_survey">
+                {% for question in survey.questions.all %}
+                <div class="check_question">
+                    {% with field=form_batch|get_field:question.id %}
+                        {{field}}
+                    {% endwith %}
+                </div>
+                <div>
+                    <a title="{% trans "Edit" %}" href="{% url "survey.edit_question_de" question.id %}"><i class="edit icon"></i></a>
+                </div>
+                <div>
+                    <a title="{% trans "Remove" %}" href="{% url "survey.remove_question_de" question.id %}"><i class="delete red icon"></i></a>
+                </div>
+                <div>
+                    <a title="{% trans "Insert above" %}" href="{% url "survey.insert_question_de" question.id "above" %}"><i class="plus green circle icon"></i><i class="level up alternate icon small"></i></a>
+                </div>
+                <div>
+                    <a title="{% trans "Insert below" %}" href="{% url "survey.insert_question_de" question.id "below" %}"><i class="plus green circle icon"></i><i class="level down alternate icon small"></i></a>
+                </div>
+                <div>
+                    <a title="{% trans "Duplicate question" %}" href="{% url "survey.duplicate_question_de" question.id %}"><i class="copy icon blue"></i></a>
+                </div>
+                <div>
+                    {% if not forloop.last %}
+                    <a title="{% trans "Move down" %}" href="{% url "survey.move_question_de" question.id "down" %}"><i class="angle orange down icon"></i></a>
+                    {% endif %}
+                </div>
+                <div>
+                    {% if not forloop.first %}
+                    <a title="{% trans "Move up" %}" href="{% url "survey.move_question_de" question.id "up" %}"><i class="angle orange up icon"></i></a>
+                    {% endif %}
+                </div>
+                <div></div>
+                <div id="question_{{question.id}}">
+                    {% if question.is_non_field %}
+                    {% if question.question_type|print_question_type == "TITLE" %}
+                    <p class="larger"><strong>{{ question.content }}</strong></p>
+                    {% elif question.question_type|print_question_type == "DESCRIPTION" %}
+                    <p><em>{{ question.content }}</em></p>
+                    {% endif %}
+                    <!-- {{question.content}} (<code>{{question.question_type|print_question_type}}</code>) -->
+                    {% else %}
+                        {% trans "Question" %}: 
+                        {{question.content}} (<code>{{question.question_type|print_question_type}}</code>)
+                    {% endif %}
+                    {% if question.is_iterable %}
+                    <br>
+                    <em>{{question.get_inline_choices}}</em>
+                    {% endif %}
+                </div>
+                {% endfor %}
             </div>
-            <div>
-                <a title="{% trans "Edit" %}" href="{% url "survey.edit_question_de" question.id %}"><i class="edit icon"></i></a>
-            </div>
-            <div>
-                <a title="{% trans "Remove" %}" href="{% url "survey.remove_question_de" question.id %}"><i class="delete red icon"></i></a>
-            </div>
-            <div>
-                <a title="{% trans "Insert above" %}" href="{% url "survey.insert_question_de" question.id "above" %}"><i class="plus green circle icon"></i><i class="level up alternate icon small"></i></a>
-            </div>
-            <div>
-                <a title="{% trans "Insert below" %}" href="{% url "survey.insert_question_de" question.id "below" %}"><i class="plus green circle icon"></i><i class="level down alternate icon small"></i></a>
-            </div>
-            <div>
-                <a title="{% trans "Duplicate question" %}" href="{% url "survey.duplicate_question_de" question.id %}"><i class="copy icon blue"></i></a>
-            </div>
-            <div>
-                {% if not forloop.last %}
-                <a title="{% trans "Move down" %}" href="{% url "survey.move_question_de" question.id "down" %}"><i class="angle orange down icon"></i></a>
-                {% endif %}
-            </div>
-            <div>
-                {% if not forloop.first %}
-                <a title="{% trans "Move up" %}" href="{% url "survey.move_question_de" question.id "up" %}"><i class="angle orange up icon"></i></a>
-                {% endif %}
-            </div>
-            <div></div>
-            <div id="question_{{question.id}}">
-                {% if question.is_non_field %}
-                {% if question.question_type|print_question_type == "TITLE" %}
-                <p class="larger"><strong>{{ question.content }}</strong></p>
-                {% elif question.question_type|print_question_type == "DESCRIPTION" %}
-                <p><em>{{ question.content }}</em></p>
-                {% endif %}
-                <!-- {{question.content}} (<code>{{question.question_type|print_question_type}}</code>) -->
-                {% else %}
-                    {% trans "Question" %}: 
-                    {{question.content}} (<code>{{question.question_type|print_question_type}}</code>)
-                {% endif %}
-                {% if question.is_iterable %}
-                <br>
-                <em>{{question.get_inline_choices}}</em>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
+        </form>
         {% else %}
         <p class="no_answer">
             {% trans "No question yet." %}

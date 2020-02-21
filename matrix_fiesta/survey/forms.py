@@ -1,3 +1,4 @@
+from enum import Enum
 import json
 
 from django import forms
@@ -161,3 +162,90 @@ class QuestionInsertionForm(QuestionCreationForm):
 
 class ConfirmationForm(forms.Form):
     pass
+
+
+class BatchActions(Enum):
+    DUPLICATE = "duplicate"
+    REMOVE = "remove"
+
+
+class BatchSelectionForm(forms.Form):
+    def __init__(self, questions, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["action"] = forms.ChoiceField(
+            label=_("Which action?"),
+            required=True,
+            widget=forms.Select,
+            choices=[(action.value, _(action.value)) for action in BatchActions],
+        )
+
+        self.questions_fields = []
+        self.questions = questions
+        for question in self.questions.all():
+            self.add_question(question)
+
+    def is_hidden(self):
+        return False
+
+    def add_question(self, question):
+        field_id = "question_" + str(question.id)
+        self.fields[field_id] = forms.BooleanField(
+            required=False, label=question.content
+        )
+        self.questions_fields.append(field_id)
+
+
+class BatchRemoveForm(BatchSelectionForm):
+    def __init__(self, questions, *args, **kwargs):
+        super().__init__(questions, *args, **kwargs)
+        self.fields["action"].non_question = True
+
+        data = args[0]
+        to_delete_fields = []
+        for field_name, field in self.fields.items():
+            field.widget = forms.HiddenInput()
+            if field_name != "action" and not data.get(field_name, False):
+                to_delete_fields.append(field_name)
+
+        for field_name in to_delete_fields:
+            del self.fields[field_name]
+
+        self.fields["confirm"] = forms.BooleanField(
+            label=_("Do you really confirm the deletion of all following elements?"),
+            required=True,
+        )
+        self.fields["confirm"].non_question = True
+
+    def is_hidden(self):
+        print("Child readonly")
+        return True
+
+
+class BatchDuplicateForm(BatchSelectionForm):
+    def __init__(self, questions, *args, **kwargs):
+        super().__init__(questions, *args, **kwargs)
+        self.fields["action"].non_question = True
+
+        data = args[0]
+        to_delete_fields = []
+        for field_name, field in self.fields.items():
+            field.widget = forms.HiddenInput()
+            if field_name != "action" and not data.get(field_name, False):
+                to_delete_fields.append(field_name)
+        print(to_delete_fields)
+
+        for field_name in to_delete_fields:
+            del self.fields[field_name]
+
+        # self.fields["action"] = forms.CharField(
+        #     widget=forms.HiddenInput(), initial=BatchActions.DUPLICATE.value
+        # )
+
+        self.fields["question_above"] = forms.ChoiceField(
+            required=True,
+            label=_("Which question should be above your duplicates?"),
+            choices=[(0, _("........top......."))]
+            + [(question.id, question.content) for question in questions.all()],
+        )
+        self.fields["question_above"].non_question = True

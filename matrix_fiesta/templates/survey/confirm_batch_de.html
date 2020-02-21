@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% load questionstypes_extras %}
+
+{% block title %}{% trans "Create a survey" %}{% endblock %}
+{% block content %}
+    <p><a class="ui button primary" href="{% url "survey.edit_de" survey.id %}">{% trans "Return to the survey" %}</a></p>
+    
+    <h2>{% trans "Survey" %} {{ survey.name }}</h2>
+    <h3>{{ message }}</h3>
+        
+    <form method="post" class="ui form">
+        {% csrf_token %}
+        {% for field in form %}
+            {% if field.field.non_question %}
+                <p>{{ field }}</p>
+            {% else %}
+            <div>
+                {{ field.errors }}
+                <p><strong>{% trans "Question:" %}</strong><br><em>{{ field.label_tag }}</em></p>
+                <p>{{ field }}</p>
+            </div>
+            {% endif %}
+        {% endfor %}
+        <input type="submit" class="ui button green" value="{% trans "Submit" %}" />
+    </form>
+{% endblock %}
