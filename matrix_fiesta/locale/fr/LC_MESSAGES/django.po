@@ -247,18 +247,18 @@ msgstr "..Tout en haut des questions.."
 #: survey/models.py:33
 #, python-format
 msgid "Survey %s"
-msgstr "Sondage %s"
+msgstr "Questionnaire %s"
 
 #: survey/models.py:36 templates/survey/answer.html:6
 #: templates/survey/confirm_batch_de.html:9 templates/survey/confirm_de.html:12
 #: templates/survey/detail.html:5 templates/survey/detail_de.html:5
 msgid "Survey"
-msgstr "Sondage"
+msgstr "Questionnaire"
 
 #: survey/models.py:37 templates/de/homepage.html:25
 #: templates/survey/list.html:7 templates/survey/list_de.html:7
 msgid "Surveys"
-msgstr "Sondages"
+msgstr "Questionnaires"
 
 #: survey/models.py:60
 msgid "Question choice"
@@ -367,11 +367,11 @@ msgstr "Liste des enseignants"
 #: templates/de/homepage.html:26 templates/index.html:46
 #: templates/survey/list.html:5 templates/survey/list_de.html:5
 msgid "Survey list"
-msgstr "Sondages"
+msgstr "Questionnaires"
 
 #: templates/de/homepage.html:27 templates/survey/creation_de.html:7
 msgid "Survey creation"
-msgstr "Création d'un sondage"
+msgstr "Création d'un questionnaire"
 
 #: templates/de/insert_new_users.html:4 templates/de/insert_new_users.html:7
 msgid "Insert new students"
@@ -833,13 +833,13 @@ msgstr "Pas de réponse donnée"
 #: templates/survey/creation_de.html:5 templates/survey/edition_de.html:7
 #: templates/survey/list_de.html:8 templates/survey/question_form_de.html:5
 msgid "Create a survey"
-msgstr "Créer un sondage"
+msgstr "Créer un questionnaire"
 
 #: templates/survey/confirm_batch_de.html:7
 #: templates/survey/question_form_de.html:7
 #: templates/survey/question_form_de.html:27
 msgid "Return to the survey"
-msgstr "Retour au sondage"
+msgstr "Retour au questionnaire"
 
 #: templates/survey/confirm_batch_de.html:20
 msgid "Question:"
@@ -860,9 +860,9 @@ msgid ""
 "        The old survey will be kept and renamed to <em>Previous title "
 "(ARCHIVED)</em> and will be closed."
 msgstr ""
-"Nettoyer un sondage va créer une copie du sondage avec les mêmes "
+"Nettoyer un questionnaire va créer une copie du questionnaire avec les mêmes "
 "caractéristiques mais sans les réponses. \n"
-" L'ancien sondage sera conservé, renommé à <em>Titre précédent (ARCHIVE)</"
+" L'ancien questionnaire sera conservé, renommé à <em>Titre précédent (ARCHIVE)</"
 "em> et sera fermé."
 
 #: templates/survey/creation_de.html:8 templates/survey/edition_de.html:10
@@ -875,18 +875,18 @@ msgstr "Enregistrer"
 
 #: templates/survey/edition_de.html:9
 msgid "Survey edition"
-msgstr "Modification d'un sondage"
+msgstr "Modification d'un questionnaire"
 
 #: templates/survey/edition_de.html:15
 msgid "The survey already has answers"
-msgstr "Le sondage a déjà des réponses"
+msgstr "Le questionnaire a déjà des réponses"
 
 #: templates/survey/edition_de.html:17
 msgid ""
 "Warning, the survey already has answers and changing anything here could "
 "lead to major failures."
 msgstr ""
-"Attention, modifier un sondage qui a déjà eu des réponses peut conduire à de "
+"Attention, modifier un questionnaire qui a déjà eu des réponses peut conduire à de "
 "sérieux problèmes."
 
 #: templates/survey/edition_de.html:28
@@ -895,11 +895,11 @@ msgstr "Ajouter une question"
 
 #: templates/survey/edition_de.html:29 templates/survey/list_de.html:20
 msgid "Clear the survey"
-msgstr "Nettoyer le sondage"
+msgstr "Nettoyer le questionnaire"
 
 #: templates/survey/edition_de.html:30 templates/survey/list_de.html:30
 msgid "Preview the survey"
-msgstr "Prévisualiser le sondage"
+msgstr "Prévisualiser le questionnaire"
 
 #: templates/survey/edition_de.html:31 templates/survey/list_de.html:35
 msgid "Reorder the questions"
@@ -907,11 +907,11 @@ msgstr "Réordonner les questions"
 
 #: templates/survey/edition_de.html:33 templates/survey/list_de.html:41
 msgid "Close the survey"
-msgstr "Fermer le sondage"
+msgstr "Fermer le questionnaire"
 
 #: templates/survey/edition_de.html:35 templates/survey/list_de.html:45
 msgid "Open the survey"
-msgstr "Ouvrir le sondage"
+msgstr "Ouvrir le questionnaire"
 
 #: templates/survey/edition_de.html:55
 msgid "Edit"
@@ -963,11 +963,11 @@ msgstr "Vos réponses"
 
 #: templates/survey/list_de.html:15
 msgid "Edit the survey"
-msgstr "Modifier le sondage"
+msgstr "Modifier le questionnaire"
 
 #: templates/survey/list_de.html:25
 msgid "Copy the survey"
-msgstr "Copier le sondage"
+msgstr "Copier le questionnaire"
 
 #: templates/survey/list_de.html:68
 #, python-format
@@ -978,7 +978,7 @@ msgstr[1] "%(counter)s réponses"
 
 #: templates/survey/preview_de.html:5 templates/survey/preview_de.html:7
 msgid "Survey preview"
-msgstr "Prévisualisation d'un sondage"
+msgstr "Prévisualisation d'un questionnaire"
 
 #: templates/survey/question_form_de.html:9
 msgid "Question edition"
@@ -990,14 +990,14 @@ msgstr "Pour :"
 
 #: templates/survey/question_form_de.html:15
 msgid "The survey is opened"
-msgstr "Le sondage est ouvert"
+msgstr "Le questionnaire est ouvert"
 
 #: templates/survey/question_form_de.html:17
 msgid ""
 "Warning, the survey has been opened and adding a question can lead to "
 "missing values for existing answers."
 msgstr ""
-"Attention, le sondage a déjà été ouvert et ajouter une question peut "
+"Attention, le questionnaire a déjà été ouvert et ajouter une question peut "
 "conduire à des données manquantes pour les réponses existantes."
 
 #: templates/users/login.html:9
