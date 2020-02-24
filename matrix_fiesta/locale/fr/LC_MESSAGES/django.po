@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-21 20:16+0100\n"
+"POT-Creation-Date: 2020-02-24 11:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -862,8 +862,8 @@ msgid ""
 msgstr ""
 "Nettoyer un questionnaire va créer une copie du questionnaire avec les mêmes "
 "caractéristiques mais sans les réponses. \n"
-" L'ancien questionnaire sera conservé, renommé à <em>Titre précédent (ARCHIVE)</"
-"em> et sera fermé."
+" L'ancien questionnaire sera conservé, renommé à <em>Titre précédent "
+"(ARCHIVE)</em> et sera fermé."
 
 #: templates/survey/creation_de.html:8 templates/survey/edition_de.html:10
 msgid "Return to the list"
@@ -886,8 +886,8 @@ msgid ""
 "Warning, the survey already has answers and changing anything here could "
 "lead to major failures."
 msgstr ""
-"Attention, modifier un questionnaire qui a déjà eu des réponses peut conduire à de "
-"sérieux problèmes."
+"Attention, modifier un questionnaire qui a déjà eu des réponses peut "
+"conduire à de sérieux problèmes."
 
 #: templates/survey/edition_de.html:28
 msgid "Add a question"
@@ -957,9 +957,17 @@ msgstr "Afficher votre réponse à"
 msgid "Answer to"
 msgstr "Répondre à"
 
-#: templates/survey/list.html:28
+#: templates/survey/list.html:27
+msgid "No survey available yet."
+msgstr "Aucun questionnaire disponible pour l'instant."
+
+#: templates/survey/list.html:30
 msgid "Your answers"
 msgstr "Vos réponses"
+
+#: templates/survey/list.html:35
+msgid "No answer given."
+msgstr "Pas de réponse donnée pour l'instant."
 
 #: templates/survey/list_de.html:15
 msgid "Edit the survey"
@@ -1055,8 +1063,8 @@ msgstr "Vous êtes bien connecté !"
 #~ msgid "PetiteClasse"
 #~ msgstr "PetiteClasse"
 
-msgid "duplicate"
-msgstr "Dupliquer"
+#~ msgid "duplicate"
+#~ msgstr "Dupliquer"
 
-msgid "remove"
-msgstr "Supprimer"
+#~ msgid "remove"
+#~ msgstr "Supprimer"
