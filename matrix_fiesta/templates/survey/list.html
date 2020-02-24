@@ -23,12 +23,16 @@
             {% else %}
                 <li>{% trans "Answer to" %} <a href="{% url "survey.detail" survey.id %}">{{ survey.name }}</a></li>
             {% endif %}
-        {% endfor %}
-    </ul>
-    <h2>{% trans "Your answers" %}</h2>
-    <ul>
-        {% for response in object_list.responses %}
+        {% empty %}
+            <li class="no_answer">{% trans "No survey available yet." %}</li>
+            {% endfor %}
+        </ul>
+        <h2>{% trans "Your answers" %}</h2>
+        <ul>
+            {% for response in object_list.responses %}
             <li><a href="{% url "survey.detail" response.survey.id %}">{{ response.survey.name }}</a></li>
+        {% empty %}
+            <li class="no_answer">{% trans "No answer given." %}</li>
         {% endfor %}
     </ul>
 {% endblock %}
