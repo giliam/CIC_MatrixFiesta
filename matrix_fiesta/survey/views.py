@@ -545,7 +545,7 @@ def de_results_survey(request, survey):
     for response in responses.all():
         for answer in response.answers.all():
             if not answers_results[answer.question.id]["iterable"]:
-                answers_results[answer.question.id]["values"].append(answer.value)
+                answers_results[answer.question.id]["values"].append(answer.print())
                 if response.anonymous:
                     answers_results[answer.question.id]["authors"].append(
                         _("Anonymous")
@@ -668,7 +668,10 @@ def answer_survey(request, survey, initial_response=None):
                                 )
                         answer.value = json.dumps(json_raw_answer)
                     else:
-                        answer.value = json.dumps(raw_answer)
+                        print("raw_answer", raw_answer)
+                        answer.value = json.dumps(raw_answer, ensure_ascii=False)
+                        print("answer.value", answer.value)
+                        print("json dumps", json.dumps(raw_answer))
                     answer.save()
             return redirect(reverse("survey.list"))
     else:

@@ -77,3 +77,22 @@ form.answer p.description {
 form.answer div {
     margin-left: 20px;
 }
+
+.grid_container_results_de {
+    display: grid;
+    margin-left: 0px;
+    column-gap: 5px;
+    grid-template-columns: 150px 1fr;
+}
+
+.author_result {
+    text-align: right;
+}
+
+.grid_container_results_de > div > p {
+    margin-bottom: 0px;
+}
+
+div.answer p {
+    margin-left: 25px;
+}

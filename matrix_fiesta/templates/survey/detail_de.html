@@ -9,18 +9,19 @@
     {% for question in survey.questions.all %}
         <p><strong>{{question.content}}</strong></p>
         {% with results=answers_results|get_item:question.id %}
-            {% if results.iterable %}
+            {% if question.is_iterable %}
                 <ul>
                 {% for choice, nb in results.choices.values %}
                     <li>{{ choice.value }} : {{ nb }}</li>
                 {% endfor %}
                 </ul>
             {% else %}
-                <ul>
-                {% for answer in results.values %}
-                    <li><strong>{{results.authors|get_item:forloop.counter0}}</strong> {{ answer }}</li>
-                {% endfor %}
-                </ul>
+                <div class="grid_container_results_de">
+                    {% for answer in results.values %}
+                        <div class="author_result"><em>{{results.authors|get_item:forloop.counter0}}</em></div>
+                        <div>{{ answer|linebreaks }}</div>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
     {% endfor %}

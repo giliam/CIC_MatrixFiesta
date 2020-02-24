@@ -2,8 +2,9 @@
 {% load common_extras %}
 
 {% if answer is None %}
-    <p class="no_answer"><em>{% trans "No answer given" %}</em></p>
+<p class="no_answer"><em>{% trans "No answer given" %}</em></p>
 {% else %}
+    <div class="answer">
     {% if answer|is_list %}
     <ul>
         {% for elt in answer %}
@@ -11,6 +12,7 @@
         {% endfor %}
     </ul>
     {% else %}
-    <p>{{answer}}</p>
+    {{answer|linebreaks}}
     {% endif %}
+    </div>
 {% endif %}
