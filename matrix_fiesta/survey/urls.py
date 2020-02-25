@@ -69,4 +69,9 @@ urlpatterns = [
         views.de_edit_question,
         name="survey.edit_question_de",
     ),
+    re_path(
+        r"de/change/required/question/(?P<question>[0-9]+)/",
+        views.de_change_required_question,
+        name="survey.change_required_question_de",
+    ),
 ]

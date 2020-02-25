@@ -476,6 +476,18 @@ def de_remove_question(request, question):
     )
 
 
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_change_required_question(request, question):
+    question = get_object_or_404(
+        models.Question.objects.prefetch_related("survey"),
+        Q(id=question, survey__archived=False),
+    )
+    question.required = not question.required
+    question.save()
+    return redirect(reverse("survey.edit_de", kwargs={"survey": question.survey.id}))
+
+
 def _duplicate_question(question, new_order=None):
     choices = question.choices.all()
     question.pk = None

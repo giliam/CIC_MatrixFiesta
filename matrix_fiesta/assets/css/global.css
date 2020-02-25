@@ -24,7 +24,7 @@ a .icon {
     display: grid;
     row-gap: 30px;
     column-gap: 5px;
-    grid-template-columns: 30px repeat(2, 15px) 29px 29px repeat(3, 15px) 5px 1fr;
+    grid-template-columns: 30px repeat(2, 15px) 29px 29px repeat(4, 15px) 5px 1fr;
     margin-bottom: 15px;
     margin-top: 25px;
 }
