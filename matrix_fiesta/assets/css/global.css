@@ -82,16 +82,35 @@ form.answer div {
     display: grid;
     margin-left: 0px;
     column-gap: 5px;
-    grid-template-columns: 150px 1fr;
+    grid-template-columns: 150px 125px 1fr ;
+    grid-template-areas: 
+    "author smallclass answer";
 }
 
 .author_result {
+    grid-area: author;
     text-align: right;
 }
 
+.small_class_result {
+    grid-area: smallclass;
+    text-align: center;
+}
+.small_class_result p {
+    margin-bottom: 0px;
+    margin-top: 2px;
+    font-size: 0.85em;
+    font-style: italic;
+    color: rgb(0, 0, 0, 0.7)
+}
+
+.answer_result {
+    grid-area: answer;
+}
 .grid_container_results_de > div > p {
     margin-bottom: 0px;
 }
+
 
 div.answer p {
     margin-left: 25px;

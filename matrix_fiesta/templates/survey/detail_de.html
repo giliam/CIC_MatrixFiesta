@@ -18,8 +18,17 @@
             {% else %}
                 <div class="grid_container_results_de">
                     {% for answer in results.values %}
-                        <div class="author_result"><em>{{results.authors|get_item:forloop.counter0}}</em></div>
-                        <div>{{ answer|linebreaks }}</div>
+                        {% with author=results.authors|get_item:forloop.counter0 author_id=results.authors_ids|get_item:forloop.counter0 %}
+                        <div class="small_class_result">                          
+                            {% for small_class in profiles_authors|get_item:author_id %}
+                                <p>{{small_class.course.name}} (<em>{{small_class.teacher}}</em>)</p>
+                            {% empty %}
+                                <span class="no_answer">{% trans "No small class known" %}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="author_result"><em>{{author}}</em></div>
+                        {% endwith %}
+                        <div class="answer_result">{{ answer|linebreaks }}</div>
                     {% endfor %}
                 </div>
             {% endif %}

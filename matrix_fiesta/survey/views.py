@@ -526,7 +526,7 @@ def de_preview_survey(request, survey):
 @user_passes_test(auths.check_is_de)
 def de_results_survey(request, survey):
     survey = get_object_or_404(
-        models.Survey.objects.prefetch_related("questions"), Q(id=survey)
+        models.Survey.objects.prefetch_related("questions", "ecue"), Q(id=survey)
     )
     responses = models.Response.objects.filter(survey=survey).prefetch_related(
         "user", "answers", "answers__question", "answers__question__choices"
@@ -539,9 +539,13 @@ def de_results_survey(request, survey):
             "values": [],
             "choices": {c.id: [c, 0] for c in question.choices.all()},
             "authors": [],
+            "authors_ids": [],
         }
         for question in survey.questions.all()
     }
+
+    users = set()
+
     for response in responses.all():
         for answer in response.answers.all():
             if not answers_results[answer.question.id]["iterable"]:
@@ -552,14 +556,38 @@ def de_results_survey(request, survey):
                     )
                 else:
                     answers_results[answer.question.id]["authors"].append(response.user)
+                users.add(response.user.id)
+                answers_results[answer.question.id]["authors_ids"].append(
+                    response.user.id
+                )
             else:
                 for choice in answer.choices.all():
                     answers_results[answer.question.id]["choices"][choice.id][1] += 1
 
+    # Retrieves profiles of concerned users to access small classes
+    profiles = ProfileUser.objects.filter(id__in=list(users)).prefetch_related(
+        "small_classes_student",
+        "small_classes_student__teacher",
+        "small_classes_student__course",
+    )
+    profiles_authors = {}
+    for profile in profiles.all():
+        small_classes_associated = profile.small_classes_student.filter(
+            course__ecue=survey.ecue
+        )
+        if small_classes_associated.exists():
+            profiles_authors[profile.id] = small_classes_associated.all()
+        else:
+            profiles_authors[profile.id] = []
+
     return render(
         request,
         "survey/detail_de.html",
-        {"survey": survey, "answers_results": answers_results},
+        {
+            "survey": survey,
+            "answers_results": answers_results,
+            "profiles_authors": profiles_authors,
+        },
     )
 
 
