@@ -4,104 +4,102 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <title>CIC - {% block title %}{% trans "Welcome" %}{% endblock %}</title>
-    <link rel="icon" href="{% static "favicon.ico" %}" />
 
-    <link rel="stylesheet" type="text/css" href="{% static "css/semantic.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "css/global.css" %}">
-    <script src="{% static "js/jquery-3.1.1.min.js" %}"></script>
-    <script src="{% static "js/semantic.min.js" %}"></script>
+    <head>
+        <meta charset="utf-8" />
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <title>CIC - {% block title %}{% trans "Welcome" %}{% endblock %}</title>
+        <link rel="icon" href="{% static "favicon.ico" %}" />
 
-    <style type="text/css">
-        .Site {
-          display: flex;
-          min-height: 100vh;
-          flex-direction: column;
-        }
+        <link rel="stylesheet" type="text/css" href="{% static "css/semantic.min.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "css/global.css" %}">
+        <script src="{% static "js/jquery-3.1.1.min.js" %}"></script>
+        <script src="{% static "js/semantic.min.js" %}"></script>
 
-        .Site-content {
-          flex: 1;
-          margin-bottom: 15px;
-        }
-    </style>
-    {% block css_addon %}{% endblock %}
-</head>
-<body class="Site">
-      <main class="Site-content">
+        <style type="text/css">
+            .Site {
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
+            }
+
+            .Site-content {
+                flex: 1;
+                margin-bottom: 15px;
+            }
+        </style>
+        {% block css_addon %}{% endblock %}
+    </head>
+
+    <body class="Site">
+        <main class="Site-content">
             <div class="ui container">
-            <br>
-            <div class="ui secondary menu">
-              <div class="header item">Matrix Fiesta</div>
-              <a class="item {{ nav_homepage_active }}" href="{% url "homepage" %}">
-                {% trans "Homepage" %}
-              </a>
-              {% if request.user|is_student %} 
-              <a class="item {{ nav_matrix_active }}" href="{% url "ues.matrix" %}">
-                {% trans "Your matrix" %}
-              </a>
-              <a class="item {{ nav_survey_active }}" href="{% url "survey.list" %}">
-                {% trans "Survey list" %}
-              </a>
-              {% endif %}
-              {% if request.user|is_teacher %} 
-              <a class="item {{ nav_homepage_teachers_active }}" href="{% url "teachers.homepage_teachers" %}">
-                {% trans "Evaluate your students" %}
-              </a>
-              {% endif %}
-              {% if request.user|is_de %} 
-              <a class="item {{ nav_homepage_de_active }}" href="{% url "de.homepage_de" %}">
-                {% trans "DE" %}
-              </a>
-              {% endif %}
-              <div class="right menu">
-    <!--             <div class="item">
-                  <div class="ui icon input">
-                    <input type="text" placeholder="Search...">
-                    <i class="search link icon"></i>
-                  </div>
+                <br>
+                <div class="ui secondary menu">
+                    <div class="header item">Matrix Fiesta</div>
+                    <a class="item {{ nav_homepage_active }}" href="{% url "homepage" %}">
+                        {% trans "Homepage" %}
+                    </a>
+                    {% if request.user|is_student %}
+                    <a class="item {{ nav_matrix_active }}" href="{% url "ues.matrix" %}">
+                        {% trans "Your matrix" %}
+                    </a>
+                    <a class="item {{ nav_survey_active }}" href="{% url "survey.list" %}">
+                        {% trans "Survey list" %}
+                    </a>
+                    {% endif %}
+                    {% if request.user|is_teacher %}
+                    <a class="item {{ nav_homepage_teachers_active }}" href="{% url "teachers.homepage_teachers" %}">
+                        {% trans "Evaluate your students" %}
+                    </a>
+                    {% endif %}
+                    {% if request.user|is_de %}
+                    <a class="item {{ nav_homepage_de_active }}" href="{% url "de.homepage_de" %}">
+                        {% trans "DE" %}
+                    </a>
+                    {% endif %}
+                    <div class="right menu">
+                        {% if user.is_staff %}
+                        <a class="ui item {{ nav_admin_active }}" href="/admin">
+                            {% trans "Admin" %}
+                        </a>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                        <a class="ui item {{ nav_users_active }}" href="{% url "users.log_out" %}">
+                            {% trans "Log out" %}
+                        </a>
+                        {% else %}
+                        <a class="ui item {{ nav_users_active }}" href="{% url "users.log_in" %}">
+                            {% trans "Log in" %}
+                        </a>
+                        {% endif %}
+                    </div>
                 </div>
-     -->        
-                {% if user.is_staff %}
-                <a class="ui item {{ nav_admin_active }}" href="/admin">
-                  {% trans "Admin" %}
-                </a>
-                {% endif %}
-                {% if user.is_authenticated %}    
-                <a class="ui item {{ nav_users_active }}" href="{% url "users.log_out" %}">
-                  {% trans "Log out" %}
-                </a>
-                {% else %}
-                <a class="ui item {{ nav_users_active }}" href="{% url "users.log_in" %}">
-                  {% trans "Log in" %}
-                </a>
-                {% endif %}
-              </div>
+                <div class="ui divider"></div>
+                <br>
+                <div class="ui grid">
+                    <div class="sixteen wide column">
+                        {% block content %}
+                        {% trans "Nothing to see here!" %}
+                        {% endblock %}
+                    </div>
+                </div>
             </div>
-            <div class="ui divider"></div>
-            <br>
-            <div class="ui grid">
-              <div class="sixteen wide column">
-                {% block content %}
-                {% trans "Nothing to see here!" %}
-                {% endblock %}
-              </div>
-            </div>
-          </div>
         </main>
         <footer>
-          <div class="ui inverted vertical footer segment">
-            <div class="ui center aligned container">
-              
-              <div class="ui horizontal inverted small divided link list">
-                <a class="item" href="{{ DISCOURSE_URL }}"><i class="icon comment"></i> Discourse</a>
-                <a class="item" href="https://github.com/giliam/CIC_MatrixFiesta"><i class="icon github"></i> Github</a>
-                <a class="item" href="https://github.com/giliam/CIC_MatrixFiesta/issues"><i class="icon bug"></i> {% trans "Report an issue" %}</a>
-              </div>
+            <div class="ui inverted vertical footer segment">
+                <div class="ui center aligned container">
+
+                    <div class="ui horizontal inverted small divided link list">
+                        <a class="item" href="{{ DISCOURSE_URL }}"><i class="icon comment"></i> Discourse</a>
+                        <a class="item" href="https://github.com/giliam/CIC_MatrixFiesta"><i class="icon github"></i>
+                            Github</a>
+                        <a class="item" href="https://github.com/giliam/CIC_MatrixFiesta/issues"><i
+                                class="icon bug"></i> {% trans "Report an issue" %}</a>
+                    </div>
+                </div>
             </div>
-          </div>
         </footer>
-</body>
+    </body>
+
 </html>

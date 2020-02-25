@@ -10,13 +10,14 @@
         <p><strong>{{question.content}}</strong></p>
         {% with results=answers_results|get_item:question.id %}
             {% if question.is_iterable %}
-                <ul>
+                <div class="grid_container_iterable_result">
                 {% for choice, nb in results.choices.values %}
-                    <li>{{ choice.value }} : {{ nb }}</li>
+                    <div class="value_result">{{ choice.value }}</div>
+                    <div>{{ nb }}</div>
                 {% endfor %}
-                </ul>
+                </div>
             {% else %}
-                <div class="grid_container_results_de">
+                <div class="grid_container_non_iterable_result">
                     {% for answer in results.values %}
                         {% with author=results.authors|get_item:forloop.counter0 author_id=results.authors_ids|get_item:forloop.counter0 %}
                         <div class="small_class_result">                          

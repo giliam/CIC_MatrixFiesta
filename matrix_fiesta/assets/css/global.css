@@ -78,13 +78,25 @@ form.answer div {
     margin-left: 20px;
 }
 
-.grid_container_results_de {
+.grid_container_iterable_result {
+    display: grid;
+    margin-left: 30px;
+    column-gap: 5px;
+    width: 500px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.grid_container_iterable_result div.value_result {
+    display: list-item;
+}
+
+.grid_container_non_iterable_result {
     display: grid;
     margin-left: 0px;
     column-gap: 5px;
-    grid-template-columns: 150px 125px 1fr ;
-    grid-template-areas: 
-    "author smallclass answer";
+    grid-template-columns: 150px 125px 1fr;
+    grid-template-areas:
+        "author smallclass answer";
 }
 
 .author_result {
@@ -96,6 +108,7 @@ form.answer div {
     grid-area: smallclass;
     text-align: center;
 }
+
 .small_class_result p {
     margin-bottom: 0px;
     margin-top: 2px;
@@ -107,7 +120,8 @@ form.answer div {
 .answer_result {
     grid-area: answer;
 }
-.grid_container_results_de > div > p {
+
+.grid_container_non_iterable_result>div>p {
     margin-bottom: 0px;
 }
 
