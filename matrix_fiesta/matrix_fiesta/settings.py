@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 from matrix_fiesta.generate_secret_key import secret_key_from_file
+
 if os.path.isfile("matrix_fiesta/parameters.py"):
     from matrix_fiesta import parameters
 else:
@@ -31,7 +32,9 @@ SECRET_KEY = secret_key_from_file("secret_key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = parameters.DEBUG if hasattr(parameters, "DEBUG") else False
 
-ALLOWED_HOSTS = parameters.ALLOWED_HOSTS if hasattr(parameters, "ALLOWED_HOSTS") else ['127.0.0.1']
+ALLOWED_HOSTS = (
+    parameters.ALLOWED_HOSTS if hasattr(parameters, "ALLOWED_HOSTS") else ["127.0.0.1"]
+)
 
 
 # Application definition
@@ -49,7 +52,7 @@ INSTALLED_APPS = [
     # "django_extensions",
     # "debug_toolbar",
     "django_cas_ng",
-    "survey"
+    "survey",
 ]
 
 
@@ -74,7 +77,9 @@ ROOT_URLCONF = "matrix_fiesta.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": parameters.TEMPLATES_DIRS if hasattr(parameters, "TEMPLATES_DIRS") else ["templates"],
+        "DIRS": parameters.TEMPLATES_DIRS
+        if hasattr(parameters, "TEMPLATES_DIRS")
+        else ["templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -85,9 +90,9 @@ TEMPLATES = [
                 "matrix_fiesta.context_processors.activeNavbar",
                 "matrix_fiesta.context_processors.discourseUrl",
                 "django.template.context_processors.i18n",
-            ],
+            ]
         },
-    },
+    }
 ]
 
 WSGI_APPLICATION = "matrix_fiesta.wsgi.application"
@@ -96,12 +101,16 @@ WSGI_APPLICATION = "matrix_fiesta.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = parameters.DATABASES if hasattr(parameters, "DATABASES") else {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+DATABASES = (
+    parameters.DATABASES
+    if hasattr(parameters, "DATABASES")
+    else {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
     }
-}
+)
 
 
 # Password validation
@@ -109,30 +118,21 @@ DATABASES = parameters.DATABASES if hasattr(parameters, "DATABASES") else {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'fr'
-LANGUAGES = (
-    ('en', 'English'),
-    ('fr', 'Français'),
-)
+LANGUAGE_CODE = "fr"
+LANGUAGES = (("en", "English"), ("fr", "Français"))
 
-TIME_ZONE = 'Europe/Paris'
+TIME_ZONE = "Europe/Paris"
 
 USE_I18N = True
 
@@ -140,17 +140,16 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
-)
+LOCALE_PATHS = (os.path.join(BASE_DIR, "locale"),)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 STATICFILES_DIRS = (
     parameters.STATICFILES_DIRS
-    if hasattr(parameters, "STATICFILES_DIRS") else ("assets/",)
+    if hasattr(parameters, "STATICFILES_DIRS")
+    else ("assets/",)
 )
 
 STATIC_ROOT = (
@@ -159,63 +158,69 @@ STATIC_ROOT = (
     else os.path.join(BASE_DIR, "static")
 )
 
-REST_FRAMEWORK = parameters.REST_FRAMEWORK if hasattr(parameters, "REST_FRAMEWORK") else {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
+REST_FRAMEWORK = (
+    parameters.REST_FRAMEWORK
+    if hasattr(parameters, "REST_FRAMEWORK")
+    else {
+        # Use Django's standard `django.contrib.auth` permissions,
+        # or allow read-only access for unauthenticated users.
+        "DEFAULT_PERMISSION_CLASSES": [
+            "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+        ]
+    }
+)
 
 AUTHENTICATION_BACKENDS = (
-     'django.contrib.auth.backends.ModelBackend',
-#     'django_cas_ng.backends.CASBackend',
-     'matrix.backends.MatrixCASBackend',
+    "django.contrib.auth.backends.ModelBackend",
+    #     'django_cas_ng.backends.CASBackend',
+    "matrix.backends.MatrixCASBackend",
 )
 
 INTERNAL_IPS = [
     # ...
-    '127.0.0.1',
+    "127.0.0.1",
     # ...
 ]
 
-#LOGIN_URL = '/matrix/log_in/'
+LOGIN_URL = "/log_in/"
 
-CAS_SERVER_URL = 'https://auth.mines-paristech.fr/cas/'
+CAS_SERVER_URL = "https://auth.mines-paristech.fr/cas/"
 CAS_VERSION = 3
 CAS_CREATE_USER = False
 
 # According to
 # https://blog.ionelmc.ro/2012/01/19/tweaks-for-making-django-admin-faster/
 TEMPLATE_LOADERS = (
-    ('django.template.loaders.cached.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )),
+    (
+        "django.template.loaders.cached.Loader",
+        (
+            "django.template.loaders.filesystem.Loader",
+            "django.template.loaders.app_directories.Loader",
+        ),
+    ),
 )
 
 
-LOGGING = parameters.LOGGING if hasattr(parameters, "LOGGING") else {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, '..', 'log', 'matrix.log'),
-            'maxBytes': 1024*1024*30,
-            'backupCount': 15,
+LOGGING = (
+    parameters.LOGGING
+    if hasattr(parameters, "LOGGING")
+    else {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "handlers": {
+            "file": {
+                "level": "DEBUG",
+                "class": "logging.handlers.RotatingFileHandler",
+                "filename": os.path.join(BASE_DIR, "..", "log", "matrix.log"),
+                "maxBytes": 1024 * 1024 * 30,
+                "backupCount": 15,
+            }
         },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'WARNING',
-            'propagate': True,
+        "loggers": {
+            "django": {"handlers": ["file"], "level": "WARNING", "propagate": True}
         },
-    },
-}
-
+    }
+)
 
 
 if not DEBUG:
@@ -223,9 +228,9 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
 
     CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'LOCATION': '127.0.0.1:11211',
+        "default": {
+            "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+            "LOCATION": "127.0.0.1:11211",
         }
     }
 
