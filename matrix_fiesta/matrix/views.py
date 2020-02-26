@@ -947,6 +947,8 @@ def create_small_classes(request):
                     group_index,
                     form.cleaned_data["has_header"],
                 )
+            else:
+                groups_teachers = {}
 
             small_class = form.save(commit=False)
 
