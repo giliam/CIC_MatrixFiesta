@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-24 11:00+0100\n"
+"POT-Creation-Date: 2020-02-25 17:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -274,7 +274,7 @@ msgid "Question %s"
 msgstr "Question %s"
 
 #: survey/models.py:95 templates/survey/confirm_de.html:9
-#: templates/survey/edition_de.html:89
+#: templates/survey/edition_de.html:107
 msgid "Question"
 msgstr "Question"
 
@@ -316,7 +316,7 @@ msgstr "Confirmez-vous la duplication des questions suivantes ?"
 msgid "Do you confirm the deletion of the following questions?"
 msgstr "Confirmez-vous la suppression des questions suivantes ?"
 
-#: survey/views.py:551
+#: survey/views.py:567
 msgid "Anonymous"
 msgstr "Anonyme"
 
@@ -364,7 +364,7 @@ msgstr "Enseignants"
 msgid "List teachers"
 msgstr "Liste des enseignants"
 
-#: templates/de/homepage.html:26 templates/index.html:46
+#: templates/de/homepage.html:26 templates/index.html:48
 #: templates/survey/list.html:5 templates/survey/list_de.html:5
 msgid "Survey list"
 msgstr "Questionnaires"
@@ -497,7 +497,7 @@ msgstr "Erreur 500"
 msgid "Internal server error!"
 msgstr "Erreur interne au serveur !"
 
-#: templates/homepage.html:5 templates/index.html:39
+#: templates/homepage.html:5 templates/index.html:41
 msgid "Homepage"
 msgstr "Page d'accueil"
 
@@ -541,39 +541,39 @@ msgstr "En tant qu'enseignant, vous pouvez ici évaluer vos élèves."
 msgid "As DE member, you can manage the promotion."
 msgstr "En tant que membre de la DE, vous pouvez gérer la promotion."
 
-#: templates/index.html:10
+#: templates/index.html:11
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: templates/index.html:43
+#: templates/index.html:45
 msgid "Your matrix"
 msgstr "Votre matrice"
 
-#: templates/index.html:51
+#: templates/index.html:53
 msgid "Evaluate your students"
 msgstr "Évaluer vos élèves"
 
-#: templates/index.html:56
+#: templates/index.html:58
 msgid "DE"
 msgstr "DE"
 
-#: templates/index.html:69
+#: templates/index.html:64
 msgid "Admin"
 msgstr "Admin"
 
-#: templates/index.html:74
+#: templates/index.html:69
 msgid "Log out"
 msgstr "Déconnexion"
 
-#: templates/index.html:78 templates/users/login.html:5
+#: templates/index.html:73 templates/users/login.html:5
 msgid "Log in"
 msgstr "Connexion"
 
-#: templates/index.html:88
+#: templates/index.html:83
 msgid "Nothing to see here!"
 msgstr "Rien à voir ici !"
 
-#: templates/index.html:101
+#: templates/index.html:98
 msgid "Report an issue"
 msgstr "Signaler un problème"
 
@@ -614,7 +614,7 @@ msgstr "Pas encore d'acquis d'apprentissage ici."
 #: templates/survey/confirm_batch_de.html:25
 #: templates/survey/confirm_de.html:20 templates/survey/creation_de.html:13
 #: templates/survey/detail.html:32 templates/survey/edition_de.html:23
-#: templates/survey/edition_de.html:45
+#: templates/survey/edition_de.html:46
 #: templates/survey/question_form_de.html:24 templates/users/login.html:23
 msgid "Submit"
 msgstr "Envoyer"
@@ -873,6 +873,10 @@ msgstr "Retour à la liste"
 msgid "Save"
 msgstr "Enregistrer"
 
+#: templates/survey/detail_de.html:27
+msgid "No small class known"
+msgstr "Pas de PC connue"
+
 #: templates/survey/edition_de.html:9
 msgid "Survey edition"
 msgstr "Modification d'un questionnaire"
@@ -901,47 +905,51 @@ msgstr "Nettoyer le questionnaire"
 msgid "Preview the survey"
 msgstr "Prévisualiser le questionnaire"
 
-#: templates/survey/edition_de.html:31 templates/survey/list_de.html:35
+#: templates/survey/edition_de.html:32 templates/survey/list_de.html:35
 msgid "Reorder the questions"
 msgstr "Réordonner les questions"
 
-#: templates/survey/edition_de.html:33 templates/survey/list_de.html:41
+#: templates/survey/edition_de.html:34 templates/survey/list_de.html:41
 msgid "Close the survey"
 msgstr "Fermer le questionnaire"
 
-#: templates/survey/edition_de.html:35 templates/survey/list_de.html:45
+#: templates/survey/edition_de.html:36 templates/survey/list_de.html:45
 msgid "Open the survey"
 msgstr "Ouvrir le questionnaire"
 
-#: templates/survey/edition_de.html:55
+#: templates/survey/edition_de.html:56
 msgid "Edit"
 msgstr "Modifier"
 
-#: templates/survey/edition_de.html:58
+#: templates/survey/edition_de.html:60
 msgid "Remove"
 msgstr "Retirer"
 
-#: templates/survey/edition_de.html:61
+#: templates/survey/edition_de.html:64
 msgid "Insert above"
 msgstr "Insérer au-dessus"
 
-#: templates/survey/edition_de.html:64
+#: templates/survey/edition_de.html:68
 msgid "Insert below"
 msgstr "Insérer en-dessous"
 
-#: templates/survey/edition_de.html:67
+#: templates/survey/edition_de.html:72
 msgid "Duplicate question"
 msgstr "Dupliquer une question"
 
-#: templates/survey/edition_de.html:71
+#: templates/survey/edition_de.html:77
 msgid "Move down"
 msgstr "Déplacer vers le bas"
 
-#: templates/survey/edition_de.html:76
+#: templates/survey/edition_de.html:83
 msgid "Move up"
 msgstr "Déplacer vers le haut"
 
-#: templates/survey/edition_de.html:102
+#: templates/survey/edition_de.html:88
+msgid "Change required status question"
+msgstr "Changer le statut 'requis' de la question"
+
+#: templates/survey/edition_de.html:120
 msgid "No question yet."
 msgstr "Pas encore de question."
 
