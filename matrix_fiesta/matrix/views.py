@@ -4,6 +4,7 @@ import csv
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import Max
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, reverse
 from django.utils.translation import gettext as _
@@ -562,6 +563,10 @@ def homepage_teachers(request, archives=None):
         .all()
     )
 
+    max_evaluation_value = models.EvaluationValue.objects.aggregate(
+        Max("integer_value")
+    )
+
     averages, nb_achievements = _compute_averages(evaluations, classes)
     averages_students, nb_achievements_students = _compute_averages(
         evaluations_students, classes
@@ -580,6 +585,7 @@ def homepage_teachers(request, archives=None):
             "nb_achievements_students": nb_achievements_students,
             "archives": archives,
             "promotion_years": promotion_years,
+            "max_evaluation_value": max_evaluation_value,
         },
     )
 
