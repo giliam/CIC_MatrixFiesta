@@ -708,10 +708,7 @@ def answer_survey(request, survey, initial_response=None):
                                 )
                         answer.value = json.dumps(json_raw_answer)
                     else:
-                        print("raw_answer", raw_answer)
                         answer.value = json.dumps(raw_answer, ensure_ascii=False)
-                        print("answer.value", answer.value)
-                        print("json dumps", json.dumps(raw_answer))
                     answer.save()
             return redirect(reverse("survey.list"))
     else:

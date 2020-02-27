@@ -95,17 +95,16 @@ form.answer div {
     margin-left: 0px;
     column-gap: 5px;
     grid-template-columns: 150px 125px 1fr;
+    grid-template-rows: 1fr;
     grid-template-areas:
         "author smallclass answer";
 }
 
 .author_result {
-    grid-area: author;
     text-align: right;
 }
 
 .small_class_result {
-    grid-area: smallclass;
     text-align: center;
 }
 
@@ -115,10 +114,6 @@ form.answer div {
     font-size: 0.85em;
     font-style: italic;
     color: rgb(0, 0, 0, 0.7)
-}
-
-.answer_result {
-    grid-area: answer;
 }
 
 .grid_container_non_iterable_result>div>p {

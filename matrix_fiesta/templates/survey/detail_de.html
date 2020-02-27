@@ -4,35 +4,35 @@
 
 {% block title %}{% trans "Survey" %}{% endblock %}
 {% block content %}
-    <h2>{{survey}}</h2>
+<h2>{{survey}}</h2>
 
-    {% for question in survey.questions.all %}
-        <p><strong>{{question.content}}</strong></p>
-        {% with results=answers_results|get_item:question.id %}
-            {% if question.is_iterable %}
-                <div class="grid_container_iterable_result">
-                {% for choice, nb in results.choices.values %}
-                    <div class="value_result">{{ choice.value }}</div>
-                    <div>{{ nb }}</div>
-                {% endfor %}
-                </div>
-            {% else %}
-                <div class="grid_container_non_iterable_result">
-                    {% for answer in results.values %}
-                        {% with author=results.authors|get_item:forloop.counter0 author_id=results.authors_ids|get_item:forloop.counter0 %}
-                        <div class="small_class_result">                          
-                            {% for small_class in profiles_authors|get_item:author_id %}
-                                <p>{{small_class.course.name}} (<em>{{small_class.teacher}}</em>)</p>
-                            {% empty %}
-                                <span class="no_answer">{% trans "No small class known" %}</span>
-                            {% endfor %}
-                        </div>
-                        <div class="author_result"><em>{{author}}</em></div>
-                        {% endwith %}
-                        <div class="answer_result">{{ answer|linebreaks }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
+{% for question in survey.questions.all %}
+<p><strong>{{question.content}}</strong></p>
+{% with results=answers_results|get_item:question.id %}
+{% if question.is_iterable %}
+<div class="grid_container_iterable_result">
+    {% for choice, nb in results.choices.values %}
+    <div class="value_result">{{ choice.value }}</div>
+    <div>{{ nb }}</div>
     {% endfor %}
+</div>
+{% else %}
+<div class="grid_container_non_iterable_result">
+    {% for answer in results.values %}
+    {% with author=results.authors|get_item:forloop.counter0 author_id=results.authors_ids|get_item:forloop.counter0 %}
+    <div class="author_result"><em>{{author}}</em></div>
+    <div class="small_class_result">
+        {% for small_class in profiles_authors|get_item:author_id %}
+        <p>{{small_class.course.name}} (<em>{{small_class.teacher}}</em>)</p>
+        {% empty %}
+        <span class="no_answer">{% trans "No small class known" %}</span>
+        {% endfor %}
+    </div>
+    {% endwith %}
+    <div class="answer_result">{{ answer|linebreaks }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+{% endfor %}
 {% endblock %}
