@@ -114,7 +114,7 @@ class Response(DatedModel):
     class Meta:
         verbose_name = _("Response")
         verbose_name_plural = _("Responses")
-        ordering = ["survey", "user"]
+        ordering = ["survey", "updated_date", "added_date"]
 
     def prepare_answers_for_template(self, questions):
         if not self.answers:
