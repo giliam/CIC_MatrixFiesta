@@ -38,12 +38,12 @@
 </p>
 
 {% if survey.questions.all|length > 0 %}
-<form method="post" action="{% url "survey.batch_de" survey.id %}">
+<form method="post" action="{% url "survey.batch_de" survey.id %}" class="ui form batcheditionform mini">
     {% csrf_token %}
     {% with field=form_batch.action %}
     {{field}}
     {% endwith %}
-    <input type="submit" class="ui button mini compact" value="{% trans "Submit" %}" />
+    <input type="submit" class="ui button compact" value="{% trans "Submit" %}" />
 
     <div class="grid_container_survey">
         {% for question in survey.questions.all %}

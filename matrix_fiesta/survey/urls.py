@@ -10,7 +10,14 @@ urlpatterns = [
     re_path(
         r"de/results/(?P<survey>[0-9]+)/",
         views.de_results_survey,
+        {"with_graphs": False},
         name="survey.results_de",
+    ),
+    re_path(
+        r"de/results/graphs/(?P<survey>[0-9]+)/",
+        views.de_results_survey,
+        {"with_graphs": True},
+        name="survey.results_graphs_de",
     ),
     re_path(
         r"de/edit/(?P<survey>[0-9]+)/", views.de_edit_survey, name="survey.edit_de"

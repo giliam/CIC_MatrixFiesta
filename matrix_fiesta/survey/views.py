@@ -591,19 +591,17 @@ def _parse_survey_answers(survey, responses):
 
 @login_required
 @user_passes_test(auths.check_is_de)
-def de_results_survey(request, survey):
+def de_results_survey(request, survey, with_graphs=False):
     survey = get_object_or_404(
         models.Survey.objects.prefetch_related("questions", "ecue"), Q(id=survey)
     )
     responses = models.Response.objects.filter(survey=survey).prefetch_related(
         "user", "answers", "answers__question", "answers__question__choices"
     )
+    parameters = _parse_survey_answers(survey, responses)
+    parameters["with_graphs"] = with_graphs
 
-    return render(
-        request,
-        "survey/report_results_de.html",
-        _parse_survey_answers(survey, responses),
-    )
+    return render(request, "survey/report_results_de.html", parameters)
 
 
 @login_required

@@ -70,6 +70,15 @@ a.nolink {
     text-align: center;
 }
 
+.grid_container_survey_list>div {
+    display: flex;
+    align-items: center;
+}
+
+.results_cell {
+    justify-content: center;
+}
+
 form.answer p.description {
     margin-top: 15px;
 }
@@ -109,6 +118,10 @@ form.answer div {
         "author smallclass answer";
 }
 
+.grid_container_non_iterable_result>div {
+    min-height: 35px;
+}
+
 .author_result {
     text-align: right;
 }
@@ -132,4 +145,13 @@ form.answer div {
 
 div.answer p {
     margin-left: 25px;
+}
+
+.ui.form.batcheditionform select {
+    display: inline;
+    width: auto;
+}
+
+.check_question>input {
+    margin-top: 5px;
 }

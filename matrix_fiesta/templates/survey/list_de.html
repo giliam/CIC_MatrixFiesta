@@ -63,10 +63,15 @@
             <div>
                 {% trans "Promotion" %} {{survey.promotionyear}}
             </div>
-            <div>
-                <a href="{% url "survey.results_de" survey.id %}">
-                    ({% blocktrans count counter=survey.responses.count %}1 answer{% plural %}{{ counter }} answers{% endblocktrans %})
-                </a>
+            <div class="results_cell">
+                <div class="ui buttons tiny" style="align: center">
+                    <a class="ui button {% if survey.responses.count == 0 %}basic {% endif %}blue" href="{% url "survey.results_de" survey.id %}">
+                        {% blocktrans count counter=survey.responses.count %}1 answer{% plural %}{{ counter }} answers{% endblocktrans %}
+                    </a>
+                    <a class="ui button {% if survey.responses.count == 0 %}basic {% endif %}teal" href="{% url "survey.results_graphs_de" survey.id %}">
+                        <em>{% trans "with graphs" %}</em>
+                    </a>
+                </div>
             </div>
         {% endfor %}
     </div>

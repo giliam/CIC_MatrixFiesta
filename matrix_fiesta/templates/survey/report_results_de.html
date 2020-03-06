@@ -4,6 +4,8 @@
 {% load questionstypes_extras %}
 
 {% block title %}{% trans "Survey" %}{% endblock %}
+
+{% if with_graphs %}
 {% block js_addon %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2@2.0.0/dist/spectrum.min.js"></script>
@@ -12,11 +14,18 @@
 let myCharts = {}
 </script>
 {% endblock %}
+{% endif %}
+
 {% block content %}
+
 <p>
+    <a href="{% url "survey.list_de" %}" id="hide_graphs" class="ui primary button">{% trans "Return to list" %}</a>
+    {% if with_graphs %}
     <a href="#" id="hide_graphs" class="ui primary basic button">{% trans "Hide graphs" %}</a>
     <a href="#" id="hide_personnalization" class="ui primary basic button">{% trans "Hide personnalization tools" %}</a>
+    {% endif %}
 </p>
+
 <h2>{{survey}}</h2>
 
 {% for question in survey.questions.all %}
@@ -34,124 +43,126 @@ let myCharts = {}
         <div>{{ nb }}</div>
         {% endfor %}
     </div>
-    <div class="grid_container_graph">
-        <div>
-            <canvas class="canvas_graph" id="graph_{{question.id}}" width="800" height="400"></canvas>
-        </div>
-        <div class="personnalization">
-            <form class="ui form">
-                <p class="field">
-                    <div class="ui radio checkbox">
-                        <input type="radio" class="change_type hidden" id="graph_choice_{{question.id}}_pie" name="graph_choice_{{question.id}}" value="pie" {% if not question|is_of_type:"CHECKBOX" and not question|is_of_type:"MULTIPLESELECT" %}checked="checked"{% endif %}/>
-                        <label for="graph_choice_{{question.id}}_pie">{% trans "Pie" %}</label>
-                    </div>
-                </p>
-                <p class="field">
-                    <div class="ui radio checkbox">
-                        <input type="radio" class="change_type hidden" id="graph_choice_{{question.id}}_bar" name="graph_choice_{{question.id}}" value="bar" {% if question|is_of_type:"CHECKBOX" or question|is_of_type:"MULTIPLESELECT" %}checked="checked"{% endif %}/>
-                        <label for="graph_choice_{{question.id}}_bar">{% trans "Bar" %}</label>
-                    </div>
-                </p>
-                <p class="field">
-                    <div class="ui radio checkbox">
-                        <input type="radio" class="change_type hidden" id="graph_choice_{{question.id}}_radar" name="graph_choice_{{question.id}}" value="radar" />
-                        <label for="graph_choice_{{question.id}}_radar">{% trans "Radar" %}</label>
-                    </div>
-                </p>
-                <p class="field">
-                    <div class="ui radio checkbox">
-                        <input type="radio" class="change_type hidden" id="graph_choice_{{question.id}}_polarArea" name="graph_choice_{{question.id}}" value="polarArea" />
-                        <label for="graph_choice_{{question.id}}_polarArea">{% trans "Polar Area" %}</label>
-                    </div>
-                </p>
+        {% if with_graphs %}
+        <div class="grid_container_graph">
+            <div>
+                <canvas class="canvas_graph" id="graph_{{question.id}}" width="800" height="400"></canvas>
+            </div>
+            <div class="personnalization">
+                <form class="ui form">
+                    <p class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" class="change_type hidden" id="graph_choice_{{question.id}}_pie" name="graph_choice_{{question.id}}" value="pie" {% if not question|is_of_type:"CHECKBOX" and not question|is_of_type:"MULTIPLESELECT" %}checked="checked"{% endif %}/>
+                            <label for="graph_choice_{{question.id}}_pie">{% trans "Pie" %}</label>
+                        </div>
+                    </p>
+                    <p class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" class="change_type hidden" id="graph_choice_{{question.id}}_bar" name="graph_choice_{{question.id}}" value="bar" {% if question|is_of_type:"CHECKBOX" or question|is_of_type:"MULTIPLESELECT" %}checked="checked"{% endif %}/>
+                            <label for="graph_choice_{{question.id}}_bar">{% trans "Bar" %}</label>
+                        </div>
+                    </p>
+                    <p class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" class="change_type hidden" id="graph_choice_{{question.id}}_radar" name="graph_choice_{{question.id}}" value="radar" />
+                            <label for="graph_choice_{{question.id}}_radar">{% trans "Radar" %}</label>
+                        </div>
+                    </p>
+                    <p class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" class="change_type hidden" id="graph_choice_{{question.id}}_polarArea" name="graph_choice_{{question.id}}" value="polarArea" />
+                            <label for="graph_choice_{{question.id}}_polarArea">{% trans "Polar Area" %}</label>
+                        </div>
+                    </p>
 
-                <p class="field">
-                    <input id="color_picker_{{question.id}}" class="color_picker" />
-                </p>
-                    
-            </form>
-        </div>
-        <script type="text/javascript">
-        var ctx = document.getElementById('graph_{{question.id}}');
-        myCharts[{{question.id}}] = new Chart(ctx, {
-            {% if question|is_of_type:"CHECKBOX" or question|is_of_type:"MULTIPLESELECT" %}
-            type: 'bar',
-            {% else %}
-            type: 'pie',
-            {% endif %}
-            data: {
-                labels: [
-                    {% for choice, nb in results.choices.values %}
-                    '{{ choice.value }}',
-                    {% endfor %}
-                ],
-                datasets: [{
-                    label: '{% trans "Number of votes" %}',
-                    data: [{% for choice, nb in results.choices.values %}{{ nb }},{% endfor %}],
-                    backgroundColor: [
-                        {% if results.choices.values|length > 8 %}
-                        '#a6cee3',
-                        '#1f78b4',
-                        '#b2df8a',
-                        '#33a02c',
-                        '#fb9a99',
-                        '#e31a1c',
-                        '#fdbf6f',
-                        '#ff7f00',
-                        '#cab2d6',
-                        '#6a3d9a',
-                        '#ffff99',
-                        '#b15928',
-                        {% elif results.choices.values|length > 5 %}
-                        '#e41a1c',
-                        '#377eb8',
-                        '#33a02c',
-                        '#984ea3',
-                        '#ff7f00',
-                        '#ffff33',
-                        '#a65628',
-                        '#f781bf',
-                        {% else %}
-                        '#e41a1c',
-                        '#377eb8',
-                        '#33a02c',
-                        '#984ea3',
-                        {% endif %}
+                    <p class="field">
+                        <input id="color_picker_{{question.id}}" class="color_picker" />
+                    </p>
+                        
+                </form>
+            </div>
+            <script type="text/javascript">
+            var ctx = document.getElementById('graph_{{question.id}}');
+            myCharts[{{question.id}}] = new Chart(ctx, {
+                {% if question|is_of_type:"CHECKBOX" or question|is_of_type:"MULTIPLESELECT" %}
+                type: 'bar',
+                {% else %}
+                type: 'pie',
+                {% endif %}
+                data: {
+                    labels: [
+                        {% for choice, nb in results.choices.values %}
+                        '{{ choice.value }}',
+                        {% endfor %}
                     ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                devicePixelRatio: 1,
-                legend: {
-                    display: false,
-                },
-                onClick: function(e){
-                    var element = this.getElementAtEvent(e);
-                    if(element.length > 0){
-                        this.chart.data.datasets[0].backgroundColor[element[0]._index] = $('#color_picker_{{question.id}}').val()
-                        this.update()
-                    }
-                },
-                scales: {
-                    {% if question|is_of_type:"CHECKBOX" or question|is_of_type:"MULTIPLESELECT" %}
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
+                    datasets: [{
+                        label: '{% trans "Number of votes" %}',
+                        data: [{% for choice, nb in results.choices.values %}{{ nb }},{% endfor %}],
+                        backgroundColor: [
+                            {% if results.choices.values|length > 8 %}
+                            '#a6cee3',
+                            '#1f78b4',
+                            '#b2df8a',
+                            '#33a02c',
+                            '#fb9a99',
+                            '#e31a1c',
+                            '#fdbf6f',
+                            '#ff7f00',
+                            '#cab2d6',
+                            '#6a3d9a',
+                            '#ffff99',
+                            '#b15928',
+                            {% elif results.choices.values|length > 5 %}
+                            '#e41a1c',
+                            '#377eb8',
+                            '#33a02c',
+                            '#984ea3',
+                            '#ff7f00',
+                            '#ffff33',
+                            '#a65628',
+                            '#f781bf',
+                            {% else %}
+                            '#e41a1c',
+                            '#377eb8',
+                            '#33a02c',
+                            '#984ea3',
+                            {% endif %}
+                        ],
+                        borderWidth: 0
                     }]
-                    {% endif %}
+                },
+                options: {
+                    devicePixelRatio: 1,
+                    legend: {
+                        display: false,
+                    },
+                    onClick: function(e){
+                        var element = this.getElementAtEvent(e);
+                        if(element.length > 0){
+                            this.chart.data.datasets[0].backgroundColor[element[0]._index] = $('#color_picker_{{question.id}}').val()
+                            this.update()
+                        }
+                    },
+                    scales: {
+                        {% if question|is_of_type:"CHECKBOX" or question|is_of_type:"MULTIPLESELECT" %}
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                        {% endif %}
+                    }
                 }
-            }
-        });
+            });
 
-            
-        $('#color_picker_{{question.id}}').spectrum({
-            type: "text",
-            showInput: "true"
-        });
-        </script>
-    </div>
+                
+            $('#color_picker_{{question.id}}').spectrum({
+                type: "text",
+                showInput: "true"
+            });
+            </script>
+        </div>
+        {% endif %}
     {% else %}
         <div class="grid_container_non_iterable_result">
             {% for answer in results.values %}
@@ -172,6 +183,9 @@ let myCharts = {}
     {% endwith %}
 {% endif %}
 {% endfor %}
+
+
+{% if with_graphs %}
 <script type="text/javascript">
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -224,4 +238,5 @@ $("#hide_graphs").click(function(){
     }
 })
 </script>
+{% endif %}
 {% endblock %}
