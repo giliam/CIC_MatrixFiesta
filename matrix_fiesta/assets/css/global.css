@@ -78,9 +78,18 @@ form.answer div {
     margin-left: 20px;
 }
 
-.grid_container_iterable_result {
+.grid_container_graph {
     display: grid;
     margin-left: 30px;
+    column-gap: 5px;
+    width: 500px;
+    grid-template-columns: 2fr 1fr;
+    margin-top: 20px;
+}
+
+.grid_container_iterable_result {
+    display: grid;
+    margin-left: 50px;
     column-gap: 5px;
     width: 500px;
     grid-template-columns: 1fr 1fr;
@@ -92,7 +101,7 @@ form.answer div {
 
 .grid_container_non_iterable_result {
     display: grid;
-    margin-left: 0px;
+    margin-left: 20px;
     column-gap: 5px;
     grid-template-columns: 150px 125px 1fr;
     grid-template-rows: 1fr;

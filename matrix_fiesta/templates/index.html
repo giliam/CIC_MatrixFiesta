@@ -7,7 +7,6 @@
 
     <head>
         <meta charset="utf-8" />
-        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
         <title>CIC - {% block title %}{% trans "Welcome" %}{% endblock %}</title>
         <link rel="icon" href="{% static "favicon.ico" %}" />
 
@@ -29,6 +28,7 @@
             }
         </style>
         {% block css_addon %}{% endblock %}
+        {% block js_addon %}{% endblock %}
     </head>
 
     <body class="Site">

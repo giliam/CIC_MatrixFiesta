@@ -534,16 +534,7 @@ def de_preview_survey(request, survey):
     return render(request, "survey/preview_de.html", {"survey": survey, "form": form})
 
 
-@login_required
-@user_passes_test(auths.check_is_de)
-def de_results_survey(request, survey):
-    survey = get_object_or_404(
-        models.Survey.objects.prefetch_related("questions", "ecue"), Q(id=survey)
-    )
-    responses = models.Response.objects.filter(survey=survey).prefetch_related(
-        "user", "answers", "answers__question", "answers__question__choices"
-    )
-
+def _parse_survey_answers(survey, responses):
     # Needs to handle each question's results
     answers_results = {
         question.id: {
@@ -591,15 +582,27 @@ def de_results_survey(request, survey):
             profiles_authors[profile.id] = small_classes_associated.all()
         else:
             profiles_authors[profile.id] = []
+    return {
+        "survey": survey,
+        "answers_results": answers_results,
+        "profiles_authors": profiles_authors,
+    }
+
+
+@login_required
+@user_passes_test(auths.check_is_de)
+def de_results_survey(request, survey):
+    survey = get_object_or_404(
+        models.Survey.objects.prefetch_related("questions", "ecue"), Q(id=survey)
+    )
+    responses = models.Response.objects.filter(survey=survey).prefetch_related(
+        "user", "answers", "answers__question", "answers__question__choices"
+    )
 
     return render(
         request,
-        "survey/detail_de.html",
-        {
-            "survey": survey,
-            "answers_results": answers_results,
-            "profiles_authors": profiles_authors,
-        },
+        "survey/report_results_de.html",
+        _parse_survey_answers(survey, responses),
     )
 
 
