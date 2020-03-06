@@ -19,7 +19,7 @@ let myCharts = {}
 {% block content %}
 
 <p>
-    <a href="{% url "survey.list_de" %}" id="hide_graphs" class="ui primary button">{% trans "Return to list" %}</a>
+    <a href="{% url "survey.list_de" %}" class="ui primary button">{% trans "Return to list" %}</a>
     {% if with_graphs %}
     <a href="#" id="hide_graphs" class="ui primary basic button">{% trans "Hide graphs" %}</a>
     <a href="#" id="hide_personnalization" class="ui primary basic button">{% trans "Hide personnalization tools" %}</a>
@@ -92,7 +92,7 @@ let myCharts = {}
                 data: {
                     labels: [
                         {% for choice, nb in results.choices.values %}
-                        '{{ choice.value }}',
+                        '{{ choice.value|escapejs }}',
                         {% endfor %}
                     ],
                     datasets: [{
@@ -132,6 +132,10 @@ let myCharts = {}
                     }]
                 },
                 options: {
+                    title: {
+                        display: true,
+                        text: "{{question.content|escapejs}}"
+                    },
                     devicePixelRatio: 1,
                     legend: {
                         display: false,
