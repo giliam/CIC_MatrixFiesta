@@ -572,16 +572,15 @@ def _parse_survey_answers(survey, responses):
         "small_classes_student",
         "small_classes_student__teacher",
         "small_classes_student__course",
+        "small_classes_student__course__ecue",
     )
     profiles_authors = {}
     for profile in profiles.all():
-        small_classes_associated = profile.small_classes_student.filter(
-            course__ecue=survey.ecue
-        )
-        if small_classes_associated.exists():
-            profiles_authors[profile.id] = small_classes_associated.all()
-        else:
-            profiles_authors[profile.id] = []
+        profiles_authors[profile.id] = [
+            sm
+            for sm in profile.small_classes_student.all()
+            if sm.course.ecue.id == survey.ecue.id
+        ]
     return {
         "survey": survey,
         "answers_results": answers_results,
@@ -593,10 +592,19 @@ def _parse_survey_answers(survey, responses):
 @user_passes_test(auths.check_is_de)
 def de_results_survey(request, survey, with_graphs=False):
     survey = get_object_or_404(
-        models.Survey.objects.prefetch_related("questions", "ecue"), Q(id=survey)
+        models.Survey.objects.prefetch_related(
+            "questions", "questions__choices", "ecue"
+        ),
+        Q(id=survey),
     )
     responses = models.Response.objects.filter(survey=survey).prefetch_related(
-        "user", "answers", "answers__question", "answers__question__choices"
+        "user",
+        "user__user",
+        "user__small_classes_student",
+        "user__user__groups",
+        "answers",
+        "answers__choices",
+        "answers__question",
     )
     parameters = _parse_survey_answers(survey, responses)
     parameters["with_graphs"] = with_graphs
