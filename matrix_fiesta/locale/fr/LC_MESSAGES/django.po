@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-25 17:33+0100\n"
+"POT-Creation-Date: 2020-03-06 11:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,23 +162,23 @@ msgstr "Petite classe"
 msgid "Small classes"
 msgstr "Petites classes"
 
-#: matrix/views.py:807 matrix/views.py:981 matrix/views.py:1073
+#: matrix/views.py:813 matrix/views.py:989 matrix/views.py:1081
 msgid "Only super users can perform this action"
 msgstr "Seuls les administrateurs peuvent faire cette action"
 
-#: matrix/views.py:816
+#: matrix/views.py:822
 msgid "formatted as 20XX"
 msgstr "renseigné au format 20XX"
 
-#: matrix/views.py:821
+#: matrix/views.py:827
 msgid "must be 0 or 1"
 msgstr "doit être 0 ou 1"
 
-#: matrix/views.py:843
+#: matrix/views.py:849
 msgid "DE shouldn't be in the groups selected"
 msgstr "La DE ne devrait pas être dans les groupes sélectionnés."
 
-#: matrix/views.py:957
+#: matrix/views.py:965
 #, python-format
 msgid "Groupe #%d"
 msgstr "Groupe #%d"
@@ -251,7 +251,7 @@ msgstr "Questionnaire %s"
 
 #: survey/models.py:36 templates/survey/answer.html:6
 #: templates/survey/confirm_batch_de.html:9 templates/survey/confirm_de.html:12
-#: templates/survey/detail.html:5 templates/survey/detail_de.html:5
+#: templates/survey/detail.html:5 templates/survey/report_results_de.html:6
 msgid "Survey"
 msgstr "Questionnaire"
 
@@ -316,7 +316,7 @@ msgstr "Confirmez-vous la duplication des questions suivantes ?"
 msgid "Do you confirm the deletion of the following questions?"
 msgstr "Confirmez-vous la suppression des questions suivantes ?"
 
-#: survey/views.py:567
+#: survey/views.py:558
 msgid "Anonymous"
 msgstr "Anonyme"
 
@@ -541,7 +541,7 @@ msgstr "En tant qu'enseignant, vous pouvez ici évaluer vos élèves."
 msgid "As DE member, you can manage the promotion."
 msgstr "En tant que membre de la DE, vous pouvez gérer la promotion."
 
-#: templates/index.html:11
+#: templates/index.html:10
 msgid "Welcome"
 msgstr "Bienvenue"
 
@@ -748,36 +748,36 @@ msgstr "Statut"
 msgid "Overall evaluation"
 msgstr "Évaluation globale"
 
-#: templates/matrix/teachers/homepage.html:57
+#: templates/matrix/teachers/homepage.html:67
 msgid "Not fully evaluated yet!"
 msgstr "Non évalué"
 
-#: templates/matrix/teachers/homepage.html:61
+#: templates/matrix/teachers/homepage.html:71
 msgid "Different!"
 msgstr "Différent !"
 
-#: templates/matrix/teachers/homepage.html:65
+#: templates/matrix/teachers/homepage.html:75
 msgid "Same!"
 msgstr "Ok !"
 
-#: templates/matrix/teachers/homepage.html:70
+#: templates/matrix/teachers/homepage.html:81
 #: templates/matrix/teachers/list_all_sc.html:34
 #: templates/matrix/teachers/list_all_students.html:53
 msgid "No student enrolled yet."
 msgstr "Pas encore d'élève inscrit."
 
-#: templates/matrix/teachers/homepage.html:75
+#: templates/matrix/teachers/homepage.html:87
 #: templates/matrix/teachers/list_all_sc.html:39
 #: templates/matrix/teachers/list_all_students.html:58
 msgid "Average of the class"
 msgstr "Moyenne de la classe"
 
-#: templates/matrix/teachers/homepage.html:76
+#: templates/matrix/teachers/homepage.html:88
 #: templates/matrix/teachers/list_all_sc.html:41
 msgid "student(s)"
 msgstr "élève(s)"
 
-#: templates/matrix/teachers/homepage.html:87
+#: templates/matrix/teachers/homepage.html:99
 #: templates/matrix/teachers/list_all_sc.html:49
 msgid "No class assigned yet."
 msgstr "Pas encore de petite classe assignée."
@@ -872,10 +872,6 @@ msgstr "Retour à la liste"
 #: templates/survey/detail.html:31
 msgid "Save"
 msgstr "Enregistrer"
-
-#: templates/survey/detail_de.html:27
-msgid "No small class known"
-msgstr "Pas de PC connue"
 
 #: templates/survey/edition_de.html:9
 msgid "Survey edition"
@@ -1015,6 +1011,38 @@ msgid ""
 msgstr ""
 "Attention, le questionnaire a déjà été ouvert et ajouter une question peut "
 "conduire à des données manquantes pour les réponses existantes."
+
+#: templates/survey/report_results_de.html:17
+msgid "Hide graphs"
+msgstr "Cacher les graphiques"
+
+#: templates/survey/report_results_de.html:18
+msgid "Hide personnalization tools"
+msgstr "Cacher les outils de personnalisation"
+
+#: templates/survey/report_results_de.html:46
+msgid "Pie"
+msgstr "Circulaire"
+
+#: templates/survey/report_results_de.html:52
+msgid "Bar"
+msgstr "Barres"
+
+#: templates/survey/report_results_de.html:58
+msgid "Radar"
+msgstr "Radar"
+
+#: templates/survey/report_results_de.html:64
+msgid "Polar Area"
+msgstr "Polar Area"
+
+#: templates/survey/report_results_de.html:89
+msgid "Number of votes"
+msgstr "Nombre de votes"
+
+#: templates/survey/report_results_de.html:164
+msgid "No small class known"
+msgstr "Pas de PC connue"
 
 #: templates/users/login.html:9
 msgid "If you have a CAS access"
