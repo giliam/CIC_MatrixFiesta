@@ -82,7 +82,7 @@ let myCharts = {}
             data: {
                 labels: [
                     {% for choice, nb in results.choices.values %}
-                    '{{ choice.value }}',
+                    '{{ choice.value|escapejs }}',
                     {% endfor %}
                 ],
                 datasets: [{
@@ -122,6 +122,10 @@ let myCharts = {}
                 }]
             },
             options: {
+                title: {
+                    display: true,
+                    text: "{{question.content|escapejs}}"
+                },
                 devicePixelRatio: 1,
                 legend: {
                     display: false,
