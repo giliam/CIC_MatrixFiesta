@@ -534,7 +534,7 @@ def de_preview_survey(request, survey):
     return render(request, "survey/preview_de.html", {"survey": survey, "form": form})
 
 
-def _parse_survey_answers(survey, responses):
+def _parse_survey_answers(survey, responses, nohide=False):
     # Needs to handle each question's results
     answers_results = {
         question.id: {
@@ -543,6 +543,7 @@ def _parse_survey_answers(survey, responses):
             "choices": {c.id: [c, 0] for c in question.choices.all()},
             "authors": [],
             "authors_ids": [],
+            "authors_disableSC": [],
         }
         for question in survey.questions.all()
     }
@@ -557,8 +558,14 @@ def _parse_survey_answers(survey, responses):
                     answers_results[answer.question.id]["authors"].append(
                         _("Anonymous")
                     )
+                    answers_results[answer.question.id]["authors_disableSC"].append(
+                        True and not nohide
+                    )
                 else:
                     answers_results[answer.question.id]["authors"].append(response.user)
+                    answers_results[answer.question.id]["authors_disableSC"].append(
+                        False
+                    )
                 users.add(response.user.id)
                 answers_results[answer.question.id]["authors_ids"].append(
                     response.user.id
@@ -597,6 +604,7 @@ def de_results_survey(request, survey, with_graphs=False):
         ),
         Q(id=survey),
     )
+
     responses = models.Response.objects.filter(survey=survey).prefetch_related(
         "user",
         "user__user",
@@ -606,7 +614,8 @@ def de_results_survey(request, survey, with_graphs=False):
         "answers__choices",
         "answers__question",
     )
-    parameters = _parse_survey_answers(survey, responses)
+    nohide = "nohide" in request.GET
+    parameters = _parse_survey_answers(survey, responses, nohide)
     parameters["with_graphs"] = with_graphs
 
     return render(request, "survey/report_results_de.html", parameters)
@@ -624,6 +633,7 @@ def detail_survey(request, survey):
     response = models.Response.objects.filter(
         survey=survey, user__user=request.user
     ).prefetch_related("answers", "answers__question")
+    print(response)
 
     # If already answered, show answer.
     if len(response) >= 1 and len(response.filter(sent=True).all()) >= 1:

@@ -170,14 +170,16 @@ let myCharts = {}
     {% else %}
         <div class="grid_container_non_iterable_result">
             {% for answer in results.values %}
-            {% with author=results.authors|get_item:forloop.counter0 author_id=results.authors_ids|get_item:forloop.counter0 %}
+            {% with author=results.authors|get_item:forloop.counter0 disableSC=results.authors_disableSC|get_item:forloop.counter0 author_id=results.authors_ids|get_item:forloop.counter0 %}
             <div class="author_result"><em>{{author}}</em></div>
             <div class="small_class_result">
+                {% if not disableSC %}
                 {% for small_class in profiles_authors|get_item:author_id %}
                 <p>{{small_class.course.name}} (<em>{{small_class.teacher}}</em>)</p>
                 {% empty %}
                 <span class="no_answer">{% trans "No small class known" %}</span>
                 {% endfor %}
+                {% endif %}
             </div>
             {% endwith %}
             <div class="answer_result">{{ answer|linebreaks }}</div>
