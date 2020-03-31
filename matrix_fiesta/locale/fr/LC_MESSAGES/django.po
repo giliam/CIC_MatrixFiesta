@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-06 12:55+0100\n"
+"POT-Creation-Date: 2020-03-31 18:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr "Nom d'utilisateur"
 msgid "Password"
 msgstr "Mot de passe"
 
-#: matrix/forms.py:57 matrix/forms.py:64 matrix/models.py:170
+#: matrix/forms.py:57 matrix/forms.py:64 matrix/models.py:175
 msgid "Evaluation value"
 msgstr "Valeur de l'évaluation"
 
@@ -54,111 +54,111 @@ msgstr "Sélectionner un fichier pour les élèves"
 msgid "Select a file for the teachers"
 msgstr "Sélectionner un fichier pour les enseignants"
 
-#: matrix/forms.py:96 matrix/models.py:155
+#: matrix/forms.py:96 matrix/models.py:160
 msgid "Course"
 msgstr "Cours"
 
-#: matrix/forms.py:96 matrix/models.py:62
+#: matrix/forms.py:96 matrix/models.py:63
 msgid "Promotion year"
 msgstr "Promotion"
 
-#: matrix/models.py:35
+#: matrix/models.py:36
 msgid "DatedModel"
 msgstr "Objet daté"
 
-#: matrix/models.py:36
+#: matrix/models.py:37
 msgid "DatedModels"
 msgstr "Objets datés"
 
-#: matrix/models.py:48
+#: matrix/models.py:49
 msgid "School year"
 msgstr "Année scolaire"
 
-#: matrix/models.py:49
+#: matrix/models.py:50
 msgid "School years"
 msgstr "Années scolaires"
 
-#: matrix/models.py:63
+#: matrix/models.py:64
 msgid "Promotion years"
 msgstr "Promotions"
 
-#: matrix/models.py:93
+#: matrix/models.py:98
 msgid "User"
 msgstr "Utilisateur"
 
-#: matrix/models.py:94
+#: matrix/models.py:99
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: matrix/models.py:109
+#: matrix/models.py:114
 msgid "Semestre"
 msgstr "Semestre"
 
-#: matrix/models.py:110
+#: matrix/models.py:115
 msgid "Semestres"
 msgstr "Semestres"
 
-#: matrix/models.py:124
+#: matrix/models.py:129
 msgid "UE"
 msgstr "UE"
 
-#: matrix/models.py:125 templates/matrix/students/matrix_ues.html:18
+#: matrix/models.py:130 templates/matrix/students/matrix_ues.html:18
 msgid "UEs"
 msgstr "UEs"
 
-#: matrix/models.py:136
+#: matrix/models.py:141
 #, python-format
 msgid "ECUE %(name)s - %(ue)s"
 msgstr "ECUE %(name)s - %(ue)s"
 
-#: matrix/models.py:139 survey/forms.py:134
+#: matrix/models.py:144 survey/forms.py:134
 #: templates/matrix/students/overall_self_evaluation.html:27
 msgid "ECUE"
 msgstr "ECUE"
 
-#: matrix/models.py:140
+#: matrix/models.py:145
 msgid "ECUEs"
 msgstr "ECUEs"
 
-#: matrix/models.py:156
+#: matrix/models.py:161
 msgid "Courses"
 msgstr "Cours"
 
-#: matrix/models.py:171
+#: matrix/models.py:176
 msgid "Evaluation values"
 msgstr "Valeurs de l'évaluation"
 
-#: matrix/models.py:190
+#: matrix/models.py:195
 msgid "Learning achievement"
 msgstr "Acquis d'apprentissage"
 
-#: matrix/models.py:191
+#: matrix/models.py:196
 msgid "Learning achievements"
 msgstr "Acquis d'apprentissage"
 
-#: matrix/models.py:207
+#: matrix/models.py:212
 #, python-format
 msgid "%(achiev)s, %(student)s : %(eval)s (teacher: %(teacher)s)"
 msgstr "%(achiev)s, %(student)s : %(eval)s (enseignant : %(teacher)s)"
 
-#: matrix/models.py:215
+#: matrix/models.py:220
 msgid "Student evaluation"
 msgstr "Évaluation de l'étudiant"
 
-#: matrix/models.py:216
+#: matrix/models.py:221
 msgid "Student evaluations"
 msgstr "Évaluations des étudiants"
 
-#: matrix/models.py:245
+#: matrix/models.py:250
 #, python-format
 msgid "SC %(name)s of %(course)s by %(teacher)s"
 msgstr "PC %(name)s %(course)s par %(teacher)s"
 
-#: matrix/models.py:252
+#: matrix/models.py:257
 msgid "Small class"
 msgstr "Petite classe"
 
-#: matrix/models.py:253 templates/de/homepage.html:18
+#: matrix/models.py:258 templates/de/homepage.html:18
 msgid "Small classes"
 msgstr "Petites classes"
 
@@ -316,7 +316,7 @@ msgstr "Confirmez-vous la duplication des questions suivantes ?"
 msgid "Do you confirm the deletion of the following questions?"
 msgstr "Confirmez-vous la suppression des questions suivantes ?"
 
-#: survey/views.py:558
+#: survey/views.py:559
 msgid "Anonymous"
 msgstr "Anonyme"
 
@@ -1045,7 +1045,7 @@ msgstr "Polar Area"
 msgid "Number of votes"
 msgstr "Nombre de votes"
 
-#: templates/survey/report_results_de.html:179
+#: templates/survey/report_results_de.html:180
 msgid "No small class known"
 msgstr "Pas de PC connue"
 
