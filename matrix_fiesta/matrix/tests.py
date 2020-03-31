@@ -8,7 +8,7 @@ from matrix import models
 
 class ProfileUserTestCase(TestCase):
     def setUp(self):
-        current_year = datetime.datetime.now().year
+        current_year = 2019
 
         p_y_2019 = models.PromotionYear.objects.create(
             name="2019/2020", value=current_year, current=True
@@ -102,7 +102,7 @@ class ProfileUserTestCase(TestCase):
             models.ProfileUser.objects.create(**e)
 
     def test_get_schoolyear(self):
-        current_year = datetime.datetime.now().year
+        current_date = datetime.datetime(2019, 11, 12)
 
         noces = models.ProfileUser.objects.get(id=1)
         ces = models.ProfileUser.objects.get(id=2)
@@ -122,12 +122,21 @@ class ProfileUserTestCase(TestCase):
         self.assertEqual(noces_4A.get_schoolyear(), 4)
         self.assertEqual(ces_4A.get_schoolyear(), 3)
 
-        self.assertEqual(noces_2A.get_schoolyear(current_year - 1), 1)
-        self.assertEqual(ces_2A.get_schoolyear(current_year - 1), 1)
-        self.assertEqual(noces_3A.get_schoolyear(current_year - 1), 2)
-        self.assertEqual(ces_3A.get_schoolyear(current_year - 1), 2)
-        self.assertEqual(noces_4A.get_schoolyear(current_year - 1), 3)
-        self.assertEqual(ces_4A.get_schoolyear(current_year - 1), 2)
+        # Tests with real date and just the year, with and without cesure
+        self.assertEqual(noces_2A.get_schoolyear(current_date), 2)
+        self.assertEqual(noces_2A.get_schoolyear(2019), 2)
+        self.assertEqual(ces_2A.get_schoolyear(current_date), 2)
+        self.assertEqual(ces_2A.get_schoolyear(2019), 2)
+        # Tests with real date and just the year, with and without cesure
+        self.assertEqual(noces_3A.get_schoolyear(current_date), 3)
+        self.assertEqual(noces_3A.get_schoolyear(2019), 3)
+        self.assertEqual(ces_3A.get_schoolyear(current_date), 2)
+        self.assertEqual(ces_3A.get_schoolyear(2019), 2)
+        # Tests with real date and just the year, with and without cesure
+        self.assertEqual(noces_4A.get_schoolyear(current_date), 4)
+        self.assertEqual(noces_4A.get_schoolyear(2019), 4)
+        self.assertEqual(ces_4A.get_schoolyear(current_date), 3)
+        self.assertEqual(ces_4A.get_schoolyear(2019), 3)
 
 
 class SlugTestCase:

@@ -1,4 +1,5 @@
 import datetime
+import math
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -74,11 +75,15 @@ class ProfileUser(DatedModel):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    def get_schoolyear(self, year_considered=None):
-        if year_considered is None:
-            year_considered = datetime.datetime.now().year
+    def get_schoolyear(self, date_considered=None):
+        if date_considered is None:
+            date_considered = datetime.datetime.now()
+        elif isinstance(date_considered, int):
+            date_considered = datetime.datetime(date_considered, 10, 1)
 
-        current_schoolyear = min(4, (year_considered - self.year_entrance.value) + 1)
+        nb_months = date_considered - datetime.datetime(self.year_entrance.value, 8, 20)
+        current_schoolyear = int(max(1, math.ceil(nb_months.days / 365)))
+
         if self.cesure and current_schoolyear > 2:
             current_schoolyear -= 1
         return current_schoolyear

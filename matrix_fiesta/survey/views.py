@@ -729,6 +729,8 @@ def answer_survey(request, survey, initial_response=None):
                     else:
                         answer.value = json.dumps(raw_answer, ensure_ascii=False)
                     answer.save()
+                elif question.id in answers:
+                    answers[question.id].delete()
             return redirect(reverse("survey.list"))
     else:
         if initial_response is None:
