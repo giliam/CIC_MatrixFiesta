@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-06 11:19+0100\n"
+"POT-Creation-Date: 2020-03-06 12:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -866,6 +866,7 @@ msgstr ""
 "(ARCHIVE)</em> et sera fermé."
 
 #: templates/survey/creation_de.html:8 templates/survey/edition_de.html:10
+#: templates/survey/report_results_de.html:22
 msgid "Return to the list"
 msgstr "Retour à la liste"
 
@@ -981,12 +982,16 @@ msgstr "Modifier le questionnaire"
 msgid "Copy the survey"
 msgstr "Copier le questionnaire"
 
-#: templates/survey/list_de.html:68
+#: templates/survey/list_de.html:69
 #, python-format
 msgid "1 answer"
 msgid_plural "%(counter)s answers"
 msgstr[0] "%(counter)s réponse"
 msgstr[1] "%(counter)s réponses"
+
+#: templates/survey/list_de.html:72
+msgid "with graphs"
+msgstr "avec graphiques"
 
 #: templates/survey/preview_de.html:5 templates/survey/preview_de.html:7
 msgid "Survey preview"
@@ -1012,35 +1017,35 @@ msgstr ""
 "Attention, le questionnaire a déjà été ouvert et ajouter une question peut "
 "conduire à des données manquantes pour les réponses existantes."
 
-#: templates/survey/report_results_de.html:17
+#: templates/survey/report_results_de.html:24
 msgid "Hide graphs"
 msgstr "Cacher les graphiques"
 
-#: templates/survey/report_results_de.html:18
+#: templates/survey/report_results_de.html:25
 msgid "Hide personnalization tools"
 msgstr "Cacher les outils de personnalisation"
 
-#: templates/survey/report_results_de.html:46
+#: templates/survey/report_results_de.html:56
 msgid "Pie"
 msgstr "Circulaire"
 
-#: templates/survey/report_results_de.html:52
+#: templates/survey/report_results_de.html:62
 msgid "Bar"
 msgstr "Barres"
 
-#: templates/survey/report_results_de.html:58
+#: templates/survey/report_results_de.html:68
 msgid "Radar"
 msgstr "Radar"
 
-#: templates/survey/report_results_de.html:64
+#: templates/survey/report_results_de.html:74
 msgid "Polar Area"
 msgstr "Polar Area"
 
-#: templates/survey/report_results_de.html:89
+#: templates/survey/report_results_de.html:99
 msgid "Number of votes"
 msgstr "Nombre de votes"
 
-#: templates/survey/report_results_de.html:164
+#: templates/survey/report_results_de.html:179
 msgid "No small class known"
 msgstr "Pas de PC connue"
 
@@ -1063,6 +1068,11 @@ msgstr "Utilisateur inexistant ou mauvais de mot de passe."
 #: templates/users/login.html:18
 msgid "You are successfully logged in!"
 msgstr "Vous êtes bien connecté !"
+
+#, fuzzy
+#~| msgid "Return to the list"
+#~ msgid "Return to list"
+#~ msgstr "Retour à la liste"
 
 #~ msgid ""
 #~ "\n"
