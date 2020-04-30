@@ -32,9 +32,7 @@ def download_result(request, ev_id):
     path_to_file = file_name
     # en mode debug, on demande à Django de servir le fichier histoire de pas
     # être forcé de setuper nginx sur sa machine de dev
-    print(settings.SECURE_MEDIA_ROOT)
     if settings.DEBUG:
-        print(path_to_file)
         return serve(request, path_to_file, settings.SECURE_MEDIA_ROOT)
 
     # Sinon on retourne une réponse VIDE avec en header le chemin de l'url
