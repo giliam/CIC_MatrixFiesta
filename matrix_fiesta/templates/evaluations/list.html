@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+{% load i18n %}
+{% load common_extras %}
+
+{% block title %}{% trans "Evaluations" %}{% endblock %}
+{% block content %}
+<h1>{% trans "Download your evaluation results" %}</h1>
+<p>{{ path }}</p>
+<ul>
+{% for evaluation in results %}
+    <li>Evaluation <em>{{evaluation.evaluation.name}}</em> : <a href="{% url "evaluations.download" evaluation.id %}">download</a> ({% trans "added on " %}{{evaluation.added_date|date:"d/m/Y" }})</li>
+{% endfor %}
+</ul>
+{% endblock %}

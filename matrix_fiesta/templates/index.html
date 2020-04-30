@@ -47,6 +47,9 @@
                     <a class="item {{ nav_survey_active }}" href="{% url "survey.list" %}">
                         {% trans "Survey list" %}
                     </a>
+                    <a class="item {{ nav_evaluations_active }}" href="{% url "evaluations.list" %}">
+                        {% trans "Evaluations" %}
+                    </a>
                     {% endif %}
                     {% if request.user|is_teacher %}
                     <a class="item {{ nav_homepage_teachers_active }}" href="{% url "teachers.homepage_teachers" %}">

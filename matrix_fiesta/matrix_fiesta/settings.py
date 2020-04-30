@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # "debug_toolbar",
     "django_cas_ng",
     "survey",
+    "evaluations",
 ]
 
 
@@ -156,6 +157,18 @@ STATIC_ROOT = (
     parameters.STATIC_ROOT
     if hasattr(parameters, "STATIC_ROOT")
     else os.path.join(BASE_DIR, "static")
+)
+
+MEDIA_ROOT = (
+    parameters.MEDIA_ROOT
+    if hasattr(parameters, "MEDIA_ROOT")
+    else os.path.join(BASE_DIR, "media")
+)
+
+SECURE_MEDIA_ROOT = (
+    parameters.SECURE_MEDIA_ROOT
+    if hasattr(parameters, "SECURE_MEDIA_ROOT")
+    else os.path.join(MEDIA_ROOT, "secure_upload")
 )
 
 REST_FRAMEWORK = (
