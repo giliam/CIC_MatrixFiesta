@@ -19,40 +19,28 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: evaluations/models.py:12
-#, fuzzy, python-format
-#| msgid "Older evaluation(s)"
 msgid "Final evaluation %(name)s"
-msgstr "Anciennes évaluations"
+msgstr "Évaluation de %(name)s"
 
 #: evaluations/models.py:15
-#, fuzzy
-#| msgid "Self evaluation"
 msgid "Final evaluation"
-msgstr "Auto-évaluation"
+msgstr "Évaluation"
 
 #: evaluations/models.py:16
-#, fuzzy
-#| msgid "Self evaluation"
 msgid "Final evaluations"
-msgstr "Auto-évaluation"
+msgstr "Évaluations"
 
 #: evaluations/models.py:29
-#, fuzzy, python-format
-#| msgid "Evaluation values"
 msgid "Evaluation result for %(user)s"
-msgstr "Valeurs de l'évaluation"
+msgstr "Résultat de l'évaluation de %(user)s"
 
 #: evaluations/models.py:32
-#, fuzzy
-#| msgid "Evaluation values"
 msgid "Evaluation result"
-msgstr "Valeurs de l'évaluation"
+msgstr "Résultat de l'évaluation"
 
 #: evaluations/models.py:33
-#, fuzzy
-#| msgid "Evaluation values"
 msgid "Evaluation results"
-msgstr "Valeurs de l'évaluation"
+msgstr "Résultats de l'évaluation"
 
 #: matrix/forms.py:10
 msgid "User name"
@@ -534,18 +522,16 @@ msgid "Internal server error!"
 msgstr "Erreur interne au serveur !"
 
 #: templates/evaluations/list.html:5 templates/index.html:51
-#, fuzzy
-#| msgid "Evaluation"
 msgid "Evaluations"
-msgstr "Évaluation"
+msgstr "Évaluations"
 
 #: templates/evaluations/list.html:7
 msgid "Download your evaluation results"
-msgstr ""
+msgstr "Télécharger vos résultats d'évaluation"
 
 #: templates/evaluations/list.html:11
 msgid "added on "
-msgstr ""
+msgstr "ajouté le "
 
 #: templates/homepage.html:5 templates/index.html:41
 msgid "Homepage"
