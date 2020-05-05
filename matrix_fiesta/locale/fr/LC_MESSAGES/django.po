@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-31 18:18+0200\n"
+"POT-Creation-Date: 2020-05-05 12:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,42 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: evaluations/models.py:12
+#, fuzzy, python-format
+#| msgid "Older evaluation(s)"
+msgid "Final evaluation %(name)s"
+msgstr "Anciennes évaluations"
+
+#: evaluations/models.py:15
+#, fuzzy
+#| msgid "Self evaluation"
+msgid "Final evaluation"
+msgstr "Auto-évaluation"
+
+#: evaluations/models.py:16
+#, fuzzy
+#| msgid "Self evaluation"
+msgid "Final evaluations"
+msgstr "Auto-évaluation"
+
+#: evaluations/models.py:29
+#, fuzzy, python-format
+#| msgid "Evaluation values"
+msgid "Evaluation result for %(user)s"
+msgstr "Valeurs de l'évaluation"
+
+#: evaluations/models.py:32
+#, fuzzy
+#| msgid "Evaluation values"
+msgid "Evaluation result"
+msgstr "Valeurs de l'évaluation"
+
+#: evaluations/models.py:33
+#, fuzzy
+#| msgid "Evaluation values"
+msgid "Evaluation results"
+msgstr "Valeurs de l'évaluation"
 
 #: matrix/forms.py:10
 msgid "User name"
@@ -497,6 +533,20 @@ msgstr "Erreur 500"
 msgid "Internal server error!"
 msgstr "Erreur interne au serveur !"
 
+#: templates/evaluations/list.html:5 templates/index.html:51
+#, fuzzy
+#| msgid "Evaluation"
+msgid "Evaluations"
+msgstr "Évaluation"
+
+#: templates/evaluations/list.html:7
+msgid "Download your evaluation results"
+msgstr ""
+
+#: templates/evaluations/list.html:11
+msgid "added on "
+msgstr ""
+
 #: templates/homepage.html:5 templates/index.html:41
 msgid "Homepage"
 msgstr "Page d'accueil"
@@ -549,31 +599,31 @@ msgstr "Bienvenue"
 msgid "Your matrix"
 msgstr "Votre matrice"
 
-#: templates/index.html:53
+#: templates/index.html:56
 msgid "Evaluate your students"
 msgstr "Évaluer vos élèves"
 
-#: templates/index.html:58
+#: templates/index.html:61
 msgid "DE"
 msgstr "DE"
 
-#: templates/index.html:64
+#: templates/index.html:67
 msgid "Admin"
 msgstr "Admin"
 
-#: templates/index.html:69
+#: templates/index.html:72
 msgid "Log out"
 msgstr "Déconnexion"
 
-#: templates/index.html:73 templates/users/login.html:5
+#: templates/index.html:76 templates/users/login.html:5
 msgid "Log in"
 msgstr "Connexion"
 
-#: templates/index.html:83
+#: templates/index.html:86
 msgid "Nothing to see here!"
 msgstr "Rien à voir ici !"
 
-#: templates/index.html:98
+#: templates/index.html:101
 msgid "Report an issue"
 msgstr "Signaler un problème"
 
