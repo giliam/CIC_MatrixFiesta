@@ -39,6 +39,7 @@ def download_result(request, ev_id):
     # de l'upload interne
     # Nginx va l'intercepter, réaliser qu'il faut qu'il upload ce qu'il y
     # a à cette URL et faire le reste du boulot
-    response = HttpResponse()
+    response = HttpResponse(content_type="application/force-download")
+    response["Content-Disposition"] = "attachment; filename=%s" % smart_str(file_name)
     response["X-Accel-Redirect"] = "/supload/%s" % path_to_file
     return response
